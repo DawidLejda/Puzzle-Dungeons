@@ -1,5 +1,7 @@
 package main;
 
+import character.Player;
+
 import javax.swing.JPanel;
 import java.awt.*;
 
@@ -8,17 +10,14 @@ public class GamePanel extends JPanel implements Runnable
     // Parameters ************************************************
     final int width = 640;
     final int height = 480;
-    final int tileSize = 32;
-
+    public final int tileSize = 32;
     final int TARGET_FPS = 60;
     public int averageFPS;
+    public boolean gameRunning = true;
 
     Thread GameThread;
     KeyHandler pressedKey = new KeyHandler();
-
-    public int playerSpeed = 4;
-    public int playerX = 100;
-    public int playerY = 100;
+    Player player = new Player(this,pressedKey);
 
     // ********************************************************
     public GamePanel()
@@ -27,9 +26,7 @@ public class GamePanel extends JPanel implements Runnable
         this.setDoubleBuffered(true);
         this.addKeyListener(pressedKey);
         this.setFocusable(true);
-
     }
-
 
     public void startGameThread()
     {
@@ -48,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable
         long initialTime = System.nanoTime();
 
         // Game loop
-        while (GameThread != null)
+        while (gameRunning)
         {
             long currentTime = System.nanoTime();
 
@@ -57,7 +54,7 @@ public class GamePanel extends JPanel implements Runnable
 
             if (delta >= 1)
             {
-                playerUpdate();
+                Update();
                 repaint();
                 delta--;
                 frameCount++;
@@ -72,32 +69,17 @@ public class GamePanel extends JPanel implements Runnable
         }
     }
 
-    public void playerUpdate()
+    public void Update()
     {
-        if (pressedKey.left)
-        {
-            playerX -= playerSpeed;
-        }
-        else if (pressedKey.right)
-        {
-            playerX += playerSpeed;
-        }
-        else if (pressedKey.up)
-        {
-            playerY -= playerSpeed;
-        }
-        else if (pressedKey.down)
-        {
-            playerY += playerSpeed;
-        }
+        player.Update();
     }
 
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.blue);
-        g2.fillRect(playerX, playerY, tileSize, tileSize);
+        player.Draw(g2);
+
         g2.drawString("FPS: " + averageFPS,3,12);
         g2.dispose();
     }
