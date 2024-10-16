@@ -41,7 +41,7 @@ public class GamePanel extends JPanel implements Runnable
     public void run()
     {
 
-        final double targetTime = 1000000000/TARGET_FPS;
+        final double targetTime = 1000000000.0 / TARGET_FPS;
         double delta = 0;
         int frameCount = 0;
         long timer = System.currentTimeMillis();
@@ -98,7 +98,7 @@ public class GamePanel extends JPanel implements Runnable
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(Color.blue);
         g2.fillRect(playerX, playerY, tileSize, tileSize);
-        g2.drawString("FPS: " + averageFPS,5,10);
+        g2.drawString("FPS: " + averageFPS,3,12);
         g2.dispose();
     }
 
