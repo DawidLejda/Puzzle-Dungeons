@@ -8,8 +8,8 @@ import java.awt.*;
 public class GamePanel extends JPanel implements Runnable
 {
     // Parameters ************************************************
-    final int width = 640;
-    final int height = 480;
+    final int width = 1280;
+    final int height = 720;
     public final int tileSize = 64;
     final int TARGET_FPS = 60;
     public int averageFPS;

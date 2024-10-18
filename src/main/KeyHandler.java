@@ -7,6 +7,7 @@ public class KeyHandler implements KeyListener
 {
 
     public boolean left, right, up, down;
+    public String lastPressedKey;
     @Override
     public void keyTyped(KeyEvent e)
     {
@@ -20,15 +21,19 @@ public class KeyHandler implements KeyListener
         {
             case KeyEvent.VK_A:
                 left = true;
+                lastPressedKey = "left";
                 break;
             case KeyEvent.VK_D:
                 right = true;
+                lastPressedKey = "right";
                 break;
             case KeyEvent.VK_W:
                 up = true;
+                lastPressedKey = "up";
                 break;
             case KeyEvent.VK_S:
                 down = true;
+                lastPressedKey = "down";
                 break;
         }
     }
