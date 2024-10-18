@@ -11,9 +11,10 @@ import java.util.Objects;
 
 public class Player extends Character
 {
+
     GamePanel gamePanel;
     KeyHandler pressedKey;
-
+    boolean swapSkin = false;
 
     public Player(GamePanel gamePanel, KeyHandler pressedKey)
     {
@@ -31,7 +32,8 @@ public class Player extends Character
     {
         try
         {
-            down = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/player_down.png")));
+            down1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/player_down.1.png")));
+            down2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/player_down.2.png")));
 
         } catch (IOException e) {
             System.out.println("Couldn't read player character model file");
@@ -57,11 +59,36 @@ public class Player extends Character
         {
             y += speed;
         }
+
     }
 
     public void Draw(Graphics2D g2)
     {
-        BufferedImage image = down;
+        BufferedImage image = null;
+
+        // Indicates how often skin is changed
+        if (gamePanel.frameCount % 15 == 0)
+        {
+            if(swapSkin)
+            {
+                swapSkin = false;
+            }
+            else
+            {
+                swapSkin = true;
+            }
+        }
+
+        if(swapSkin)
+        {
+            image = down2;
+        }
+        else
+        {
+            image = down1;
+        }
+
+
         g2.drawImage(image, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 }

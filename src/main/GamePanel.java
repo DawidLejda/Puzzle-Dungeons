@@ -10,10 +10,11 @@ public class GamePanel extends JPanel implements Runnable
     // Parameters ************************************************
     final int width = 640;
     final int height = 480;
-    public final int tileSize = 32;
+    public final int tileSize = 64;
     final int TARGET_FPS = 60;
     public int averageFPS;
     public boolean gameRunning = true;
+    public int frameCount = 0;
 
     Thread GameThread;
     KeyHandler pressedKey = new KeyHandler();
@@ -40,7 +41,7 @@ public class GamePanel extends JPanel implements Runnable
 
         final double targetTime = 1000000000.0 / TARGET_FPS;
         double delta = 0;
-        int frameCount = 0;
+
         long timer = System.currentTimeMillis();
         long initialTime = System.nanoTime();
 
