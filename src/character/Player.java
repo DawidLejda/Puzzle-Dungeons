@@ -15,6 +15,7 @@ public class Player extends Character
     GamePanel gamePanel;
     KeyHandler pressedKey;
     private boolean playerMoving;
+    private boolean reverse;
     private int swapSkin = 1;
     private int swapIdle = 1;
     private int animationFrame = 1;
@@ -26,8 +27,8 @@ public class Player extends Character
         this.pressedKey = pressedKey;
         getPlayerModel();
 
-        x = 100;
-        y = 100;
+        x = 500;
+        y = 500;
         speed = 4;
         getPlayerModel();
     }
@@ -42,6 +43,7 @@ public class Player extends Character
             idle_down2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_down2.png")));
             idle_down3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_down3.png")));
             idle_down4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_down4.png")));
+            idle_down5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_down5.png")));
 
         } catch (IOException e) {
             System.out.println("Couldn't read player character model file");
@@ -55,12 +57,10 @@ public class Player extends Character
         {
             x -= speed;
             animationFrame++;
-            animationIdle = 0;
             playerMoving = true;
         }
         else if(!pressedKey.left)
         {
-            animationFrame = 0;
             animationIdle++;
             playerMoving = false;
         }
@@ -68,12 +68,10 @@ public class Player extends Character
         {
             x += speed;
             animationFrame++;
-            animationIdle = 0;
             playerMoving = true;
         }
         else if(!pressedKey.right)
         {
-            animationFrame = 0;
             animationIdle++;
             playerMoving = false;
         }
@@ -81,12 +79,10 @@ public class Player extends Character
         {
             y -= speed;
             animationFrame++;
-            animationIdle = 0;
             playerMoving = true;
         }
         else if(!pressedKey.up)
         {
-            animationFrame = 0;
             animationIdle++;
             playerMoving = false;
         }
@@ -94,12 +90,10 @@ public class Player extends Character
         {
             y += speed;
             animationFrame++;
-            animationIdle = 0;
             playerMoving = true;
         }
         else if(!pressedKey.down)
         {
-            animationFrame = 0;
             animationIdle++;
             playerMoving = false;
         }
@@ -111,25 +105,23 @@ public class Player extends Character
         {
             if (animationFrame >= 8)
             {
+                swapSkin++;
                 if (swapSkin > 2)
                 {
                     swapSkin = 1;
                 }
-
-                swapSkin++;
                 animationFrame = 0;
             }
         }
         else
         {
-            if (animationIdle >= 8)
+            if (animationIdle >= 12)
             {
-                if (swapIdle > 4)
+                swapIdle++;
+                if (swapIdle > 5)
                 {
                     swapIdle = 1;
                 }
-
-                swapIdle++;
                 animationIdle = 0;
             }
         }
@@ -141,6 +133,7 @@ public class Player extends Character
 
         if (playerMoving)
         {
+            /*
             if(swapSkin == 1)
             {
                 image = down1;
@@ -149,6 +142,7 @@ public class Player extends Character
             {
                 image = down2;
             }
+            */
         }
 
         else
@@ -173,6 +167,10 @@ public class Player extends Character
                         else if(swapIdle == 4)
                         {
                             image = idle_down4;
+                        }
+                        else if(swapIdle == 5)
+                        {
+                            image = idle_down5;
                         }
                 }
             }
