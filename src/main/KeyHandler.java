@@ -23,24 +23,21 @@ public class KeyHandler implements KeyListener
             case KeyEvent.VK_A:
                 left = true;
                 lastPressedKey = "left";
-                lastReleasedKey = null;
                 break;
             case KeyEvent.VK_D:
                 right = true;
                 lastPressedKey = "right";
-                lastReleasedKey = null;
                 break;
             case KeyEvent.VK_W:
                 up = true;
                 lastPressedKey = "up";
-                lastReleasedKey = null;
                 break;
             case KeyEvent.VK_S:
                 down = true;
                 lastPressedKey = "down";
-                lastReleasedKey = null;
                 break;
         }
+        lastReleasedKey = null;
     }
 
     @Override

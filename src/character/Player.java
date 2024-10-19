@@ -29,7 +29,6 @@ public class Player extends Character
         x = 500;
         y = 100;
         speed = 4;
-        getPlayerModel();
     }
 
     public void getPlayerModel()

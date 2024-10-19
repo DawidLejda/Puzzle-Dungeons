@@ -11,9 +11,6 @@ public class Main
         GameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GameFrame.setResizable(false);
 
-        // TO DO
-        //ImageIcon image = new ImageIcon();
-        //this.setIconImage(image.getImage());
 
         GamePanel game_panel = new GamePanel();
         GameFrame.add(game_panel);

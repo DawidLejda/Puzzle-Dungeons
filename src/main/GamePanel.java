@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable
     Thread GameThread;
     KeyHandler pressedKey = new KeyHandler();
     Player player = new Player(this, pressedKey);
-    Map map = new Map(this, pressedKey);
+    Map map = new Map(this);
     // ********************************************************
 
     public GamePanel()
@@ -74,6 +74,7 @@ public class GamePanel extends JPanel implements Runnable
 
     public void Update()
     {
+        map.Update();
         player.Update();
 
     }
@@ -86,6 +87,8 @@ public class GamePanel extends JPanel implements Runnable
         player.Draw(g2);
 
         g2.drawString("FPS: " + averageFPS,3,12);
+        g2.drawString("X: " + player.x,3,24);
+        g2.drawString("Y: " + player.y,3,36);
         g2.dispose();
     }
 
