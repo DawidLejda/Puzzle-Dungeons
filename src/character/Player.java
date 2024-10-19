@@ -44,6 +44,7 @@ public class Player extends Character
             idle_down3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_down3.png")));
             idle_down4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_down4.png")));
             idle_down5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_down5.png")));
+
             up1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/up1.png")));
             up2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/up2.png")));
             up3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/up3.png")));
@@ -55,6 +56,32 @@ public class Player extends Character
             idle_up3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_up3.png")));
             idle_up4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_up4.png")));
             idle_up5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_up5.png")));
+
+            left1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/left1.png")));
+            left2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/left2.png")));
+            left3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/left3.png")));
+            left4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/left4.png")));
+            left5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/left5.png")));
+            left6 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/left6.png")));
+            idle_left1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_left1.png")));
+            idle_left2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_left2.png")));
+            idle_left3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_left3.png")));
+            idle_left4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_left4.png")));
+            idle_left5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_left5.png")));
+
+
+            right1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/right1.png")));
+            right2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/right2.png")));
+            right3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/right3.png")));
+            right4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/right4.png")));
+            right5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/right5.png")));
+            right6 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/right6.png")));
+            idle_right1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_right1.png")));
+            idle_right2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_right2.png")));
+            idle_right3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_right3.png")));
+            idle_right4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_right4.png")));
+            idle_right5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_right5.png")));
+
 
         } catch (IOException e) {
             System.out.println("Couldn't read player character model file");
@@ -96,10 +123,11 @@ public class Player extends Character
         // 8 frames of pressing key per animation change
         if (playerMoving)
         {
-            if (animationFrame >= 8)
+
+            if (animationFrame >= 5)
             {
                 swapSkin++;
-                if (swapSkin > 6)
+                if (swapSkin > 7)
                 {
                     swapSkin = 1;
                 }
@@ -149,7 +177,7 @@ public class Player extends Character
                     {
                         image = down5;
                     }
-                    else if (swapSkin == 6)
+                    else
                     {
                         image = down6;
                     }
@@ -176,19 +204,67 @@ public class Player extends Character
                     {
                         image = up5;
                     }
-                    else if (swapSkin == 6)
+                    else
                     {
                         image = up6;
                     }
                     break;
 
+
                 case "left":
-                    image = down1;
+                    if (swapSkin == 1)
+                    {
+                        image = left1;
+                    }
+                    else if (swapSkin == 2)
+                    {
+                        image = left2;
+                    }
+                    else if (swapSkin == 3)
+                    {
+                        image = left3;
+                    }
+                    else if (swapSkin == 4)
+                    {
+                        image = left4;
+                    }
+                    else if (swapSkin == 5)
+                    {
+                        image = left5;
+                    }
+                    else
+                    {
+                        image = left6;
+                    }
                     break;
 
                 case "right":
-                    image = down2;
+                    if (swapSkin == 1)
+                    {
+                        image = right1;
+                    }
+                    else if (swapSkin == 2)
+                    {
+                        image = right2;
+                    }
+                    else if (swapSkin == 3)
+                    {
+                        image = right3;
+                    }
+                    else if (swapSkin == 4)
+                    {
+                        image = right4;
+                    }
+                    else if (swapSkin == 5)
+                    {
+                        image = right5;
+                    }
+                    else
+                    {
+                        image = right6;
+                    }
                     break;
+
             }
         }
 
@@ -243,9 +319,76 @@ public class Player extends Character
                             image = idle_up5;
                         }
                         break;
+                    case "left":
+                        if (swapIdle == 1)
+                        {
+                            image = idle_left1;
+                        }
+                        else if (swapIdle == 2)
+                        {
+                            image = idle_left2;
+                        }
+                        else if (swapIdle == 3)
+                        {
+                            image = idle_left3;
+                        }
+                        else if (swapIdle == 4)
+                        {
+                            image = idle_left4;
+                        }
+                        else if (swapIdle == 5)
+                        {
+                            image = idle_left5;
+                        }
+                        break;
+                    case "right":
+                        if (swapIdle == 1)
+                        {
+                            image = idle_right1;
+                        }
+                        else if (swapIdle == 2)
+                        {
+                            image = idle_right2;
+                        }
+                        else if (swapIdle == 3)
+                        {
+                            image = idle_right3;
+                        }
+                        else if (swapIdle == 4)
+                        {
+                            image = idle_right4;
+                        }
+                        else if (swapIdle == 5)
+                        {
+                            image = idle_right5;
+                        }
+                        break;
                 }
             }
 
+            else
+            {
+                if (swapIdle == 1)
+                {
+                    image = idle_down1;
+                }
+                else if (swapIdle == 2)
+                {
+                    image = idle_down2;
+                }
+                else if (swapIdle == 3)
+                {
+                    image = idle_down3;
+                }
+                else if (swapIdle == 4)
+                {
+                    image = idle_down4;
+                }
+                else if (swapIdle == 5)
+                {
+                    image = idle_down5;
+                }
+            }
         }
 
 
