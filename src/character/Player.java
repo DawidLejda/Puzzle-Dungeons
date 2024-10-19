@@ -20,7 +20,8 @@ public class Player extends Character
     private int animationFrame = 1;
     private int animationIdle = 1;
 
-    public Player(GamePanel gamePanel, KeyHandler pressedKey) {
+    public Player(GamePanel gamePanel, KeyHandler pressedKey)
+    {
         this.gamePanel = gamePanel;
         this.pressedKey = pressedKey;
         getPlayerModel();
@@ -31,8 +32,10 @@ public class Player extends Character
         getPlayerModel();
     }
 
-    public void getPlayerModel() {
-        try {
+    public void getPlayerModel()
+    {
+        try
+        {
             down1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/down1.png")));
             down2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/down2.png")));
             down3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/down3.png")));
@@ -83,7 +86,9 @@ public class Player extends Character
             idle_right5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_right5.png")));
 
 
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             System.out.println("Couldn't read player character model file");
             gamePanel.gameRunning = false;
         }

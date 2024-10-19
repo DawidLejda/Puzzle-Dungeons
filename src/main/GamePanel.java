@@ -1,6 +1,7 @@
 package main;
 
 import character.Player;
+import map.Map;
 
 import javax.swing.JPanel;
 import java.awt.*;
@@ -8,8 +9,8 @@ import java.awt.*;
 public class GamePanel extends JPanel implements Runnable
 {
     // Parameters ************************************************
-    final int width = 1280;
-    final int height = 720;
+    public final int width = 960;
+    public final int height = 768;
     public final int tileSize = 64;
     final int TARGET_FPS = 60;
     public int averageFPS;
@@ -18,9 +19,10 @@ public class GamePanel extends JPanel implements Runnable
 
     Thread GameThread;
     KeyHandler pressedKey = new KeyHandler();
-    Player player = new Player(this,pressedKey);
-
+    Player player = new Player(this, pressedKey);
+    Map map = new Map(this, pressedKey);
     // ********************************************************
+
     public GamePanel()
     {
         this.setPreferredSize(new Dimension(width,height));
@@ -73,12 +75,14 @@ public class GamePanel extends JPanel implements Runnable
     public void Update()
     {
         player.Update();
+
     }
 
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        map.Draw(g2);
         player.Draw(g2);
 
         g2.drawString("FPS: " + averageFPS,3,12);
