@@ -20,14 +20,21 @@ public class Player extends Character
     private int animationFrame = 1;
     private int animationIdle = 1;
 
+    public final int cameraX;
+    public final int cameraY;
+
     public Player(GamePanel gamePanel, KeyHandler pressedKey)
     {
         this.gamePanel = gamePanel;
         this.pressedKey = pressedKey;
         getPlayerModel();
 
-        x = 500;
-        y = 100;
+        cameraX = (gamePanel.width / 2) - (gamePanel.tileSize / 2);
+        cameraY = (gamePanel.height / 2) - (gamePanel.tileSize / 2);
+
+        // Coordinates of player starting position
+        x = gamePanel.tileSize * 20;
+        y = gamePanel.tileSize * 15;
         speed = 4;
     }
 
@@ -397,6 +404,6 @@ public class Player extends Character
 
 
 
-        g2.drawImage(image, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2.drawImage(image, cameraX, cameraY, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 }

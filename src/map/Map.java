@@ -1,5 +1,6 @@
 package map;
 
+import character.Player;
 import main.GamePanel;
 
 import javax.imageio.ImageIO;
@@ -12,6 +13,8 @@ import java.util.Random;
 public class Map extends bitmap
 {
     GamePanel gamePanel;
+    Player player;
+
     private int animationFrame = 1;
     private int swapWater = 1;
     Random rand = new Random();
@@ -21,9 +24,10 @@ public class Map extends bitmap
 
     Tile[] tile = new Tile[50];
 
-    public Map(GamePanel gamePanel)
+    public Map(GamePanel gamePanel, Player player)
     {
         this.gamePanel = gamePanel;
+        this.player = player;
         getTileSet();
     }
 
@@ -92,15 +96,14 @@ public class Map extends bitmap
 
     public void Draw(Graphics2D g2)
     {
-        BufferedImage render_tile = null;
-        int length_Y = gamePanel.height / gamePanel.tileSize;
-        int length_X = gamePanel.width / gamePanel.tileSize;
-
-        for (int y = 0; y < length_Y; y++)
+        BufferedImage render_tile;
+        for (int y = 0; y < mapHeight; y++)
         {
-            for (int x = 0; x < length_X; x++)
+            for (int x = 0; x < mapWidth; x++)
             {
                 int map_index = starting_area[y][x];
+                int cameraX = x * gamePanel.tileSize - player.x + player.cameraX;
+                int cameraY = y * gamePanel.tileSize - player.y + player.cameraY;
 
                 if (map_index == 21)
                 {
@@ -146,7 +149,7 @@ public class Map extends bitmap
                     render_tile = tile[map_index].image;
                 }
 
-                g2.drawImage(render_tile, x * gamePanel.tileSize, y * gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
+                g2.drawImage(render_tile, cameraX, cameraY, gamePanel.tileSize, gamePanel.tileSize, null);
             }
         }
     }

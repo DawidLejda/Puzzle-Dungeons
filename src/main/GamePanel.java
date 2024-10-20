@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable
     Thread GameThread;
     KeyHandler pressedKey = new KeyHandler();
     Player player = new Player(this, pressedKey);
-    Map map = new Map(this);
+    Map map = new Map(this, player);
     // ********************************************************
 
     public GamePanel()
