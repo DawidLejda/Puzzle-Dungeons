@@ -7,12 +7,19 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Random;
 
 public class Map extends bitmap
 {
     GamePanel gamePanel;
     private int animationFrame = 1;
     private int swapWater = 1;
+    Random rand = new Random();
+    int randomWave = 16;
+    int chanceForWave = 0;
+    int waveTime = 0;
+
+    Tile[] tile = new Tile[50];
 
     public Map(GamePanel gamePanel)
     {
@@ -22,48 +29,61 @@ public class Map extends bitmap
 
     public void getTileSet()
     {
+        loadTileSet(11, "grass", "grass1");
+        loadTileSet(12, "grass", "grass2");
+        loadTileSet(13, "grass", "grass3");
+        loadTileSet(14, "grass", "grass4");
+        loadTileSet(15, "grass", "grass5");
+
+        // 21 index initializing water animation
+        loadTileSet(1,"water", "water1");
+        loadTileSet(2, "water", "water2");
+        loadTileSet(3, "water", "water3");
+        loadTileSet(4, "water", "water4");
+        loadTileSet(5, "water", "water5");
+        loadTileSet(6, "water", "water6");
+        loadTileSet(7, "water", "water7");
+
+        loadTileSet(22, "water", "water_deco1");
+        loadTileSet(23, "water", "water_deco2");
+        loadTileSet(24, "water", "water_deco3");
+        loadTileSet(25, "water", "water_deco4");
+
+        loadTileSet(26, "water", "water_left");
+        loadTileSet(27, "water", "water_right");
+        loadTileSet(28, "water", "water_bottom");
+        loadTileSet(29, "water", "water_top");
+
+        loadTileSet(31, "water", "water_corner1");
+        loadTileSet(32, "water", "water_corner2");
+        loadTileSet(33, "water", "water_corner3");
+        loadTileSet(34, "water", "water_corner4");
+
+    }
+    public void loadTileSet(int index, String directory, String name)
+    {
         try
         {
-            grass1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/grass1.png")));
-            grass2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/grass2.png")));
-            grass3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/grass3.png")));
-            grass4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/grass4.png")));
-            grass5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/grass5.png")));
-
-            water1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water1.png")));
-            water2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water2.png")));
-            water3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water3.png")));
-            water4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water4.png")));
-            water5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water5.png")));
-            water6 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water6.png")));
-
-            water_left = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water_left.png")));
-            water_right = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water_right.png")));
-            water_top = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water_top.png")));
-            water_bottom = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water_bottom.png")));
-
-            water_deco1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water_deco1.png")));
-            water_deco2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water_deco2.png")));
-            water_deco3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water_deco3.png")));
-            water_deco4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/water/water_deco4.png")));
-
-
+            tile[index] = new Tile();
+            tile[index].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/"+ directory + "/" + name +".png")));
         }
         catch (IOException e)
         {
-        System.out.println("Couldn't read tileset");
-        gamePanel.gameRunning = false;
+            System.out.println("Couldn't read tileset");
+            gamePanel.gameRunning = false;
         }
     }
 
     public void Update()
     {
         animationFrame++;
-        if (animationFrame >= 16)
+        if (animationFrame >= randomWave)
         {
             swapWater++;
-            if (swapWater > 6)
+            if (swapWater > 7)
             {
+                randomWave = rand.nextInt(15) + 8;
+                chanceForWave = rand.nextInt(2);
                 swapWater = 1;
             }
             animationFrame = 0;
@@ -72,7 +92,7 @@ public class Map extends bitmap
 
     public void Draw(Graphics2D g2)
     {
-        BufferedImage tile = null;
+        BufferedImage render_tile = null;
         int length_Y = gamePanel.height / gamePanel.tileSize;
         int length_X = gamePanel.width / gamePanel.tileSize;
 
@@ -80,94 +100,53 @@ public class Map extends bitmap
         {
             for (int x = 0; x < length_X; x++)
             {
-                if (starting_area[y][x] >= 10 && starting_area[y][x] < 20)
-                {
-                    if (starting_area[y][x] == 11)
-                    {
-                        tile = grass1;
-                    }
-                    else if (starting_area[y][x] == 12)
-                    {
-                        tile = grass2;
-                    }
-                    else if (starting_area[y][x] == 13)
-                    {
-                        tile = grass3;
-                    }
-                    else if (starting_area[y][x] == 14)
-                    {
-                        tile = grass4;
-                    }
-                    else if (starting_area[y][x] == 15)
-                    {
-                        tile = grass5;
-                    }
-                }
-                else if (starting_area[y][x] >= 20)
-                {
-                    switch (starting_area[y][x])
-                    {
-                        case 21:
-                            // Animating water
-                            for (int i = 0; i < 6; i++)
-                            {
-                                if (swapWater == 1)
-                                {
-                                    tile = water1;
-                                }
-                                else if (swapWater == 2)
-                                {
-                                    tile = water2;
-                                }
-                                else if (swapWater == 3)
-                                {
-                                    tile = water3;
-                                }
-                                else if (swapWater == 4)
-                                {
-                                    tile = water4;
-                                }
-                                else if (swapWater == 5)
-                                {
-                                    tile = water5;
-                                }
-                                else
-                                {
-                                    tile = water6;
-                                }
-                            }
-                            break;
-                        case 22:
-                            tile = water_deco1;
-                            break;
-                        case 23:
-                            tile = water_deco2;
-                            break;
-                        case 24:
-                            tile = water_deco3;
-                            break;
-                        case 25:
-                            tile = water_deco4;
-                            break;
-                        case 26:
-                            tile = water_left;
-                            break;
-                        case 27:
-                            tile = water_right;
-                            break;
-                        case 28:
-                            tile = water_bottom;
-                            break;
-                        case 29:
-                            tile = water_top;
-                            break;
-                    }
+                int map_index = starting_area[y][x];
 
-
+                if (map_index == 21)
+                {
+                    if(starting_area[y][x+chanceForWave] == 21)
+                    {
+                        starting_area[y][x+chanceForWave] = 20;
+                    }
+                    if (chanceForWave != 0 )
+                    {
+                        if (swapWater == 1) {
+                            render_tile = tile[1].image;
+                        } else if (swapWater == 2) {
+                            render_tile = tile[2].image;
+                        } else if (swapWater == 3) {
+                            render_tile = tile[3].image;
+                        } else if (swapWater == 4) {
+                            render_tile = tile[4].image;
+                        } else if (swapWater == 5) {
+                            render_tile = tile[5].image;
+                        } else if (swapWater == 6) {
+                            render_tile = tile[6].image;
+                        } else {
+                            render_tile = tile[7].image;
+                        }
+                    }
+                    else {
+                        render_tile = tile[7].image;
+                    }
 
                 }
+                else if(map_index == 20)
+                {
+                    render_tile = tile[7].image;
+                    waveTime++;
+                    if (waveTime > 160)
+                    {
+                        waveTime = 0;
+                        starting_area[y][x] = 21;
+                    }
+                }
+                else
+                {
+                    render_tile = tile[map_index].image;
+                }
 
-                g2.drawImage(tile, x * gamePanel.tileSize, y * gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
+                g2.drawImage(render_tile, x * gamePanel.tileSize, y * gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
             }
         }
     }
