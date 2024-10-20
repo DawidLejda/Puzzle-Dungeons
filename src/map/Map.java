@@ -102,8 +102,8 @@ public class Map extends bitmap
             for (int x = 0; x < mapWidth; x++)
             {
                 int map_index = starting_area[y][x];
-                int cameraX = x * gamePanel.tileSize - player.x + player.cameraX;
-                int cameraY = y * gamePanel.tileSize - player.y + player.cameraY;
+                int centerX = x * gamePanel.tileSize - player.x + player.centerX;
+                int centerY = y * gamePanel.tileSize - player.y + player.centerY;
 
                 if (map_index == 21)
                 {
@@ -148,8 +148,15 @@ public class Map extends bitmap
                 {
                     render_tile = tile[map_index].image;
                 }
+                if (((x * gamePanel.tileSize) < (player.x + player.centerX + gamePanel.tileSize)) &&
+                   ((y * gamePanel.tileSize) < (player.y + player.centerY + gamePanel.tileSize)) &&
+                   ((x * gamePanel.tileSize) > (player.x - player.centerX - gamePanel.tileSize)) &&
+                   ((y * gamePanel.tileSize) > (player.y - player.centerY - gamePanel.tileSize)))
 
-                g2.drawImage(render_tile, cameraX, cameraY, gamePanel.tileSize, gamePanel.tileSize, null);
+                    {
+                        g2.drawImage(render_tile, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+                    }
+
             }
         }
     }
