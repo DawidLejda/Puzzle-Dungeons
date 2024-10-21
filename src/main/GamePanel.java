@@ -21,6 +21,7 @@ public class GamePanel extends JPanel implements Runnable
     KeyHandler pressedKey = new KeyHandler();
     Player player = new Player(this, pressedKey);
     Map map = new Map(this, player);
+    public CollisionChecker collisionChecker = new CollisionChecker(this);
     // ********************************************************
 
     public GamePanel()

@@ -22,7 +22,7 @@ public class Map extends bitmap
     int chanceForWave = 0;
     int waveTime = 0;
 
-    Tile[] tile = new Tile[50];
+    public Tile[] tile = new Tile[50];
 
     public Map(GamePanel gamePanel, Player player)
     {
@@ -33,43 +33,44 @@ public class Map extends bitmap
 
     public void getTileSet()
     {
-        loadTileSet(11, "grass", "grass1");
-        loadTileSet(12, "grass", "grass2");
-        loadTileSet(13, "grass", "grass3");
-        loadTileSet(14, "grass", "grass4");
-        loadTileSet(15, "grass", "grass5");
+        loadTileSet(11, "grass", "grass1", false);
+        loadTileSet(12, "grass", "grass2", false);
+        loadTileSet(13, "grass", "grass3", false);
+        loadTileSet(14, "grass", "grass4", false);
+        loadTileSet(15, "grass", "grass5", false);
 
         // 21 index initializing water animation
-        loadTileSet(1,"water", "water1");
-        loadTileSet(2, "water", "water2");
-        loadTileSet(3, "water", "water3");
-        loadTileSet(4, "water", "water4");
-        loadTileSet(5, "water", "water5");
-        loadTileSet(6, "water", "water6");
-        loadTileSet(7, "water", "water7");
+        loadTileSet(1,"water", "water1", true);
+        loadTileSet(2, "water", "water2", true);
+        loadTileSet(3, "water", "water3", true);
+        loadTileSet(4, "water", "water4", true);
+        loadTileSet(5, "water", "water5", true);
+        loadTileSet(6, "water", "water6", true);
+        loadTileSet(7, "water", "water7", true);
 
-        loadTileSet(22, "water", "water_deco1");
-        loadTileSet(23, "water", "water_deco2");
-        loadTileSet(24, "water", "water_deco3");
-        loadTileSet(25, "water", "water_deco4");
+        loadTileSet(22, "water", "water_deco1", true);
+        loadTileSet(23, "water", "water_deco2", true);
+        loadTileSet(24, "water", "water_deco3", true);
+        loadTileSet(25, "water", "water_deco4", true);
 
-        loadTileSet(26, "water", "water_left");
-        loadTileSet(27, "water", "water_right");
-        loadTileSet(28, "water", "water_bottom");
-        loadTileSet(29, "water", "water_top");
+        loadTileSet(26, "water", "water_left", true);
+        loadTileSet(27, "water", "water_right", true);
+        loadTileSet(28, "water", "water_bottom", true);
+        loadTileSet(29, "water", "water_top", true);
 
-        loadTileSet(31, "water", "water_corner1");
-        loadTileSet(32, "water", "water_corner2");
-        loadTileSet(33, "water", "water_corner3");
-        loadTileSet(34, "water", "water_corner4");
+        loadTileSet(31, "water", "water_corner1", true);
+        loadTileSet(32, "water", "water_corner2", true);
+        loadTileSet(33, "water", "water_corner3", true);
+        loadTileSet(34, "water", "water_corner4", true);
 
     }
-    public void loadTileSet(int index, String directory, String name)
+    public void loadTileSet(int index, String directory, String name, boolean collision)
     {
         try
         {
             tile[index] = new Tile();
             tile[index].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/"+ directory + "/" + name +".png")));
+            tile[index].collision = collision;
         }
         catch (IOException e)
         {

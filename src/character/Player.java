@@ -2,7 +2,6 @@ package character;
 
 import main.GamePanel;
 import main.KeyHandler;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -33,8 +32,8 @@ public class Player extends Character
         centerY = (gamePanel.height / 2) - (gamePanel.tileSize / 2);
 
         // Coordinates of player starting position
-        x = gamePanel.tileSize * 20;
-        y = gamePanel.tileSize * 15;
+        x = gamePanel.tileSize * 18;
+        y = gamePanel.tileSize * 10;
         speed = 4;
     }
 
@@ -103,25 +102,25 @@ public class Player extends Character
     public void Update() {
         if (pressedKey.left)
         {
-            x -= speed;
+            direction = "left";
             animationFrame++;
             playerMoving = true;
         }
         else if (pressedKey.right)
         {
-            x += speed;
+            direction = "right";
             animationFrame++;
             playerMoving = true;
         }
         else if (pressedKey.up)
         {
-            y -= speed;
+            direction = "up";
             animationFrame++;
             playerMoving = true;
         }
         else if (pressedKey.down)
         {
-            y += speed;
+            direction = "down";
             animationFrame++;
             playerMoving = true;
         }
@@ -131,10 +130,31 @@ public class Player extends Character
             playerMoving = false;
         }
 
+        collision = false;
+        gamePanel.collisionChecker.CheckTileCollision(this);
+        if(!collision)
+        {
+            if (pressedKey.left)
+            {
+                x -= speed;
+            }
+            else if (pressedKey.right)
+            {
+                x += speed;
+            }
+            else if (pressedKey.up)
+            {
+                y -= speed;
+            }
+            else if (pressedKey.down)
+            {
+                y += speed;
+            }
+        }
+
         // 8 frames of pressing key per animation change
         if (playerMoving)
         {
-
             if (animationFrame >= 5)
             {
                 swapSkin++;
