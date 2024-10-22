@@ -22,7 +22,7 @@ public class Map extends bitmap
     int chanceForWave = 0;
     int waveTime = 0;
 
-    public Tile[] tile = new Tile[50];
+    public Tile[] tile = new Tile[100];
 
     public Map(GamePanel gamePanel, Player player)
     {
@@ -62,6 +62,11 @@ public class Map extends bitmap
         loadTileSet(32, "water", "water_corner2", true);
         loadTileSet(33, "water", "water_corner3", true);
         loadTileSet(34, "water", "water_corner4", true);
+
+        loadTileSet(41, "rock", "rock1", true);
+        loadTileSet(42, "rock", "rock2", false);
+
+        loadTileSet(51, "tree", "tree1", true);
 
     }
     public void loadTileSet(int index, String directory, String name, boolean collision)
