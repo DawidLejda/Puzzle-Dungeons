@@ -6,4 +6,5 @@ public class Tile
 {
     BufferedImage image;
     public boolean collision;
+    public String type;
 }

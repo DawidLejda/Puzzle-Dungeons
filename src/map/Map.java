@@ -34,10 +34,14 @@ public class Map extends bitmap
     public void getTileSet()
     {
         loadTileSet(11, "grass", "grass1", false);
-        loadTileSet(12, "grass", "grass2", false);
-        loadTileSet(13, "grass", "grass3", false);
-        loadTileSet(14, "grass", "grass4", false);
-        loadTileSet(15, "grass", "grass5", false);
+        loadTileSet(12, "grass", "grass_left", true);
+        loadTileSet(13, "grass", "grass_right", true);
+        loadTileSet(14, "grass", "grass_top", true);
+        loadTileSet(15, "grass", "grass_bottom", true);
+        loadTileSet(16, "grass", "grass_corner_top_right", true);
+        loadTileSet(17, "grass", "grass_corner_top_left", true);
+        loadTileSet(18, "grass", "grass_corner_bottom_right", true);
+        loadTileSet(19, "grass", "grass_corner_bottom_left", true);
 
         // 21 index initializing water animation
         loadTileSet(1,"water", "water1", true);
@@ -53,20 +57,21 @@ public class Map extends bitmap
         loadTileSet(24, "water", "water_deco3", true);
         loadTileSet(25, "water", "water_deco4", true);
 
-        loadTileSet(26, "water", "water_left", true);
-        loadTileSet(27, "water", "water_right", true);
+        loadTileSet(26, "water", "water_right", true);
+        loadTileSet(27, "water", "water_left", true);
         loadTileSet(28, "water", "water_bottom", true);
         loadTileSet(29, "water", "water_top", true);
 
-        loadTileSet(31, "water", "water_corner1", true);
-        loadTileSet(32, "water", "water_corner2", true);
-        loadTileSet(33, "water", "water_corner3", true);
-        loadTileSet(34, "water", "water_corner4", true);
+        loadTileSet(31, "water", "water_corner_top_left", true);
+        loadTileSet(32, "water", "water_corner_top_right", true);
+        loadTileSet(33, "water", "water_corner_bottom_left", true);
+        loadTileSet(34, "water", "water_corner_bottom_right", true);
 
         loadTileSet(41, "rock", "rock1", true);
-        loadTileSet(42, "rock", "rock2", false);
+        loadTileSet(42, "rock", "rock2", true);
 
-        loadTileSet(51, "tree", "tree1", true);
+        loadTileSet(51, "tree", "tree1_bottom", true);
+        loadTileSet(52, "tree", "tree1_top", false);
 
     }
     public void loadTileSet(int index, String directory, String name, boolean collision)
@@ -76,6 +81,7 @@ public class Map extends bitmap
             tile[index] = new Tile();
             tile[index].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/"+ directory + "/" + name +".png")));
             tile[index].collision = collision;
+            tile[index].type = directory;
         }
         catch (IOException e)
         {
@@ -103,6 +109,7 @@ public class Map extends bitmap
     public void Draw(Graphics2D g2)
     {
         BufferedImage render_tile;
+        int scale = gamePanel.tileSize;
         for (int y = 0; y < mapHeight; y++)
         {
             for (int x = 0; x < mapWidth; x++)
@@ -113,10 +120,16 @@ public class Map extends bitmap
 
                 if (map_index == 21)
                 {
-                    if(starting_area[y][x+chanceForWave] == 21)
+                    try
                     {
-                        starting_area[y][x+chanceForWave] = 20;
+                        if(starting_area[y][x+chanceForWave] == 21)
+                        {
+                            starting_area[y][x+chanceForWave] = 20;
+                        }
+                    } catch (ArrayIndexOutOfBoundsException exception) {
+
                     }
+
                     if (chanceForWave != 0 )
                     {
                         if (swapWater == 1) {
@@ -160,7 +173,9 @@ public class Map extends bitmap
                    ((y * gamePanel.tileSize) > (player.y - player.centerY - gamePanel.tileSize)))
 
                     {
-                        g2.drawImage(render_tile, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+
+                        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+                        g2.drawImage(render_tile, centerX, centerY, scale,scale, null);
                     }
 
             }

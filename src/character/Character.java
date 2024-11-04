@@ -8,6 +8,7 @@ public class Character
     public int y;
     public int speed;
     public boolean collision;
+    public boolean visibility = true;
     public String direction = "down";
 
     public BufferedImage down1, down2, down3, down4, down5, down6;

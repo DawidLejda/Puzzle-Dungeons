@@ -20,8 +20,9 @@ public class GamePanel extends JPanel implements Runnable
     Thread GameThread;
     KeyHandler pressedKey = new KeyHandler();
     Player player = new Player(this, pressedKey);
-    Map map = new Map(this, player);
+    public Map map = new Map(this, player);
     public CollisionChecker collisionChecker = new CollisionChecker(this);
+    public Object Bunker = new Object();
     // ********************************************************
 
     public GamePanel()
@@ -70,6 +71,7 @@ public class GamePanel extends JPanel implements Runnable
                 timer += 1000;
                 frameCount = 0;
             }
+
         }
     }
 
@@ -84,8 +86,18 @@ public class GamePanel extends JPanel implements Runnable
     {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        map.Draw(g2);
-        player.Draw(g2);
+
+        if(player.visibility)
+        {
+            map.Draw(g2);
+            player.Draw(g2);
+        }
+        else
+        {
+            player.Draw(g2);
+            map.Draw(g2);
+        }
+
 
         g2.drawString("FPS: " + averageFPS,3,12);
         g2.drawString("X: " + player.x,3,24);

@@ -2,6 +2,7 @@ package character;
 
 import main.GamePanel;
 import main.KeyHandler;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -32,8 +33,8 @@ public class Player extends Character
         centerY = (gamePanel.height / 2) - (gamePanel.tileSize / 2);
 
         // Coordinates of player starting position
-        x = gamePanel.tileSize * 18;
-        y = gamePanel.tileSize * 10;
+        x = gamePanel.tileSize * 35;
+        y = gamePanel.tileSize * 25;
         speed = 4;
     }
 
@@ -129,9 +130,10 @@ public class Player extends Character
             animationIdle++;
             playerMoving = false;
         }
-
+        visibility = true;
         collision = false;
         gamePanel.collisionChecker.CheckTileCollision(this);
+
         if(!collision)
         {
             if (pressedKey.left)
@@ -423,7 +425,8 @@ public class Player extends Character
         }
 
 
-
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         g2.drawImage(image, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+
     }
 }
