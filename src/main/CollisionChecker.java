@@ -76,4 +76,8 @@ public class CollisionChecker
         }
     }
 
+    public void CheckObjectCollision(Character character, Object object)
+    {
+
+    }
 }

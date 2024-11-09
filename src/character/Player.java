@@ -2,6 +2,7 @@ package character;
 
 import main.GamePanel;
 import main.KeyHandler;
+import object.ObjectImages;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -19,7 +20,8 @@ public class Player extends Character
     private int swapIdle = 1;
     private int animationFrame = 1;
     private int animationIdle = 1;
-
+    public object.ObjectImages[][] Sprite = new ObjectImages[4][6];
+    public object.ObjectImages[][] IdleSprite = new ObjectImages[4][5];
     public final int centerX;
     public final int centerY;
 
@@ -40,58 +42,32 @@ public class Player extends Character
 
     public void getPlayerModel()
     {
-        try
-        {
-            down1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/down1.png")));
-            down2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/down2.png")));
-            down3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/down3.png")));
-            down4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/down4.png")));
-            down5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/down5.png")));
-            down6 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/down6.png")));
-            idle_down1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_down1.png")));
-            idle_down2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_down2.png")));
-            idle_down3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_down3.png")));
-            idle_down4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_down4.png")));
-            idle_down5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_down5.png")));
-
-            up1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/up1.png")));
-            up2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/up2.png")));
-            up3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/up3.png")));
-            up4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/up4.png")));
-            up5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/up5.png")));
-            up6 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/up6.png")));
-            idle_up1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_up1.png")));
-            idle_up2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_up2.png")));
-            idle_up3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_up3.png")));
-            idle_up4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_up4.png")));
-            idle_up5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_up5.png")));
-
-            left1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/left1.png")));
-            left2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/left2.png")));
-            left3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/left3.png")));
-            left4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/left4.png")));
-            left5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/left5.png")));
-            left6 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/left6.png")));
-            idle_left1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_left1.png")));
-            idle_left2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_left2.png")));
-            idle_left3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_left3.png")));
-            idle_left4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_left4.png")));
-            idle_left5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_left5.png")));
-
-
-            right1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/right1.png")));
-            right2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/right2.png")));
-            right3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/right3.png")));
-            right4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/right4.png")));
-            right5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/right5.png")));
-            right6 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/move/right6.png")));
-            idle_right1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_right1.png")));
-            idle_right2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_right2.png")));
-            idle_right3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_right3.png")));
-            idle_right4 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_right4.png")));
-            idle_right5 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/idle/idle_right5.png")));
-
-
+        try {
+            String direction;
+            for (int j = 0; j < 4; j++) {
+                if (j == 0) {
+                    direction = "down";
+                }
+                else if (j == 1) {
+                    direction = "up";
+                }
+                else if (j == 2) {
+                    direction = "left";
+                }
+                else {
+                    direction = "right";
+                }
+                for (int i = 0; i < 6; i++) {
+                    String path = "player/move/".concat(direction).concat(Integer.toString(i + 1)).concat(".png");
+                    Sprite[j][i] = new ObjectImages();
+                    Sprite[j][i].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
+                    if (i < 5) {
+                        String idle_path = "player/idle/idle_".concat(direction).concat(Integer.toString(i + 1)).concat(".png");
+                        IdleSprite[j][i] = new ObjectImages();
+                        IdleSprite[j][i].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(idle_path)));
+                    }
+                }
+            }
         }
         catch (IOException e)
         {
@@ -160,7 +136,7 @@ public class Player extends Character
             if (animationFrame >= 5)
             {
                 swapSkin++;
-                if (swapSkin > 7)
+                if (swapSkin > 5)
                 {
                     swapSkin = 1;
                 }
@@ -172,7 +148,7 @@ public class Player extends Character
             if (animationIdle >= 12)
             {
                 swapIdle++;
-                if (swapIdle > 5)
+                if (swapIdle > 4)
                 {
                     swapIdle = 1;
                 }
@@ -187,240 +163,30 @@ public class Player extends Character
 
         if(playerMoving)
         {
-            switch (pressedKey.lastPressedKey)
-            {
-                case "down":
-                    if (swapSkin == 1)
-                    {
-                        image = down1;
-                    }
-                    else if (swapSkin == 2)
-                    {
-                        image = down2;
-                    }
-                    else if (swapSkin == 3)
-                    {
-                        image = down3;
-                    }
-                    else if (swapSkin == 4)
-                    {
-                        image = down4;
-                    }
-                    else if (swapSkin == 5)
-                    {
-                        image = down5;
-                    }
-                    else
-                    {
-                        image = down6;
-                    }
-                    break;
-
-                case "up":
-                    if (swapSkin == 1)
-                    {
-                        image = up1;
-                    }
-                    else if (swapSkin == 2)
-                    {
-                        image = up2;
-                    }
-                    else if (swapSkin == 3)
-                    {
-                        image = up3;
-                    }
-                    else if (swapSkin == 4)
-                    {
-                        image = up4;
-                    }
-                    else if (swapSkin == 5)
-                    {
-                        image = up5;
-                    }
-                    else
-                    {
-                        image = up6;
-                    }
-                    break;
-
-
-                case "left":
-                    if (swapSkin == 1)
-                    {
-                        image = left1;
-                    }
-                    else if (swapSkin == 2)
-                    {
-                        image = left2;
-                    }
-                    else if (swapSkin == 3)
-                    {
-                        image = left3;
-                    }
-                    else if (swapSkin == 4)
-                    {
-                        image = left4;
-                    }
-                    else if (swapSkin == 5)
-                    {
-                        image = left5;
-                    }
-                    else
-                    {
-                        image = left6;
-                    }
-                    break;
-
-                case "right":
-                    if (swapSkin == 1)
-                    {
-                        image = right1;
-                    }
-                    else if (swapSkin == 2)
-                    {
-                        image = right2;
-                    }
-                    else if (swapSkin == 3)
-                    {
-                        image = right3;
-                    }
-                    else if (swapSkin == 4)
-                    {
-                        image = right4;
-                    }
-                    else if (swapSkin == 5)
-                    {
-                        image = right5;
-                    }
-                    else
-                    {
-                        image = right6;
-                    }
-                    break;
-
-            }
+            image = switch (pressedKey.lastPressedKey) {
+                case "down" -> Sprite[0][swapSkin].image;
+                case "up" -> Sprite[1][swapSkin].image;
+                case "left" -> Sprite[2][swapSkin].image;
+                case "right" -> Sprite[3][swapSkin].image;
+                default -> image;
+            };
         }
 
         else
         {
             if (pressedKey.lastReleasedKey != null)
             {
-                switch (pressedKey.lastReleasedKey)
-                {
-                    case "down":
-                        if (swapIdle == 1)
-                        {
-                            image = idle_down1;
-                        }
-                        else if (swapIdle == 2)
-                        {
-                            image = idle_down2;
-                        }
-                        else if (swapIdle == 3)
-                        {
-                            image = idle_down3;
-                        }
-                        else if (swapIdle == 4)
-                        {
-                            image = idle_down4;
-                        }
-                        else if (swapIdle == 5)
-                        {
-                            image = idle_down5;
-                        }
-                        break;
-
-                    case "up":
-                        if (swapIdle == 1)
-                        {
-                            image = idle_up1;
-                        }
-                        else if (swapIdle == 2)
-                        {
-                            image = idle_up2;
-                        }
-                        else if (swapIdle == 3)
-                        {
-                            image = idle_up3;
-                        }
-                        else if (swapIdle == 4)
-                        {
-                            image = idle_up4;
-                        }
-                        else if (swapIdle == 5)
-                        {
-                            image = idle_up5;
-                        }
-                        break;
-                    case "left":
-                        if (swapIdle == 1)
-                        {
-                            image = idle_left1;
-                        }
-                        else if (swapIdle == 2)
-                        {
-                            image = idle_left2;
-                        }
-                        else if (swapIdle == 3)
-                        {
-                            image = idle_left3;
-                        }
-                        else if (swapIdle == 4)
-                        {
-                            image = idle_left4;
-                        }
-                        else if (swapIdle == 5)
-                        {
-                            image = idle_left5;
-                        }
-                        break;
-                    case "right":
-                        if (swapIdle == 1)
-                        {
-                            image = idle_right1;
-                        }
-                        else if (swapIdle == 2)
-                        {
-                            image = idle_right2;
-                        }
-                        else if (swapIdle == 3)
-                        {
-                            image = idle_right3;
-                        }
-                        else if (swapIdle == 4)
-                        {
-                            image = idle_right4;
-                        }
-                        else if (swapIdle == 5)
-                        {
-                            image = idle_right5;
-                        }
-                        break;
-                }
+                image = switch (pressedKey.lastReleasedKey) {
+                    case "down" -> IdleSprite[0][swapIdle].image;
+                    case "up" -> IdleSprite[1][swapIdle].image;
+                    case "left" -> IdleSprite[2][swapIdle].image;
+                    case "right" -> IdleSprite[3][swapIdle].image;
+                    default -> image;
+                };
             }
-
             else
             {
-                if (swapIdle == 1)
-                {
-                    image = idle_down1;
-                }
-                else if (swapIdle == 2)
-                {
-                    image = idle_down2;
-                }
-                else if (swapIdle == 3)
-                {
-                    image = idle_down3;
-                }
-                else if (swapIdle == 4)
-                {
-                    image = idle_down4;
-                }
-                else if (swapIdle == 5)
-                {
-                    image = idle_down5;
-                }
+                image = IdleSprite[0][swapIdle].image;
             }
         }
 

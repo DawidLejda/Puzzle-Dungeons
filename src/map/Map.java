@@ -67,11 +67,19 @@ public class Map extends bitmap
         loadTileSet(33, "water", "water_corner_bottom_left", true);
         loadTileSet(34, "water", "water_corner_bottom_right", true);
 
-        loadTileSet(41, "rock", "rock1", true);
-        loadTileSet(42, "rock", "rock2", true);
+        loadTileSet(46, "water", "island_right", true);
+        loadTileSet(47, "water", "island_left", true);
+        loadTileSet(48, "water", "island_bottom", true);
+        loadTileSet(49, "water", "island_top", true);
 
-        loadTileSet(51, "tree", "tree1_bottom", true);
-        loadTileSet(52, "tree", "tree1_top", false);
+        loadTileSet(41, "water", "island_corner_top_left", true);
+        loadTileSet(42, "water", "island_corner_top_right", true);
+        loadTileSet(43, "water", "island_corner_bottom_left", true);
+        loadTileSet(44, "water", "island_corner_bottom_right", true);
+
+        loadTileSet(53, "rock", "rock1", true);
+        loadTileSet(54, "rock", "rock2", true);
+
 
     }
     public void loadTileSet(int index, String directory, String name, boolean collision)
@@ -98,7 +106,7 @@ public class Map extends bitmap
             swapWater++;
             if (swapWater > 7)
             {
-                randomWave = rand.nextInt(15) + 8;
+                randomWave = rand.nextInt(10) + 10;
                 chanceForWave = rand.nextInt(2);
                 swapWater = 1;
             }
