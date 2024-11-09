@@ -2,7 +2,8 @@ package main;
 
 import character.Player;
 import map.Map;
-
+import object.*;
+import object.Object;
 import javax.swing.JPanel;
 import java.awt.*;
 
@@ -19,10 +20,15 @@ public class GamePanel extends JPanel implements Runnable
 
     Thread GameThread;
     KeyHandler pressedKey = new KeyHandler();
-    Player player = new Player(this, pressedKey);
+
+    public Player player = new Player(this, pressedKey);
     public Map map = new Map(this, player);
     public CollisionChecker collisionChecker = new CollisionChecker(this);
-    public Object Bunker = new Object();
+
+
+    public ObjectPlacement objectPlacement = new ObjectPlacement(this);
+    public QuantumBunker bunker = new QuantumBunker(this);
+    public Object[][] trees = new Object[2][3];
     // ********************************************************
 
     public GamePanel()
@@ -31,6 +37,11 @@ public class GamePanel extends JPanel implements Runnable
         this.setDoubleBuffered(true);
         this.addKeyListener(pressedKey);
         this.setFocusable(true);
+    }
+
+    public void Placement()
+    {
+        objectPlacement.TreePlacement();
     }
 
     public void startGameThread()
@@ -79,7 +90,7 @@ public class GamePanel extends JPanel implements Runnable
     {
         map.Update();
         player.Update();
-
+        bunker.Update();
     }
 
     public void paintComponent(Graphics g)
@@ -87,17 +98,31 @@ public class GamePanel extends JPanel implements Runnable
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        if(player.visibility)
-        {
-            map.Draw(g2);
-            player.Draw(g2);
-        }
-        else
+        map.Draw(g2);
+
+        if(player.collision == false)
         {
             player.Draw(g2);
-            map.Draw(g2);
+            bunker.DrawStanding(g2, this);
+            for (int i = 0, n = trees.length; i < n; i++) {
+                if (trees[0][i] != null && trees[1][i] != null) {
+                    trees[0][i].draw(g2, this);
+                    trees[1][i].draw(g2, this);
+                }
+            }
         }
 
+        else
+        {
+            bunker.DrawStanding(g2, this);
+            for (int i = 0, n = trees.length; i < n; i++) {
+                if (trees[0][i] != null && trees[1][i] != null) {
+                    trees[0][i].draw(g2, this);
+                    trees[1][i].draw(g2, this);
+                }
+            }
+            player.Draw(g2);
+        }
 
         g2.drawString("FPS: " + averageFPS,3,12);
         g2.drawString("X: " + player.x,3,24);

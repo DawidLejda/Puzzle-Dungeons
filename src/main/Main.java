@@ -19,6 +19,7 @@ public class Main
         GameFrame.setLocationRelativeTo(null);
         GameFrame.setVisible(true);
 
+        game_panel.Placement();
         game_panel.startGameThread();
     }
 }
