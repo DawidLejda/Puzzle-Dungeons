@@ -100,7 +100,7 @@ public class GamePanel extends JPanel implements Runnable
 
         map.Draw(g2);
 
-        if(player.collision == false)
+        if(!player.collision || !player.visibility)
         {
             player.Draw(g2);
             bunker.DrawStanding(g2, this);

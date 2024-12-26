@@ -3,8 +3,8 @@ import character.Character;
 public class CollisionChecker
 {
     GamePanel gamePanel;
-    public int mapIndex1,mapIndex2;
 
+    public int playerLeft,playerRight,playerTop,playerBottom;
     public CollisionChecker(GamePanel gamePanel)
     {
         this.gamePanel = gamePanel;
@@ -12,33 +12,23 @@ public class CollisionChecker
 
     public void CheckTileCollision(Character character)
     {
-        int[] X = new int[2];
-        int[] Y = new int[2];
-        // Character pixel characterBOX : X-left[0]/right[1], Y-top[0]/bottom[1]
-        X[0] = (character.x - gamePanel.tileSize) + (int) (gamePanel.tileSize - (gamePanel.tileSize / 2)) + gamePanel.tileSize;
-        X[1] = (character.x + gamePanel.tileSize) - (int) (gamePanel.tileSize - (gamePanel.tileSize / 2));
-        Y[0] = (character.y - gamePanel.tileSize) + (int) (gamePanel.tileSize - (gamePanel.tileSize / 2.6)) + gamePanel.tileSize;
-        Y[1] = (character.y + gamePanel.tileSize) - (int) (gamePanel.tileSize - (gamePanel.tileSize / 2));
+        playerLeft = (character.x - gamePanel.tileSize) + (gamePanel.tileSize - (gamePanel.tileSize / 2)) + gamePanel.tileSize;
+        playerRight = (character.x + gamePanel.tileSize) -  (gamePanel.tileSize - (gamePanel.tileSize / 2));
+        playerTop = (character.y - gamePanel.tileSize) + (int) (gamePanel.tileSize - (gamePanel.tileSize / 2.6)) + gamePanel.tileSize;
+        playerBottom = (character.y + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2));
 
         // Corner coordinates of character BOX;
-        int X_Left = X[0] / gamePanel.tileSize;
-        int X_Right = X[1] / gamePanel.tileSize;
-        int Y_Top = Y[0] / gamePanel.tileSize;
-        int Y_Bottom = Y[1] / gamePanel.tileSize;
+        int X_Left = playerLeft / gamePanel.tileSize;
+        int X_Right = playerRight / gamePanel.tileSize;
+        int Y_Top = playerTop / gamePanel.tileSize;
+        int Y_Bottom = playerBottom / gamePanel.tileSize;
 
-
-        int characterX = X[0] / gamePanel.tileSize;
-        int characterY = Y[0] / gamePanel.tileSize;
-        if(gamePanel.map.starting_area[characterY][characterX] == 52)
-        {
-            character.visibility = false;
-        }
+        int mapIndex1,mapIndex2;
 
         switch(character.direction)
         {
             case "left":
-
-                X_Left = (X[0] - character.speed) / gamePanel.tileSize;
+                X_Left = (playerLeft - character.speed) / gamePanel.tileSize;
                 mapIndex1 = gamePanel.map.starting_area[Y_Top][X_Left];
                 mapIndex2 = gamePanel.map.starting_area[Y_Bottom][X_Left];
                 if(gamePanel.map.tile[mapIndex1].collision || gamePanel.map.tile[mapIndex2].collision)
@@ -47,7 +37,7 @@ public class CollisionChecker
                 }
                 break;
             case "right":
-                X_Right = (X[1] + character.speed) / gamePanel.tileSize;
+                X_Right = (playerRight + character.speed) / gamePanel.tileSize;
                 mapIndex1 = gamePanel.map.starting_area[Y_Top][X_Right];
                 mapIndex2 = gamePanel.map.starting_area[Y_Bottom][X_Right];
                 if(gamePanel.map.tile[mapIndex1].collision || gamePanel.map.tile[mapIndex2].collision)
@@ -56,7 +46,7 @@ public class CollisionChecker
                 }
                 break;
             case "up":
-                Y_Top = (Y[0] - character.speed) / gamePanel.tileSize;
+                Y_Top = (playerTop - character.speed) / gamePanel.tileSize;
                 mapIndex1 = gamePanel.map.starting_area[Y_Top][X_Left];
                 mapIndex2 = gamePanel.map.starting_area[Y_Top][X_Right];
                 if(gamePanel.map.tile[mapIndex1].collision || gamePanel.map.tile[mapIndex2].collision)
@@ -65,7 +55,7 @@ public class CollisionChecker
                 }
                 break;
             case "down":
-                Y_Bottom = (Y[1] + character.speed) / gamePanel.tileSize;
+                Y_Bottom = (playerBottom + character.speed) / gamePanel.tileSize;
                 mapIndex1 = gamePanel.map.starting_area[Y_Bottom][X_Left];
                 mapIndex2 = gamePanel.map.starting_area[Y_Bottom][X_Right];
                 if(gamePanel.map.tile[mapIndex1].collision || gamePanel.map.tile[mapIndex2].collision)
@@ -76,8 +66,54 @@ public class CollisionChecker
         }
     }
 
-    public void CheckObjectCollision(Character character, Object object)
+    public void CheckObjectCollision(Character character)
     {
+        for (int i = 0, n = gamePanel.trees[0].length; i<n; i++)
+        {
 
+            int X_Left = playerLeft / gamePanel.tileSize;
+            int X_Right = playerRight / gamePanel.tileSize;
+            int Y_Top = playerTop / gamePanel.tileSize;
+            int Y_Bottom = playerBottom / gamePanel.tileSize;
+
+            switch(character.direction)
+            {
+                case "left":
+                    X_Left = (playerLeft - character.speed) / gamePanel.tileSize;
+                    if(X_Left == gamePanel.trees[0][i].x && Y_Top == gamePanel.trees[0][i].y ||
+                            X_Left == gamePanel.trees[0][i].x && Y_Bottom == gamePanel.trees[0][i].y)
+                    {
+                        character.visibility = false;
+                        character.collision = true;
+                    }
+                    break;
+                case "right":
+                    X_Right = (playerRight + character.speed) / gamePanel.tileSize;
+                    if(X_Right == gamePanel.trees[0][i].x && Y_Top == gamePanel.trees[0][i].y ||
+                            X_Right == gamePanel.trees[0][i].x && Y_Bottom == gamePanel.trees[0][i].y)
+                    {
+                        character.visibility = false;
+                        character.collision = true;
+                    }
+                    break;
+                case "up":
+                    Y_Top = (playerTop - character.speed) / gamePanel.tileSize;
+                    if(X_Left == gamePanel.trees[0][i].x && Y_Top == gamePanel.trees[0][i].y ||
+                            X_Right == gamePanel.trees[0][i].x && Y_Top == gamePanel.trees[0][i].y)
+                    {
+                        character.collision = true;
+                    }
+                    break;
+                case "down":
+                    Y_Bottom = (playerBottom + character.speed) / gamePanel.tileSize;
+                    if(X_Left == gamePanel.trees[0][i].x && Y_Bottom == gamePanel.trees[0][i].y ||
+                            X_Right == gamePanel.trees[0][i].x && Y_Bottom == gamePanel.trees[0][i].y)
+                    {
+                        character.visibility = false;
+                        character.collision = true;
+                    }
+                    break;
+            }
+        }
     }
 }

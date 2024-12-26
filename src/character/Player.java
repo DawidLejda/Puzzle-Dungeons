@@ -109,7 +109,7 @@ public class Player extends Character
         visibility = true;
         collision = false;
         gamePanel.collisionChecker.CheckTileCollision(this);
-
+        gamePanel.collisionChecker.CheckObjectCollision(this);
         if(!collision)
         {
             if (pressedKey.left)
