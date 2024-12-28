@@ -35,8 +35,8 @@ public class Player extends Character
         centerY = (gamePanel.height / 2) - (gamePanel.tileSize / 2);
 
         // Coordinates of player starting position
-        x = gamePanel.tileSize * 35;
-        y = gamePanel.tileSize * 25;
+        x = gamePanel.tileSize * 17;
+        y = gamePanel.tileSize * 29;
         speed = 4;
     }
 
@@ -110,6 +110,8 @@ public class Player extends Character
         collision = false;
         gamePanel.collisionChecker.CheckTileCollision(this);
         gamePanel.collisionChecker.CheckObjectCollision(this);
+        gamePanel.collisionChecker.CheckObjectAirVentCollision(this);
+        gamePanel.collisionChecker.CheckObjectVisibility(this);
         if(!collision)
         {
             if (pressedKey.left)
@@ -130,7 +132,6 @@ public class Player extends Character
             }
         }
 
-        // 8 frames of pressing key per animation change
         if (playerMoving)
         {
             if (animationFrame >= 5)
@@ -190,9 +191,7 @@ public class Player extends Character
             }
         }
 
-
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         g2.drawImage(image, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
-
     }
 }

@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener
 {
 
-    public boolean left, right, up, down;
+    public boolean left, right, up, down, use;
     public String lastPressedKey;
     public String lastReleasedKey;
     @Override
@@ -36,6 +36,10 @@ public class KeyHandler implements KeyListener
                 down = true;
                 lastPressedKey = "down";
                 break;
+            case KeyEvent.VK_E:
+                use = true;
+                lastPressedKey = "use";
+                break;
         }
         lastReleasedKey = null;
     }
@@ -60,6 +64,10 @@ public class KeyHandler implements KeyListener
             case KeyEvent.VK_S:
                 down = false;
                 lastReleasedKey = "down";
+                break;
+            case KeyEvent.VK_E:
+                use = false;
+                lastReleasedKey = "use";
                 break;
             default:
                 lastReleasedKey = null;

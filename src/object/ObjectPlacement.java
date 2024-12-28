@@ -22,7 +22,7 @@ public class ObjectPlacement extends Object
         gamePanel.trees[0][1].y = 7;
 
         gamePanel.trees[0][2] = new TreeBottom();
-        gamePanel.trees[0][2].x = 37;
+        gamePanel.trees[0][2].x = 33;
         gamePanel.trees[0][2].y = 25;
         //*******************
         gamePanel.trees[1][0] = new TreeTop();
@@ -34,7 +34,7 @@ public class ObjectPlacement extends Object
         gamePanel.trees[1][1].y = 6;
 
         gamePanel.trees[1][2] = new TreeTop();
-        gamePanel.trees[1][2].x = 37;
+        gamePanel.trees[1][2].x = 33;
         gamePanel.trees[1][2].y = 24;
     }
 

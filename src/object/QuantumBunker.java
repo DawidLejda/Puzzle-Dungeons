@@ -26,6 +26,7 @@ public class QuantumBunker extends Object
         this.gamePanel = gamePanel;
         getBunkerModel();
         name = "bunker";
+        collision = true;
     }
 
     public void getBunkerModel()
