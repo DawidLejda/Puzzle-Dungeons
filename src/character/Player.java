@@ -110,6 +110,8 @@ public class Player extends Character
         collision = false;
         gamePanel.collisionChecker.CheckTileCollision(this);
         gamePanel.collisionChecker.CheckObjectCollision(this);
+        gamePanel.collisionChecker.CheckObjectAirVentCollision(this);
+        gamePanel.collisionChecker.CheckObjectVisibility(this);
         if(!collision)
         {
             if (pressedKey.left)
@@ -130,7 +132,6 @@ public class Player extends Character
             }
         }
 
-        // 8 frames of pressing key per animation change
         if (playerMoving)
         {
             if (animationFrame >= 5)

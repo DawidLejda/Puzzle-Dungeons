@@ -1,5 +1,8 @@
 package main;
 import character.Character;
+
+import static java.lang.Math.abs;
+
 public class CollisionChecker
 {
     GamePanel gamePanel;
@@ -65,12 +68,54 @@ public class CollisionChecker
                 break;
         }
     }
+    public void CheckObjectAirVentCollision(Character character)
+    {
+        for (int i = 0; i < 2; i++) {
+            int X_Left = playerLeft / gamePanel.tileSize;
+            int X_Right = playerRight / gamePanel.tileSize;
+            int Y_Top = playerTop / gamePanel.tileSize;
+            int Y_Bottom = playerBottom / gamePanel.tileSize;
+
+            switch (character.direction) {
+                case "left":
+                    X_Left = (playerLeft - character.speed) / gamePanel.tileSize;
+                    if (X_Left == gamePanel.airvent.x + (i+1) && Y_Top == gamePanel.airvent.y ||
+                            X_Left == gamePanel.airvent.x + (i+1) && Y_Bottom == gamePanel.airvent.y) {
+                        character.visibility = false;
+                        character.collision = true;
+                    }
+                    break;
+                case "right":
+                    X_Right = (playerRight + character.speed) / gamePanel.tileSize;
+                    if (X_Right == gamePanel.airvent.x + (i+1) && Y_Top == gamePanel.airvent.y ||
+                            X_Right == gamePanel.airvent.x + (i+1) && Y_Bottom == gamePanel.airvent.y) {
+                        character.visibility = false;
+                        character.collision = true;
+                    }
+                    break;
+                case "up":
+                    Y_Top = (playerTop - character.speed) / gamePanel.tileSize;
+                    if (X_Left == gamePanel.airvent.x + (i+1) && Y_Top == gamePanel.airvent.y ||
+                            X_Right == gamePanel.airvent.x + (i+1) && Y_Top == gamePanel.airvent.y) {
+                        character.collision = true;
+                    }
+                    break;
+                case "down":
+                    Y_Bottom = (playerBottom + character.speed) / gamePanel.tileSize;
+                    if (X_Left == gamePanel.airvent.x + (i+1) && Y_Bottom == gamePanel.airvent.y ||
+                            X_Right == gamePanel.airvent.x + (i+1) && Y_Bottom == gamePanel.airvent.y) {
+                        character.visibility = false;
+                        character.collision = true;
+                    }
+                    break;
+            }
+        }
+    }
 
     public void CheckObjectCollision(Character character)
     {
-        for (int i = 0, n = gamePanel.trees[0].length; i<n; i++)
+        for (int i = 0, n = gamePanel.trees[0].length; i < n; i++)
         {
-
             int X_Left = playerLeft / gamePanel.tileSize;
             int X_Right = playerRight / gamePanel.tileSize;
             int Y_Top = playerTop / gamePanel.tileSize;
@@ -83,7 +128,6 @@ public class CollisionChecker
                     if(X_Left == gamePanel.trees[0][i].x && Y_Top == gamePanel.trees[0][i].y ||
                             X_Left == gamePanel.trees[0][i].x && Y_Bottom == gamePanel.trees[0][i].y)
                     {
-                        character.visibility = false;
                         character.collision = true;
                     }
                     break;
@@ -92,7 +136,6 @@ public class CollisionChecker
                     if(X_Right == gamePanel.trees[0][i].x && Y_Top == gamePanel.trees[0][i].y ||
                             X_Right == gamePanel.trees[0][i].x && Y_Bottom == gamePanel.trees[0][i].y)
                     {
-                        character.visibility = false;
                         character.collision = true;
                     }
                     break;
@@ -109,11 +152,40 @@ public class CollisionChecker
                     if(X_Left == gamePanel.trees[0][i].x && Y_Bottom == gamePanel.trees[0][i].y ||
                             X_Right == gamePanel.trees[0][i].x && Y_Bottom == gamePanel.trees[0][i].y)
                     {
-                        character.visibility = false;
                         character.collision = true;
                     }
                     break;
             }
         }
     }
+    public void CheckObjectVisibility(Character character)
+    {
+        int charX,charY;
+        for (int i = 0, n = gamePanel.trees[0].length; i < n; i++) {
+            charX = character.x/gamePanel.tileSize;
+            charY = character.y/gamePanel.tileSize;
+            if(abs(charX- gamePanel.trees[1][i].x) <= 2 && abs(charY - gamePanel.trees[1][i].y) <= 2)
+            {
+                int centerX = gamePanel.trees[1][i].x;
+                int centerY = gamePanel.trees[1][i].y;
+                if ((charX == centerX || charX == centerX-1) && (charY == centerY ||charY == centerY-1)) {
+                    character.visibility = false;
+                }
+                System.out.println("CenterX: " + centerX+"\nCenterY: "+ centerY+"\nCharX: "+charX+"\nCharY: "+charY );
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            charX = character.x / gamePanel.tileSize;
+            charY = character.y / gamePanel.tileSize;
+            if (abs(charX - gamePanel.airvent.x) <= 4 && abs(charY - gamePanel.airvent.y) <= 3) {
+                int centerX = gamePanel.airvent.x + i;
+                int centerY = gamePanel.airvent.y + i;
+                if ((charX == centerX) && (charY == centerY - (i+1) )) {
+                    character.visibility = false;
+                }
+                System.out.println("CenterX: " + centerX+"\nCenterY: "+ centerY+"\nCharX: "+charX+"\nCharY: "+charY );
+            }
+        }
+    }
+
 }

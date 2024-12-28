@@ -28,7 +28,9 @@ public class GamePanel extends JPanel implements Runnable
 
     public ObjectPlacement objectPlacement = new ObjectPlacement(this);
     public QuantumBunker bunker = new QuantumBunker(this);
+    public AirVent airvent = new AirVent(this);
     public Object[][] trees = new Object[2][3];
+
     // ********************************************************
 
     public GamePanel()
@@ -91,20 +93,23 @@ public class GamePanel extends JPanel implements Runnable
         map.Update();
         player.Update();
         bunker.Update();
+        airvent.Update();
     }
 
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-
         map.Draw(g2);
-
-        if(!player.collision || !player.visibility)
+        g2.drawString("Vis: " + player.visibility,3,24);
+        g2.drawString("Col: " + player.collision,3,36);
+        if(!player.visibility)
         {
             player.Draw(g2);
+
             bunker.DrawStanding(g2, this);
-            for (int i = 0, n = trees.length; i < n; i++) {
+            airvent.Draw(g2, this);
+            for (int i = 0, n = trees.length; i <= n; i++) {
                 if (trees[0][i] != null && trees[1][i] != null) {
                     trees[0][i].draw(g2, this);
                     trees[1][i].draw(g2, this);
@@ -115,7 +120,8 @@ public class GamePanel extends JPanel implements Runnable
         else
         {
             bunker.DrawStanding(g2, this);
-            for (int i = 0, n = trees.length; i < n; i++) {
+            airvent.Draw(g2, this);
+            for (int i = 0, n = trees.length; i <= n; i++) {
                 if (trees[0][i] != null && trees[1][i] != null) {
                     trees[0][i].draw(g2, this);
                     trees[1][i].draw(g2, this);
@@ -125,8 +131,7 @@ public class GamePanel extends JPanel implements Runnable
         }
 
         g2.drawString("FPS: " + averageFPS,3,12);
-        g2.drawString("X: " + player.x,3,24);
-        g2.drawString("Y: " + player.y,3,36);
+
         g2.dispose();
     }
 
