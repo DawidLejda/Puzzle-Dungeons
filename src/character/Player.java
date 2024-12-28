@@ -30,7 +30,7 @@ public class Player extends Character
         this.gamePanel = gamePanel;
         this.pressedKey = pressedKey;
         getPlayerModel();
-
+        direction = "down";
         centerX = (gamePanel.width / 2) - (gamePanel.tileSize / 2);
         centerY = (gamePanel.height / 2) - (gamePanel.tileSize / 2);
 
@@ -77,6 +77,7 @@ public class Player extends Character
     }
 
     public void Update() {
+
         if (pressedKey.left)
         {
             direction = "left";
@@ -99,6 +100,11 @@ public class Player extends Character
         {
             direction = "down";
             animationFrame++;
+            playerMoving = true;
+        }
+        else if (pressedKey.use)
+        {
+            direction = pressedKey.previousKey;
             playerMoving = true;
         }
         else
@@ -180,10 +186,21 @@ public class Player extends Character
                 image = switch (pressedKey.lastReleasedKey) {
                     case "down" -> IdleSprite[0][swapIdle].image;
                     case "up" -> IdleSprite[1][swapIdle].image;
+                    case "use" -> IdleSprite[1][swapIdle].image;
                     case "left" -> IdleSprite[2][swapIdle].image;
                     case "right" -> IdleSprite[3][swapIdle].image;
                     default -> image;
                 };
+            }
+            else if(pressedKey.previousKey != null)
+            {
+                    image = switch (pressedKey.previousKey) {
+                        case "down" -> IdleSprite[0][swapIdle].image;
+                        case "up" -> IdleSprite[1][swapIdle].image;
+                        case "use" -> IdleSprite[1][swapIdle].image;
+                        case "left" -> IdleSprite[2][swapIdle].image;
+                        case "right" -> IdleSprite[3][swapIdle].image;
+                        default -> image;};
             }
             else
             {

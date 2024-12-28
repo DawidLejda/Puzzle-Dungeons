@@ -5,10 +5,11 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener
 {
-
+    public boolean UseInRange;
     public boolean left, right, up, down, use;
     public String lastPressedKey;
     public String lastReleasedKey;
+    public String previousKey;
     @Override
     public void keyTyped(KeyEvent e)
     {
@@ -18,6 +19,10 @@ public class KeyHandler implements KeyListener
     @Override
     public void keyPressed(KeyEvent e)
     {
+        if(lastPressedKey != null)
+        {
+            previousKey = lastPressedKey;
+        }
         switch(e.getKeyCode())
         {
             case KeyEvent.VK_A:
@@ -37,9 +42,12 @@ public class KeyHandler implements KeyListener
                 lastPressedKey = "down";
                 break;
             case KeyEvent.VK_E:
-                use = true;
-                lastPressedKey = "use";
-                break;
+                if(UseInRange)
+                {
+                    use = true;
+                    lastPressedKey = "up";
+                    break;
+                }
         }
         lastReleasedKey = null;
     }
@@ -66,11 +74,12 @@ public class KeyHandler implements KeyListener
                 lastReleasedKey = "down";
                 break;
             case KeyEvent.VK_E:
-                use = false;
-                lastReleasedKey = "use";
-                break;
-            default:
-                lastReleasedKey = null;
+                if(UseInRange)
+                {
+                    use = false;
+                    lastReleasedKey = "use";
+                }
+
         }
     }
 }

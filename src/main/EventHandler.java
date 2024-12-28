@@ -30,7 +30,7 @@ public class EventHandler
     public void Update()
     {
         renderUse = false;
-
+        pressedKey.UseInRange = false;
         int charX = gamePanel.player.x / gamePanel.tileSize;
         int charY = gamePanel.player.y / gamePanel.tileSize;
         if (abs(charX - gamePanel.airvent.x) <= 4 && abs(charY - gamePanel.airvent.y) <= 3) {
@@ -39,7 +39,9 @@ public class EventHandler
             if ((charX == centerX) && (charY == centerY-1))
             {
                 renderUse = true;
+                pressedKey.UseInRange = true;
             }
+
         }
     }
 
