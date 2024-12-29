@@ -21,8 +21,8 @@ public class AirVent extends Object
         this.gamePanel = gamepanel;
         getAirventModel();
         name = "airvent";
-        x = 15;
-        y = 30;
+        x = 13;
+        y = 28;
     }
 
     void getAirventModel()

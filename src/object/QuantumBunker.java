@@ -19,7 +19,7 @@ public class QuantumBunker extends Object
     public boolean renderBunker;
     private int frame,teleport_frame = 0;
     public int swapTeleport = 2;
-
+    boolean incorrectGround;
 
     public QuantumBunker(GamePanel gamePanel)
     {
@@ -54,11 +54,30 @@ public class QuantumBunker extends Object
 
     public void getPseudoRandomCoordinates()
     {
+        incorrectGround = false;
         do {
-            x = (rand.nextInt(20) + 3);
-            y = (rand.nextInt(20) + 3);
-        } while (gamePanel.map.starting_area[y][x] != 11 && gamePanel.map.starting_area[y][x + 1] != 11);
-
+            x = (rand.nextInt(17) + 3);
+            y = (rand.nextInt(25) + 13);
+            if(gamePanel.map.starting_area[y][x] == 11 && gamePanel.map.starting_area[y][x + 1] == 11)
+            {
+                if((x != gamePanel.airvent.x && y != gamePanel.airvent.y) ||
+                        (x != gamePanel.airvent.x+2 && y != gamePanel.airvent.y+2))
+                {
+                    incorrectGround = true;
+                }
+                for (int i = 0, n = gamePanel.trees[0].length; i < n; i++)
+                {
+                    if(x != gamePanel.trees[0][i].x && y != gamePanel.trees[0][i].y)
+                    {
+                        incorrectGround = true;
+                    }
+                    else
+                    {
+                        incorrectGround = false;
+                    }
+                }
+            }
+        } while (!incorrectGround);
         renderBunker =
                 gamePanel.map.starting_area[y][x] == 11 &&
                 gamePanel.map.starting_area[y][x + 1] == 11 &&
@@ -70,7 +89,7 @@ public class QuantumBunker extends Object
     public void Update()
     {
         frame++;
-        if(frame >= 50)
+        if(frame >= 50 && !gamePanel.event.bunkerStop)
         {
             getPseudoRandomCoordinates();
             frame = 0;
@@ -107,7 +126,7 @@ public class QuantumBunker extends Object
                     ((y * gamePanel.tileSize) > (gamePanel.player.y - gamePanel.player.centerY - gamePanel.tileSize)))
             {
 
-                if(frame <= 15)
+                if(frame <= 15 || gamePanel.event.bunkerStop)
                 {
                     g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                     g2.drawImage(bunker[0].image, centerX, centerY, gamePanel.tileSize,gamePanel.tileSize, null);

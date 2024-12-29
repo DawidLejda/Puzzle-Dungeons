@@ -15,6 +15,7 @@ public class EventHandler
     KeyHandler pressedKey;
     BufferedImage useImage;
     boolean renderUse;
+    public boolean bunkerStop;
     public EventHandler(GamePanel gamePanel, KeyHandler pressedKey)
     {
         this.gamePanel = gamePanel;
@@ -30,6 +31,7 @@ public class EventHandler
     public void Update()
     {
         renderUse = false;
+        bunkerStop = false;
         pressedKey.UseInRange = false;
         int charX = gamePanel.player.x / gamePanel.tileSize;
         int charY = gamePanel.player.y / gamePanel.tileSize;
@@ -41,7 +43,10 @@ public class EventHandler
                 renderUse = true;
                 pressedKey.UseInRange = true;
             }
-
+            if(pressedKey.use)
+            {
+                bunkerStop = true;
+            }
         }
     }
 

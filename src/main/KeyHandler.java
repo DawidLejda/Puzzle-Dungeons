@@ -5,11 +5,12 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener
 {
-    public boolean UseInRange;
+    public boolean UseInRange,bunkerStop;
     public boolean left, right, up, down, use;
     public String lastPressedKey;
     public String lastReleasedKey;
     public String previousKey;
+
     @Override
     public void keyTyped(KeyEvent e)
     {
@@ -19,6 +20,7 @@ public class KeyHandler implements KeyListener
     @Override
     public void keyPressed(KeyEvent e)
     {
+
         if(lastPressedKey != null)
         {
             previousKey = lastPressedKey;

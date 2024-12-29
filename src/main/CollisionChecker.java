@@ -161,7 +161,7 @@ public class CollisionChecker
         for (int i = 0, n = gamePanel.trees[0].length; i < n; i++) {
             charX = character.x/gamePanel.tileSize;
             charY = character.y/gamePanel.tileSize;
-            if(abs(charX- gamePanel.trees[1][i].x) <= 2 && abs(charY - gamePanel.trees[1][i].y) <= 2)
+            if(abs(charX- gamePanel.trees[1][i].x) <= 1 && abs(charY - gamePanel.trees[1][i].y) <= 1)
             {
                 int centerX = gamePanel.trees[1][i].x;
                 int centerY = gamePanel.trees[1][i].y;
