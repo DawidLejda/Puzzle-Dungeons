@@ -1,7 +1,6 @@
 package object;
 
 import main.GamePanel;
-import main.KeyHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -11,14 +10,12 @@ import java.util.Objects;
 public class ButtonQuantumState extends Object
 {
     GamePanel gamePanel;
-    KeyHandler pressedKey;
-    int frame,swapSkin;
+    int frame,swapSkin = 0;
     public ObjectImages[] buttonSwitch = new ObjectImages[4];
 
-    public ButtonQuantumState(GamePanel gamePanel,KeyHandler pressedKey)
+    public ButtonQuantumState(GamePanel gamePanel)
     {
         this.gamePanel = gamePanel;
-        this.pressedKey = pressedKey;
         getButtonModel();
         x = 25;
         y = 11;
@@ -43,17 +40,15 @@ public class ButtonQuantumState extends Object
     public void Update()
     {
         frame++;
-        if (frame >= 15)
+        if (frame >= 80)
         {
             swapSkin++;
-            if (swapSkin >= 4)
+            if (swapSkin >= 6)
             {
                 swapSkin = 0;
                 frame = 0;
             }
         }
-
-
     }
 
     public void Draw(Graphics2D g2)
@@ -68,7 +63,7 @@ public class ButtonQuantumState extends Object
                     ((y * gamePanel.tileSize) > (gamePanel.player.y - gamePanel.player.centerY - gamePanel.tileSize)))
             {
                 g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                if(swapSkin == 0)
+                if(swapSkin < 4)
                 {
                     if(gamePanel.event.buttonState)
                     {
@@ -81,7 +76,7 @@ public class ButtonQuantumState extends Object
                 }
                 else
                 {
-                    g2.drawImage(buttonSwitch[swapSkin].image, centerX, centerY, gamePanel.tileSize,gamePanel.tileSize, null);
+                    g2.drawImage(buttonSwitch[swapSkin-2].image, centerX, centerY, gamePanel.tileSize,gamePanel.tileSize, null);
                 }
 
             }

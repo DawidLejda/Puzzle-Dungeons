@@ -189,44 +189,58 @@ public class CollisionChecker
 
     public void CheckObjectVisibility(Character character)
     {
-        int charX,charY;
+        int charX,charY,centerX,centerY;
         for (int i = 0, n = gamePanel.trees[0].length; i < n; i++) {
             charX = character.x/gamePanel.tileSize;
             charY = character.y/gamePanel.tileSize;
             if(abs(charX- gamePanel.trees[1][i].x) <= 1 && abs(charY - gamePanel.trees[1][i].y) <= 1)
             {
-                int centerX = gamePanel.trees[1][i].x;
-                int centerY = gamePanel.trees[1][i].y;
+                centerX = gamePanel.trees[1][i].x;
+                centerY = gamePanel.trees[1][i].y;
                 CheckTreeCollision(character, gamePanel.trees[0][i].x, gamePanel.trees[0][i].y);
                 if ((charX == centerX || charX == centerX-1) && (charY == centerY ||charY == centerY-1)) {
                     character.visibility = false;
                 }
             }
         }
+
+
         for (int i = 0; i < 3; i++)
         {
             charX = character.x / gamePanel.tileSize;
             charY = character.y / gamePanel.tileSize;
             if (abs(charX - gamePanel.airvent.x) <= 4 && abs(charY - gamePanel.airvent.y) <= 3) {
                 CheckObjectAirVentCollision(character);
-                int centerX = gamePanel.airvent.x + i;
-                int centerY = gamePanel.airvent.y + i;
+                centerX = gamePanel.airvent.x + i;
+                centerY = gamePanel.airvent.y + i;
                 if ((charX == centerX) && (charY == centerY - (i+1) )) {
                     character.visibility = false;
                 }
             }
         }
+
+
         charX = character.x / gamePanel.tileSize;
         charY = character.y / gamePanel.tileSize;
-        int centerX = gamePanel.ButtonState.x;
-        int centerY = gamePanel.ButtonState.y;
+        centerX = gamePanel.ButtonState.x;
+        centerY = gamePanel.ButtonState.y;
         if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
             CheckButtonCollision(character,centerX,centerY);
             if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
 
                 character.visibility = false;
             }
+        }
 
+
+        centerX = gamePanel.ButtonElevation.x;
+        centerY = gamePanel.ButtonElevation.y;
+        if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
+            CheckButtonCollision(character, centerX, centerY);
+            if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
+
+                character.visibility = false;
+            }
         }
     }
 
