@@ -16,6 +16,7 @@ public class EventHandler
     BufferedImage useImage;
     boolean renderUse;
     public boolean bunkerStop;
+    public boolean buttonState = true;
     public EventHandler(GamePanel gamePanel, KeyHandler pressedKey)
     {
         this.gamePanel = gamePanel;
@@ -35,18 +36,37 @@ public class EventHandler
         pressedKey.UseInRange = false;
         int charX = gamePanel.player.x / gamePanel.tileSize;
         int charY = gamePanel.player.y / gamePanel.tileSize;
-        if (abs(charX - gamePanel.airvent.x) <= 4 && abs(charY - gamePanel.airvent.y) <= 3) {
+        if (abs(charX - gamePanel.airvent.x) <= 4
+                && abs(charY - gamePanel.airvent.y) <= 3)
+        {
             int centerX = gamePanel.airvent.x + 1;
             int centerY = gamePanel.airvent.y + 1;
             if ((charX == centerX) && (charY == centerY-1))
             {
                 renderUse = true;
                 pressedKey.UseInRange = true;
+                if(pressedKey.use)
+                {
+                    bunkerStop = true;
+                }
             }
-            if(pressedKey.use)
+
+        }
+        else if(abs(charX - gamePanel.ButtonState.x) <= 1
+                && abs(charY - gamePanel.ButtonState.y) <= 1)
+        {
+            if ((charX == gamePanel.ButtonState.x) && (charY == gamePanel.ButtonState.y))
             {
-                bunkerStop = true;
+                renderUse = true;
+                pressedKey.UseInRange = true;
+
+                if(Objects.equals(pressedKey.lastReleasedKey, "use"))
+                {
+                    buttonState = !buttonState;
+                    pressedKey.lastReleasedKey = null;
+                }
             }
+
         }
     }
 

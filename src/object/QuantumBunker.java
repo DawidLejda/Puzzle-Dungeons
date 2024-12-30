@@ -14,7 +14,7 @@ import static java.lang.Math.abs;
 public class QuantumBunker extends Object
 {
     GamePanel gamePanel;
-    public Object[] bunker = new Object[12];
+    public ObjectImages[] bunker = new ObjectImages[12];
     Random rand = new Random();
     public boolean renderBunker;
     private int frame,teleport_frame = 0;
@@ -38,7 +38,7 @@ public class QuantumBunker extends Object
             {
                 pair++;
                 String path = "objects/QuantumBunker/teleportBunker".concat(Integer.toString(set)).concat("_").concat(Integer.toString(pair)).concat(".png");
-                bunker[i] = new Object();
+                bunker[i] = new ObjectImages();
                 bunker[i].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
                 if(pair >= 2)
                 {
@@ -114,7 +114,8 @@ public class QuantumBunker extends Object
         }
     }
 
-    public void DrawStanding(Graphics2D g2, GamePanel gamePanel) {
+    public void DrawStanding(Graphics2D g2, GamePanel gamePanel)
+    {
         if(renderBunker)
         {
             int centerX = x * gamePanel.tileSize - gamePanel.player.x + gamePanel.player.centerX;

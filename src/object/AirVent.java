@@ -11,9 +11,9 @@ import java.util.Objects;
 public class AirVent extends Object
 {
     GamePanel gamePanel;
-    public Object[] airvent_left = new Object[9];
-    public Object[] airvent_middle = new Object[6];
-    public Object[] airvent_right = new Object[1];
+    public ObjectImages[] airvent_left = new ObjectImages[9];
+    public ObjectImages[] airvent_middle = new ObjectImages[6];
+    public ObjectImages[] airvent_right = new ObjectImages[1];
     private int frame,swapSkin = 0;
 
     public AirVent(GamePanel gamepanel)
@@ -36,18 +36,18 @@ public class AirVent extends Object
                     String path = "objects/airvent/vent".concat(Integer.toString(j+1)).concat("_").concat(Integer.toString(i+1)).concat(".png");
                     if(j == 0)
                     {
-                        airvent_left[i] = new Object();
+                        airvent_left[i] = new ObjectImages();
                         airvent_left[i].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
                     }
                     else
                     {
-                        airvent_middle[i] = new Object();
+                        airvent_middle[i] = new ObjectImages();
                         airvent_middle[i].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
                     }
                 }
                 n-=3;
             }
-            airvent_right[0] = new Object();
+            airvent_right[0] = new ObjectImages();
             airvent_right[0].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("objects/airvent/vent3.png")));
         }
         catch(IOException e){

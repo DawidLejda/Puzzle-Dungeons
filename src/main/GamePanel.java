@@ -29,6 +29,7 @@ public class GamePanel extends JPanel implements Runnable
     public ObjectPlacement objectPlacement = new ObjectPlacement(this);
     public QuantumBunker bunker = new QuantumBunker(this);
     public AirVent airvent = new AirVent(this);
+    public ButtonQuantumState ButtonState = new ButtonQuantumState(this, pressedKey);
     public Object[][] trees = new Object[2][5];
 
     // ********************************************************
@@ -110,6 +111,7 @@ public class GamePanel extends JPanel implements Runnable
 
             bunker.DrawStanding(g2, this);
             airvent.Draw(g2, this);
+            ButtonState.Draw(g2);
             for (int i = 0, n = trees[0].length; i < n; i++) {
                 if (trees[0][i] != null && trees[1][i] != null) {
                     trees[0][i].draw(g2, this);
@@ -122,6 +124,7 @@ public class GamePanel extends JPanel implements Runnable
         {
             bunker.DrawStanding(g2, this);
             airvent.Draw(g2, this);
+            ButtonState.Draw(g2);
             for (int i = 0, n = trees[0].length; i < n; i++) {
                 if (trees[0][i] != null && trees[1][i] != null) {
                     trees[0][i].draw(g2, this);
@@ -134,7 +137,7 @@ public class GamePanel extends JPanel implements Runnable
         event.Draw(g2);
         g2.drawString("FPS: " + averageFPS,3,12);
         g2.drawString("Vis: " + player.visibility,3,24);
-        g2.drawString("Col: " + player.collision,3,36);
+        g2.drawString("buttonState: " + event.buttonState,3,36);
         g2.dispose();
     }
 

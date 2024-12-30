@@ -35,8 +35,8 @@ public class Player extends Character
         centerY = (gamePanel.height / 2) - (gamePanel.tileSize / 2);
 
         // Coordinates of player starting position // 17x 29y lewa, 30x,10y prawa
-        x = gamePanel.tileSize * 17;
-        y = gamePanel.tileSize * 29;
+        x = gamePanel.tileSize * 30;
+        y = gamePanel.tileSize * 10;
         speed = 4;
     }
 
@@ -75,7 +75,13 @@ public class Player extends Character
             gamePanel.gameRunning = false;
         }
     }
-
+    void CollisionCheck()
+    {
+        visibility = true;
+        collision = false;
+        gamePanel.collisionChecker.CheckTileCollision(this);
+        gamePanel.collisionChecker.CheckObjectVisibility(this);
+    }
     public void Update() {
 
         if (pressedKey.left)
@@ -112,12 +118,7 @@ public class Player extends Character
             animationIdle++;
             playerMoving = false;
         }
-        visibility = true;
-        collision = false;
-        gamePanel.collisionChecker.CheckTileCollision(this);
-        gamePanel.collisionChecker.CheckObjectCollision(this);
-        gamePanel.collisionChecker.CheckObjectAirVentCollision(this);
-        gamePanel.collisionChecker.CheckObjectVisibility(this);
+        CollisionCheck();
         if(!collision)
         {
             if (pressedKey.left)
