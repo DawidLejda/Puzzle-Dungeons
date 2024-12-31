@@ -8,6 +8,7 @@ public class CollisionChecker
     GamePanel gamePanel;
 
     public int playerLeft,playerRight,playerTop,playerBottom;
+    public boolean collisionCheck = true;
     public CollisionChecker(GamePanel gamePanel)
     {
         this.gamePanel = gamePanel;
@@ -15,6 +16,7 @@ public class CollisionChecker
 
     public void CheckTileCollision(Character character)
     {
+
         playerLeft = (character.x - gamePanel.tileSize) + (gamePanel.tileSize - (gamePanel.tileSize / 2)) + gamePanel.tileSize;
         playerRight = (character.x + gamePanel.tileSize) -  (gamePanel.tileSize - (gamePanel.tileSize / 2));
         playerTop = (character.y - gamePanel.tileSize) + (int) (gamePanel.tileSize - (gamePanel.tileSize / 2.6)) + gamePanel.tileSize;
@@ -30,13 +32,18 @@ public class CollisionChecker
 
         switch(character.direction)
         {
+
             case "left":
                 X_Left = (playerLeft - character.speed) / gamePanel.tileSize;
                 mapIndex1 = gamePanel.map.starting_area[Y_Top][X_Left];
                 mapIndex2 = gamePanel.map.starting_area[Y_Bottom][X_Left];
+
                 if(gamePanel.map.tile[mapIndex1].collision || gamePanel.map.tile[mapIndex2].collision)
                 {
-                    character.collision = true;
+                    if(collisionCheck)
+                    {
+                        character.collision = true;
+                    }
                 }
                 break;
             case "right":
@@ -45,7 +52,10 @@ public class CollisionChecker
                 mapIndex2 = gamePanel.map.starting_area[Y_Bottom][X_Right];
                 if(gamePanel.map.tile[mapIndex1].collision || gamePanel.map.tile[mapIndex2].collision)
                 {
-                    character.collision = true;
+                    if(collisionCheck)
+                    {
+                        character.collision = true;
+                    }
                 }
                 break;
             case "up":
@@ -233,8 +243,19 @@ public class CollisionChecker
         }
 
 
-        centerX = gamePanel.ButtonElevation.x;
-        centerY = gamePanel.ButtonElevation.y;
+        centerX = gamePanel.ButtonElevationUp.x;
+        centerY = gamePanel.ButtonElevationUp.y;
+        if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
+            CheckButtonCollision(character, centerX, centerY);
+            if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
+
+                character.visibility = false;
+            }
+        }
+
+
+        centerX = gamePanel.ButtonElevationDown.x;
+        centerY = gamePanel.ButtonElevationDown.y;
         if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
             CheckButtonCollision(character, centerX, centerY);
             if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
@@ -244,4 +265,20 @@ public class CollisionChecker
         }
     }
 
+    public void CheckBridgeCollision(Character character)
+    {
+        int charX = character.x/gamePanel.tileSize;
+        int charY = character.y/gamePanel.tileSize;
+        collisionCheck = true;
+        System.out.println("x: "+charX);
+        System.out.println("y: "+charY);
+        if(gamePanel.ButtonState.traversable)
+        {
+            if((charX == 23 && charY == 13) || (charX == 22 && charY == 13) || (charX == 21 && charY == 13)
+            ||(charX == 20 && charY == 13) || (charX == 19 && charY == 13) || (charX == 18 && charY == 13))
+            {
+                collisionCheck = false;
+            }
+        }
+    }
 }

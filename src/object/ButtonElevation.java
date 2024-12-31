@@ -12,12 +12,12 @@ public class ButtonElevation extends Object
     GamePanel gamePanel;
     public ObjectImages[] buttonElevation = new ObjectImages[4];
     int frame,swapSkin = 0;
-    public ButtonElevation(GamePanel gamePanel)
+    public ButtonElevation(GamePanel gamePanel, int posX)
     {
         this.gamePanel = gamePanel;
         getButtonModel();
-        x = 25;
-        y = 14;
+        y = 12;
+        x = posX;
     }
 
     void getButtonModel()
@@ -75,7 +75,7 @@ public class ButtonElevation extends Object
             g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             if(swapSkin < 4)
             {
-                if(gamePanel.event.buttonState)
+                if(x == 26)
                 {
                     g2.drawImage(buttonElevation[1].image, centerX, centerY, gamePanel.tileSize,gamePanel.tileSize, null);
                 }

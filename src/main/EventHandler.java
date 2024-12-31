@@ -16,12 +16,12 @@ public class EventHandler
     BufferedImage useImage;
     boolean renderUse;
     public boolean bunkerStop;
-    public boolean buttonState,buttonElevation = true;
+    public boolean buttonState, elevationDown, elevationUp;
     public EventHandler(GamePanel gamePanel, KeyHandler pressedKey)
     {
         this.gamePanel = gamePanel;
         this.pressedKey = pressedKey;
-
+        buttonState = true;
         try {
             useImage = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/use.png")));
         } catch (IOException e) {
@@ -34,6 +34,9 @@ public class EventHandler
         renderUse = false;
         bunkerStop = false;
         pressedKey.UseInRange = false;
+        elevationDown = false;
+        elevationUp = false;
+
         int charX = gamePanel.player.x / gamePanel.tileSize;
         int charY = gamePanel.player.y / gamePanel.tileSize;
         if (abs(charX - gamePanel.airvent.x) <= 4
@@ -69,21 +72,38 @@ public class EventHandler
         }
 
 
-        else if(abs(charX - gamePanel.ButtonElevation.x) <= 1
-                && abs(charY - gamePanel.ButtonElevation.y) <= 1)
+        else if(abs(charX - gamePanel.ButtonElevationUp.x) <= 1
+                && abs(charY - gamePanel.ButtonElevationUp.y) <= 1)
         {
-            if ((charX == gamePanel.ButtonElevation.x) && (charY == gamePanel.ButtonElevation.y))
+            if ((charX == gamePanel.ButtonElevationUp.x) && (charY == gamePanel.ButtonElevationUp.y))
             {
                 renderUse = true;
                 pressedKey.UseInRange = true;
 
                 if(Objects.equals(pressedKey.lastReleasedKey, "use"))
                 {
-                    buttonElevation = !buttonElevation;
+                    elevationUp = true;
                     pressedKey.lastReleasedKey = null;
                 }
             }
         }
+
+        else if(abs(charX - gamePanel.ButtonElevationDown.x) <= 1
+                && abs(charY - gamePanel.ButtonElevationDown.y) <= 1)
+        {
+            if ((charX == gamePanel.ButtonElevationDown.x) && (charY == gamePanel.ButtonElevationDown.y))
+            {
+                renderUse = true;
+                pressedKey.UseInRange = true;
+
+                if(Objects.equals(pressedKey.lastReleasedKey, "use"))
+                {
+                    elevationDown = true;
+                    pressedKey.lastReleasedKey = null;
+                }
+            }
+        }
+
     }
 
     public void Draw(Graphics2D g2)

@@ -6,19 +6,23 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Random;
 
 public class ButtonQuantumState extends Object
 {
     GamePanel gamePanel;
     int frame,swapSkin = 0;
     public ObjectImages[] buttonSwitch = new ObjectImages[4];
+    public Boolean traversable = false;
+    public int randomBridge;
+    Random rand = new Random();
 
     public ButtonQuantumState(GamePanel gamePanel)
     {
         this.gamePanel = gamePanel;
         getButtonModel();
         x = 25;
-        y = 11;
+        y = 15;
     }
 
     void getButtonModel()
@@ -30,7 +34,6 @@ public class ButtonQuantumState extends Object
                 buttonSwitch[i] = new ObjectImages();
                 buttonSwitch[i].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
             }
-
         }
         catch(IOException e){
             System.out.println("Couldn't read tileset");
@@ -49,6 +52,12 @@ public class ButtonQuantumState extends Object
                 frame = 0;
             }
         }
+        if(!gamePanel.event.buttonState)
+        {
+            randomBridge =  rand.nextInt(2);
+        }
+
+        traversable = gamePanel.bridgeLeft.swapSkin == 4 && gamePanel.bridgeRight.swapSkin == 4;
     }
 
     public void Draw(Graphics2D g2)
@@ -78,9 +87,7 @@ public class ButtonQuantumState extends Object
                 {
                     g2.drawImage(buttonSwitch[swapSkin-2].image, centerX, centerY, gamePanel.tileSize,gamePanel.tileSize, null);
                 }
-
             }
-
     }
 
 }

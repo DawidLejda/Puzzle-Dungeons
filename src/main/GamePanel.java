@@ -30,7 +30,11 @@ public class GamePanel extends JPanel implements Runnable
     public QuantumBunker bunker = new QuantumBunker(this);
     public AirVent airvent = new AirVent(this);
     public ButtonQuantumState ButtonState = new ButtonQuantumState(this);
-    public ButtonElevation ButtonElevation = new ButtonElevation(this);
+    public ButtonElevation ButtonElevationUp = new ButtonElevation(this, 26);
+    public ButtonElevation ButtonElevationDown = new ButtonElevation(this, 24);
+    public BridgeLeft bridgeLeft = new BridgeLeft(this);
+    public BridgeRight bridgeRight = new BridgeRight(this);
+    public BridgeMid bridgeMid = new BridgeMid(this);
     public Object[][] trees = new Object[2][5];
 
     // ********************************************************
@@ -97,7 +101,10 @@ public class GamePanel extends JPanel implements Runnable
         bunker.Update();
         airvent.Update();
         ButtonState.Update();
-        ButtonElevation.Update();
+        ButtonElevationUp.Update();
+        ButtonElevationDown.Update();
+        bridgeRight.Update();
+        bridgeLeft.Update();
     }
 
     public void paintComponent(Graphics g)
@@ -115,7 +122,11 @@ public class GamePanel extends JPanel implements Runnable
             bunker.DrawStanding(g2, this);
             airvent.Draw(g2, this);
             ButtonState.Draw(g2);
-            ButtonElevation.Draw(g2);
+            ButtonElevationUp.Draw(g2);
+            ButtonElevationDown.Draw(g2);
+            bridgeLeft.Draw(g2);
+            bridgeRight.Draw(g2);
+            bridgeMid.draw(g2,this);
             for (int i = 0, n = trees[0].length; i < n; i++) {
                 if (trees[0][i] != null && trees[1][i] != null) {
                     trees[0][i].draw(g2, this);
@@ -129,7 +140,11 @@ public class GamePanel extends JPanel implements Runnable
             bunker.DrawStanding(g2, this);
             airvent.Draw(g2, this);
             ButtonState.Draw(g2);
-            ButtonElevation.Draw(g2);
+            ButtonElevationUp.Draw(g2);
+            ButtonElevationDown.Draw(g2);
+            bridgeLeft.Draw(g2);
+            bridgeRight.Draw(g2);
+            bridgeMid.draw(g2,this);
             for (int i = 0, n = trees[0].length; i < n; i++) {
                 if (trees[0][i] != null && trees[1][i] != null) {
                     trees[0][i].draw(g2, this);
@@ -143,6 +158,9 @@ public class GamePanel extends JPanel implements Runnable
         g2.drawString("FPS: " + averageFPS,3,12);
         g2.drawString("Vis: " + player.visibility,3,24);
         g2.drawString("buttonState: " + event.buttonState,3,36);
+        g2.drawString("RightBridge: " + bridgeRight.swapSkin+"  i:  "+bridgeRight.i,3,48);
+        g2.drawString("LeftBridge: " + bridgeLeft.swapSkin+"  i:  "+bridgeLeft.i,3,60);
+        g2.drawString("Traversable: " + ButtonState.traversable,3,72);
         g2.dispose();
     }
 

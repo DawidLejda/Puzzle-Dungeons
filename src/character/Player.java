@@ -79,8 +79,12 @@ public class Player extends Character
     {
         visibility = true;
         collision = false;
+        gamePanel.collisionChecker.CheckBridgeCollision(this);
+
         gamePanel.collisionChecker.CheckTileCollision(this);
+
         gamePanel.collisionChecker.CheckObjectVisibility(this);
+
     }
     public void Update() {
 

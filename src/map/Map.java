@@ -43,14 +43,18 @@ public class Map extends bitmap
         loadTileSet(18, "grass", "grass_corner_bottom_right", true);
         loadTileSet(19, "grass", "grass_corner_bottom_left", true);
 
-        // 21 index initializing water animation
-        loadTileSet(1,"water", "water1", true);
+        //
+        loadTileSet(20,"water", "water1", true);
+        loadTileSet(21,"water", "water1", true);
+
+        loadTileSet(1, "water", "water1", true);
         loadTileSet(2, "water", "water2", true);
         loadTileSet(3, "water", "water3", true);
         loadTileSet(4, "water", "water4", true);
         loadTileSet(5, "water", "water5", true);
         loadTileSet(6, "water", "water6", true);
         loadTileSet(7, "water", "water7", true);
+        //
 
         loadTileSet(22, "water", "water_deco1", true);
         loadTileSet(23, "water", "water_deco2", true);
@@ -134,7 +138,7 @@ public class Map extends bitmap
                         {
                             starting_area[y][x+chanceForWave] = 20;
                         }
-                    } catch (ArrayIndexOutOfBoundsException exception) {
+                    } catch (ArrayIndexOutOfBoundsException ignored) {
 
                     }
 
