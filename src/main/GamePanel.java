@@ -158,8 +158,8 @@ public class GamePanel extends JPanel implements Runnable
         g2.drawString("FPS: " + averageFPS,3,12);
         g2.drawString("Vis: " + player.visibility,3,24);
         g2.drawString("buttonState: " + event.buttonState,3,36);
-        g2.drawString("RightBridge: " + bridgeRight.swapSkin+"  i:  "+bridgeRight.i,3,48);
-        g2.drawString("LeftBridge: " + bridgeLeft.swapSkin+"  i:  "+bridgeLeft.i,3,60);
+        g2.drawString("LEFT: " + bridgeLeft.swapSkin,3,48);
+        g2.drawString("RIGHT: " + bridgeRight.swapSkin,3,60);
         g2.drawString("Traversable: " + ButtonState.traversable,3,72);
         g2.dispose();
     }

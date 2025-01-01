@@ -12,9 +12,9 @@ public class BridgeLeft extends Object
 {
     GamePanel gamePanel;
     public ObjectImages[] bridgeLeft = new ObjectImages[9];
-    public int swapSkin = 2;
+    public int swapSkin = 4;
     public Boolean[] ElevationLevel = new Boolean[9];
-    public int i = 0;
+
     int nonQuantumClicks = 0;
 
     public BridgeLeft(GamePanel gamePanel)
@@ -24,7 +24,7 @@ public class BridgeLeft extends Object
         x = 20;
         y = 14;
         Arrays.fill(ElevationLevel, false);
-        ElevationLevel[2] = true;
+        ElevationLevel[4] = true;
     }
 
 
@@ -45,43 +45,10 @@ public class BridgeLeft extends Object
 
     public void Update()
     {
-        int n;
+        int i,n;
 
-        if(gamePanel.event.buttonState)
+        if(!gamePanel.event.buttonState)
         {
-            for (i = 0, n = ElevationLevel.length; i < n; i++)
-            {
-                if (gamePanel.event.elevationUp)
-                {
-                    if (ElevationLevel[i])
-                    {
-                        if (i + 1 != ElevationLevel.length &&
-                        gamePanel.bridgeRight.swapSkin + 1 != n)
-                        {
-                            ElevationLevel[i] = false;
-                            ElevationLevel[i + 1] = true;
-                            swapSkin = i + 1;
-                        }
-                        break;
-                    }
-                }
-                else if (gamePanel.event.elevationDown)
-                {
-                    if (ElevationLevel[i])
-                    {
-                        if (i - 1 >= 0 &&
-                          gamePanel.bridgeRight.swapSkin - 1 >= 0)
-                        {
-                            ElevationLevel[i] = false;
-                            ElevationLevel[i - 1] = true;
-                            swapSkin = i - 1;
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-        else {
             if (gamePanel.ButtonState.randomBridge == 1)
             {
                 if (nonQuantumClicks >= 3)
