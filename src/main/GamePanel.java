@@ -1,5 +1,6 @@
 package main;
 
+import character.Cat;
 import character.Player;
 import map.Map;
 import object.*;
@@ -22,6 +23,7 @@ public class GamePanel extends JPanel implements Runnable
     KeyHandler pressedKey = new KeyHandler();
 
     public Player player = new Player(this, pressedKey);
+    public Cat cat = new Cat(this);
     public Map map = new Map(this, player);
     public EventHandler event = new EventHandler(this,pressedKey);
     public CollisionChecker collisionChecker = new CollisionChecker(this);
@@ -36,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable
     public BridgeRight bridgeRight = new BridgeRight(this);
     public BridgeMid bridgeMid = new BridgeMid(this);
     public Object[][] trees = new Object[2][5];
+    public Catnip[] catnips = new Catnip[3];
 
     // ********************************************************
 
@@ -50,6 +53,7 @@ public class GamePanel extends JPanel implements Runnable
     public void Placement()
     {
         objectPlacement.TreePlacement();
+        objectPlacement.CatnipPlacement();
     }
 
     public void startGameThread()
@@ -67,7 +71,6 @@ public class GamePanel extends JPanel implements Runnable
         long timer = System.currentTimeMillis();
         long initialTime = System.nanoTime();
 
-        // Game loop
         while (gameRunning)
         {
             long currentTime = System.nanoTime();
@@ -89,7 +92,6 @@ public class GamePanel extends JPanel implements Runnable
                 timer += 1000;
                 frameCount = 0;
             }
-
         }
     }
 
@@ -97,6 +99,7 @@ public class GamePanel extends JPanel implements Runnable
     {
         map.Update();
         player.Update();
+        cat.Update();
         event.Update();
         bunker.Update();
         airvent.Update();
@@ -105,6 +108,11 @@ public class GamePanel extends JPanel implements Runnable
         ButtonElevationDown.Update();
         bridgeRight.Update();
         bridgeLeft.Update();
+        for (Catnip catnip : catnips) {
+            if (catnip != null) {
+                catnip.Update();
+            }
+        }
     }
 
     public void paintComponent(Graphics g)
@@ -127,12 +135,20 @@ public class GamePanel extends JPanel implements Runnable
             bridgeLeft.Draw(g2);
             bridgeRight.Draw(g2);
             bridgeMid.draw(g2,this);
-            for (int i = 0, n = trees[0].length; i < n; i++) {
-                if (trees[0][i] != null && trees[1][i] != null) {
+            for (int i = 0, n = trees[0].length; i < n; i++)
+            {
+                if (trees[0][i] != null && trees[1][i] != null)
+                {
                     trees[0][i].draw(g2, this);
                     trees[1][i].draw(g2, this);
                 }
             }
+            for (Catnip catnip : catnips) {
+                if (catnip != null) {
+                    catnip.Draw(g2);
+                }
+            }
+            cat.Draw(g2);
         }
 
         else
@@ -145,12 +161,20 @@ public class GamePanel extends JPanel implements Runnable
             bridgeLeft.Draw(g2);
             bridgeRight.Draw(g2);
             bridgeMid.draw(g2,this);
-            for (int i = 0, n = trees[0].length; i < n; i++) {
-                if (trees[0][i] != null && trees[1][i] != null) {
+            for (int i = 0, n = trees[0].length; i < n; i++)
+            {
+                if (trees[0][i] != null && trees[1][i] != null)
+                {
                     trees[0][i].draw(g2, this);
                     trees[1][i].draw(g2, this);
                 }
             }
+            for (Catnip catnip : catnips) {
+                if (catnip != null) {
+                    catnip.Draw(g2);
+                }
+            }
+            cat.Draw(g2);
             player.Draw(g2);
         }
 
@@ -160,7 +184,9 @@ public class GamePanel extends JPanel implements Runnable
         g2.drawString("buttonState: " + event.buttonState,3,36);
         g2.drawString("LEFT: " + bridgeLeft.swapSkin,3,48);
         g2.drawString("RIGHT: " + bridgeRight.swapSkin,3,60);
-        g2.drawString("Traversable: " + ButtonState.traversable,3,72);
+        g2.drawString("seen: " + event.airventSeen,3,72);
+        g2.drawString("X: " + player.x/tileSize,3,82);
+        g2.drawString("Y: " + player.y/tileSize,3,94);
         g2.dispose();
     }
 

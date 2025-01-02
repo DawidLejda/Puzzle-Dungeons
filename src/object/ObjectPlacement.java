@@ -57,4 +57,19 @@ public class ObjectPlacement extends Object
 
     }
 
+
+    public void CatnipPlacement()
+    {
+        gamePanel.catnips[0] = new Catnip(gamePanel);
+        gamePanel.catnips[0].x = 33;
+        gamePanel.catnips[0].y = 15;
+
+        gamePanel.catnips[1] = new Catnip(gamePanel);
+        gamePanel.catnips[1].x = 44;
+        gamePanel.catnips[1].y = 10;
+
+        gamePanel.catnips[2] = new Catnip(gamePanel);
+        gamePanel.catnips[2].x = 21;
+        gamePanel.catnips[2].y = 7;
+    }
 }

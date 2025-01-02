@@ -270,8 +270,6 @@ public class CollisionChecker
         int charX = character.x/gamePanel.tileSize;
         int charY = character.y/gamePanel.tileSize;
         collisionCheck = true;
-        System.out.println("x: "+charX);
-        System.out.println("y: "+charY);
         if(gamePanel.ButtonState.traversable)
         {
             if((charX == 23 && charY == 13) || (charX == 22 && charY == 13) || (charX == 21 && charY == 13)

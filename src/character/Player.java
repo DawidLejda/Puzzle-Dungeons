@@ -35,8 +35,8 @@ public class Player extends Character
         centerY = (gamePanel.height / 2) - (gamePanel.tileSize / 2);
 
         // Coordinates of player starting position // 17x 29y lewa, 30x,10y prawa
-        x = gamePanel.tileSize * 30;
-        y = gamePanel.tileSize * 10;
+        x = gamePanel.tileSize * 17;
+        y = gamePanel.tileSize * 14;
         speed = 4;
     }
 

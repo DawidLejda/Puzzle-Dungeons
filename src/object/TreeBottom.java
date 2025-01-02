@@ -10,9 +10,12 @@ public class TreeBottom extends Object
     public TreeBottom() {
         name = "tree";
         collision = false;
-        try {
+        try
+        {
             image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("objects/tree/tree1_bottom.png")));
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new RuntimeException(e);
         }
     }
