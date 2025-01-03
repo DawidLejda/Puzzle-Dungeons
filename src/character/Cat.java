@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
-import static java.lang.Math.abs;
 
 public class Cat extends Character
 {
@@ -20,12 +19,13 @@ public class Cat extends Character
     private int swapSkin = 0;
     private int swapIdle = 0;
     public boolean moving = false;
-    boolean wait = false;
     public boolean [] visited = new boolean[50];
-    int frame,idle_frame,time, waitCycles = 0;
+    public boolean stop = false;
+    int frame,idle_frame,time = 0;
     int randomTime = (rand.nextInt(5))+10;
     public object.ObjectImages[][] Sprite = new ObjectImages[4][4];
     public object.ObjectImages[] IdleSprite = new ObjectImages[4];
+    String previous_direction;
 
     public Cat(GamePanel gamePanel)
     {
@@ -33,7 +33,7 @@ public class Cat extends Character
         getCatModel();
         x = 15 * gamePanel.tileSize;
         y = 15 * gamePanel.tileSize;
-        speed = 1;
+        speed = 2;
         Arrays.fill(visited,false);
     }
 
@@ -81,41 +81,74 @@ public class Cat extends Character
 
     public void Update()
     {
-        if(gamePanel.event.catStart)
-        {
-                move();
-        }
 
-        if(direction != null && gamePanel.event.catStart)
+        if(!moving && direction == null )
         {
-            switch (direction)
+            if(x/gamePanel.tileSize == 14 && y/gamePanel.tileSize == 29)
             {
-                case "left":
-                    x -= speed;
-                    wait = false;
-                    moving = true;
-                    frame++;
-                    break;
-                case "right":
-                    x += speed;
-                    wait = false;
-                    moving = true;
-                    frame++;
-                    break;
-                case "up":
-                    y -= speed;
-                    wait = false;
-                    moving = true;
-                    frame++;
-                    break;
-                case "down":
-                    y += speed;
-                    wait = false;
-                    moving = true;
-                    frame++;
-                    break;
+                stop = true;
+            }
+
+            if((x-speed)/gamePanel.tileSize == 14 && y/gamePanel.tileSize == 29)
+            {
+                x -= speed;
+                stop = true;
+            }
+            else if((x+speed)/gamePanel.tileSize == 14 && y/gamePanel.tileSize == 29)
+            {
+                x += speed;
+                stop = true;
+            }
+            else if(x/gamePanel.tileSize == 14 && (y-speed)/gamePanel.tileSize == 29)
+            {
+                y += speed;
+                stop = true;
+            }
+
+            else if(x/gamePanel.tileSize == 14 && (y+speed)/gamePanel.tileSize == 29)
+            {
+                y -= speed;
+                stop = true;
+            }
+            else if(y == 1852)
+            {
+                y += 4;
+                stop = true;
             }
         }
+
+        if(gamePanel.event.catStart && !stop)
+        {
+            move();
+            if(direction != null)
+            {
+                switch (direction)
+                {
+                    case "left":
+                        x -= speed;
+                        moving = true;
+                        frame++;
+                        break;
+                    case "right":
+                        x += speed;
+                        moving = true;
+                        frame++;
+                        break;
+                    case "up":
+                        y -= speed;
+                        moving = true;
+                        frame++;
+                        break;
+                    case "down":
+                        y += speed;
+                        moving = true;
+                        frame++;
+                        break;
+                }
+            }
+        }
+
+
 
 
         time++;
@@ -134,6 +167,7 @@ public class Cat extends Character
         }
         else
         {
+            idle_frame++;
             if(idle_frame >= randomTime)
             {
                 swapIdle++;
@@ -161,46 +195,39 @@ public class Cat extends Character
         {
             int nextX = gamePanel.trail.catnipPathX[i];
             int nextY = gamePanel.trail.catnipPathY[i];
-
-            System.out.println(i + "  " + direction);
-            if(!visited[i] && nextX != 0)
+            if(!visited[i])
             {
                 if (x / gamePanel.tileSize + 1 == nextX)
                 {
                     direction = "right";
-                    System.out.println(i + "  " + direction);
-                    visited[i] = false;
                     break;
                 }
                 else if (x / gamePanel.tileSize - 1 == nextX)
                 {
                     direction = "left";
-                    System.out.println(i + "  " + direction);
-                    visited[i] = false;
                     break;
                 }
                 else if (y / gamePanel.tileSize - 1 == nextY)
                 {
                     direction = "up";
-                    System.out.println(i + "  " + direction);
-                    visited[i] = false;
                     break;
                 }
                 else if (y / gamePanel.tileSize + 1 == nextY)
                 {
                     direction = "down";
-                    System.out.println(i + "  " + direction);
-                    visited[i] = false;
                     break;
                 }
                 else
                 {
-                    direction = null;
-                    idle_frame++;
                     visited[i] = true;
-                    //wait = true;
-                    moving = false;
                 }
+            }
+
+            else
+            {
+                previous_direction = direction;
+                direction = null;
+                moving = false;
             }
 
         }

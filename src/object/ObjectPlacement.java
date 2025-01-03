@@ -76,8 +76,8 @@ public class ObjectPlacement extends Object
     public void Catnip_TrailPlacement()
     {
         gamePanel.player.speed = 2;
-        int charX = gamePanel.player.x/gamePanel.tileSize;
-        int charY = gamePanel.player.y/gamePanel.tileSize;
+        int charX = (gamePanel.player.x+10)/gamePanel.tileSize;
+        int charY = (gamePanel.player.y+10)/gamePanel.tileSize;
         int i;
         for(i = 0; i < gamePanel.trail.catnipSteps; i++)
         {
@@ -101,7 +101,7 @@ public class ObjectPlacement extends Object
             }
         }
         i++;
-        if(gamePanel.event.catnipsCount > 0 &&
+        if(gamePanel.event.catnipsCount > 0 && !gamePanel.trail.stopTrailPlacement &&
             charX != gamePanel.trail.catnipPathX[i-1] || charY != gamePanel.trail.catnipPathY[i-1])
         {
             gamePanel.trail.catnipSteps++;

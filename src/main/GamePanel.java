@@ -127,7 +127,7 @@ public class GamePanel extends JPanel implements Runnable
             trail.catnipPathY[0] = player.y/tileSize;
             event.trailStart = false;
         }
-        if((trail.catnipPathY[0] != 0 && event.catnipsCount > 0) && !trail.stopTrailPlacement)
+        if(!cat.stop && (trail.catnipPathY[0] != 0 && event.catnipsCount > 0) && !trail.stopTrailPlacement)
         {
             event.renderUseCatnip = false;
             objectPlacement.Catnip_TrailPlacement();
@@ -232,9 +232,6 @@ public class GamePanel extends JPanel implements Runnable
         g2.drawString("FPS: " + averageFPS,3,12);
         g2.drawString("Vis: " + player.visibility,3,24);
         g2.drawString("playerMoving: " + player.playerMoving,3,36);
-        g2.drawString("LEFT: " + bridgeLeft.swapSkin,3,48);
-        g2.drawString("RIGHT: " + bridgeRight.swapSkin,3,60);
-        g2.drawString("catnipSteps: " + trail.catnipSteps,3,72);
         g2.drawString("X: " + player.x/tileSize,3,82);
         g2.drawString("Y: " + player.y/tileSize,3,94);
         g2.drawString("pathX: " + Arrays.toString(trail.catnipPathX),3,106);
@@ -242,11 +239,11 @@ public class GamePanel extends JPanel implements Runnable
         g2.drawString("catnipsCount: " + event.catnipsCount,3,130);
         g2.drawString("stopTrailing: " + trail.stopTrailPlacement,3,142);
         g2.drawString("catStart: " + event.catStart,3,154);
-        g2.drawString("catX: " + cat.x/tileSize,3,170);
-        g2.drawString("catY: " + cat.y/tileSize,3,182);
+        g2.drawString(cat.x+"    catX: " + cat.x/tileSize,3,170);
+        g2.drawString(cat.y+"    catY: " + cat.y/tileSize,3,182);
         g2.drawString("catMove: " + cat.moving,3,194);
         g2.drawString("direction: " + cat.direction,3,210);
-        g2.drawString("direction: " + Arrays.toString(cat.visited),3,230);
+        g2.drawString("stop: " + cat.stop,3,259);
         g2.dispose();
     }
 
