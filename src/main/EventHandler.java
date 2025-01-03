@@ -17,7 +17,7 @@ public class EventHandler {
 
     boolean renderUse,airventSeen,renderUseCatnip;
     public boolean bunkerStop;
-    public boolean trailStart = false;
+    public boolean trailStart,catStart = false;
     public boolean buttonState, elevationDown, elevationUp;
     public int charX,charY;
     public int catnipsCount = 3;
@@ -69,6 +69,11 @@ public class EventHandler {
 
         catnip();
         catnipTrail();
+
+        if(!catStart && gamePanel.trail.catnipSteps  > 4)
+        {
+            catStart = true;
+        }
 
         if (abs(charX - gamePanel.airvent.x) <= 4
                 && abs(charY - gamePanel.airvent.y) <= 3) {
@@ -129,7 +134,7 @@ public class EventHandler {
         charX = gamePanel.player.x / gamePanel.tileSize;
         charY = gamePanel.player.y / gamePanel.tileSize;
         if(!trailStart && catnipsCount == 3 &&
-            (abs(charX - gamePanel.cat.x) <= 1 && abs(charY - gamePanel.cat.y) <= 1))
+            (abs(charX - gamePanel.cat.x/gamePanel.tileSize) <= 1 && abs(charY - gamePanel.cat.y/gamePanel.tileSize) <= 1))
         {
             renderUseCatnip = true;
             pressedKey.UseInRange = true;

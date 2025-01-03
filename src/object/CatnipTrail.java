@@ -98,7 +98,6 @@ public class CatnipTrail extends Object
         int posY = gamePanel.player.centerY - gamePanel.tileSize/2;
         if((catnipPathY[0] != 0 && gamePanel.event.catnipsCount > 0 && !stopTrailPlacement))
         {
-            System.out.println(swapSkin);
             g2.drawImage(trailing[swapSkin].image, posX, posY, gamePanel.tileSize/2, gamePanel.tileSize/2, null);
         }
     }

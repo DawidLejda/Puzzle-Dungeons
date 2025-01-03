@@ -14,9 +14,17 @@ public class Object
 
     public void draw(Graphics2D g2, GamePanel gamePanel)
     {
-        int centerX = x * gamePanel.tileSize - gamePanel.player.x + gamePanel.player.centerX;
-        int centerY = y * gamePanel.tileSize - gamePanel.player.y + gamePanel.player.centerY;
-
+        int centerX,centerY;
+        if(x<200)
+        {
+            centerX = x * gamePanel.tileSize - gamePanel.player.x + gamePanel.player.centerX;
+            centerY = y * gamePanel.tileSize - gamePanel.player.y + gamePanel.player.centerY;
+        }
+        else
+        {
+            centerX = x  - gamePanel.player.x + gamePanel.player.centerX;
+            centerY = y  - gamePanel.player.y + gamePanel.player.centerY;
+        }
         if      (((x * gamePanel.tileSize) < (gamePanel.player.x + gamePanel.player.centerX + gamePanel.tileSize)) &&
                 ((y * gamePanel.tileSize) < (gamePanel.player.y + gamePanel.player.centerY + gamePanel.tileSize)) &&
                 ((x * gamePanel.tileSize) > (gamePanel.player.x - gamePanel.player.centerX - gamePanel.tileSize)) &&

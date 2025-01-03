@@ -16,21 +16,13 @@ public class CollisionChecker
 
     public void CheckTileCollision(Character character)
     {
-        if (character.speed == 4)
-        {
-            playerLeft = (character.x - gamePanel.tileSize) + (gamePanel.tileSize - (gamePanel.tileSize / 2)) + gamePanel.tileSize;
-            playerRight = (character.x + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2));
-            playerTop = (character.y - gamePanel.tileSize) + (int) (gamePanel.tileSize - (gamePanel.tileSize / 2.6)) + gamePanel.tileSize;
-            playerBottom = (character.y + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2));
-        }
-        else
-        {
-            playerLeft = (character.x - gamePanel.tileSize) + (gamePanel.tileSize - (gamePanel.tileSize / 2)) + gamePanel.tileSize+2;
-            playerRight = (character.x + gamePanel.tileSize) -  (gamePanel.tileSize - (gamePanel.tileSize / 2)-2);
-            playerTop = (character.y - gamePanel.tileSize) + (int) (gamePanel.tileSize - (gamePanel.tileSize / 2.6)) + gamePanel.tileSize - 4;
-            playerBottom = (character.y + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2)-4);
 
-        }
+        playerLeft = (character.x - gamePanel.tileSize) + (gamePanel.tileSize - (gamePanel.tileSize / 2)) + gamePanel.tileSize;
+        playerRight = (character.x + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2));
+        playerTop = (character.y - gamePanel.tileSize) + (int) (gamePanel.tileSize - (gamePanel.tileSize / 2.3)) + gamePanel.tileSize;
+        playerBottom = (character.y + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2)-4);
+
+
 
         // Corner coordinates of character BOX;
         int X_Left = playerLeft / gamePanel.tileSize;
@@ -282,8 +274,8 @@ public class CollisionChecker
             }
         }
 
-        centerX = gamePanel.cat.x;
-        centerY = gamePanel.cat.y;
+        centerX = gamePanel.cat.x/gamePanel.tileSize;
+        centerY = gamePanel.cat.y/gamePanel.tileSize;
         if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1)
         {
             CheckObjectCollision(character, centerX, centerY);
