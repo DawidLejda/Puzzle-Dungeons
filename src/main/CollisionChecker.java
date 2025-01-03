@@ -16,11 +16,21 @@ public class CollisionChecker
 
     public void CheckTileCollision(Character character)
     {
+        if (character.speed == 4)
+        {
+            playerLeft = (character.x - gamePanel.tileSize) + (gamePanel.tileSize - (gamePanel.tileSize / 2)) + gamePanel.tileSize;
+            playerRight = (character.x + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2));
+            playerTop = (character.y - gamePanel.tileSize) + (int) (gamePanel.tileSize - (gamePanel.tileSize / 2.6)) + gamePanel.tileSize;
+            playerBottom = (character.y + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2));
+        }
+        else
+        {
+            playerLeft = (character.x - gamePanel.tileSize) + (gamePanel.tileSize - (gamePanel.tileSize / 2)) + gamePanel.tileSize+2;
+            playerRight = (character.x + gamePanel.tileSize) -  (gamePanel.tileSize - (gamePanel.tileSize / 2)-2);
+            playerTop = (character.y - gamePanel.tileSize) + (int) (gamePanel.tileSize - (gamePanel.tileSize / 2.6)) + gamePanel.tileSize - 4;
+            playerBottom = (character.y + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2)-4);
 
-        playerLeft = (character.x - gamePanel.tileSize) + (gamePanel.tileSize - (gamePanel.tileSize / 2)) + gamePanel.tileSize;
-        playerRight = (character.x + gamePanel.tileSize) -  (gamePanel.tileSize - (gamePanel.tileSize / 2));
-        playerTop = (character.y - gamePanel.tileSize) + (int) (gamePanel.tileSize - (gamePanel.tileSize / 2.6)) + gamePanel.tileSize;
-        playerBottom = (character.y + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2));
+        }
 
         // Corner coordinates of character BOX;
         int X_Left = playerLeft / gamePanel.tileSize;
@@ -118,7 +128,7 @@ public class CollisionChecker
             }
         }
     }
-    public void CheckButtonCollision(Character character, int centerX, int centerY)
+    public void CheckObjectCollision(Character character, int centerX, int centerY)
     {
         int X_Left = playerLeft / gamePanel.tileSize;
         int X_Right = playerRight / gamePanel.tileSize;
@@ -200,9 +210,10 @@ public class CollisionChecker
     public void CheckObjectVisibility(Character character)
     {
         int charX,charY,centerX,centerY;
+        charX = character.x/gamePanel.tileSize;
+        charY = character.y/gamePanel.tileSize;
         for (int i = 0, n = gamePanel.trees[0].length; i < n; i++) {
-            charX = character.x/gamePanel.tileSize;
-            charY = character.y/gamePanel.tileSize;
+
             if(abs(charX- gamePanel.trees[1][i].x) <= 1 && abs(charY - gamePanel.trees[1][i].y) <= 1)
             {
                 centerX = gamePanel.trees[1][i].x;
@@ -214,11 +225,9 @@ public class CollisionChecker
             }
         }
 
-
         for (int i = 0; i < 3; i++)
         {
-            charX = character.x / gamePanel.tileSize;
-            charY = character.y / gamePanel.tileSize;
+
             if (abs(charX - gamePanel.airvent.x) <= 4 && abs(charY - gamePanel.airvent.y) <= 3) {
                 CheckObjectAirVentCollision(character);
                 centerX = gamePanel.airvent.x + i;
@@ -229,37 +238,57 @@ public class CollisionChecker
             }
         }
 
-
-        charX = character.x / gamePanel.tileSize;
-        charY = character.y / gamePanel.tileSize;
         centerX = gamePanel.ButtonState.x;
         centerY = gamePanel.ButtonState.y;
         if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
-            CheckButtonCollision(character,centerX,centerY);
+            CheckObjectCollision(character,centerX,centerY);
             if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
 
                 character.visibility = false;
             }
         }
-
 
         centerX = gamePanel.ButtonElevationUp.x;
         centerY = gamePanel.ButtonElevationUp.y;
         if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
-            CheckButtonCollision(character, centerX, centerY);
+            CheckObjectCollision(character, centerX, centerY);
             if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
 
                 character.visibility = false;
             }
         }
 
-
         centerX = gamePanel.ButtonElevationDown.x;
         centerY = gamePanel.ButtonElevationDown.y;
         if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
-            CheckButtonCollision(character, centerX, centerY);
+            CheckObjectCollision(character, centerX, centerY);
             if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
 
+                character.visibility = false;
+            }
+        }
+
+        for(int i = 0, n = gamePanel.catnips.length; i < n; i++)
+        {
+            centerX = gamePanel.catnips[i].x;
+            centerY = gamePanel.catnips[i].y;
+            if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1)
+            {
+                if ((charX == centerX || charX == centerX-1) &&
+                        (((character.y+28)/gamePanel.tileSize) == centerY-1))
+                {
+                    character.visibility = false;
+                }
+            }
+        }
+
+        centerX = gamePanel.cat.x;
+        centerY = gamePanel.cat.y;
+        if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1)
+        {
+            CheckObjectCollision(character, centerX, centerY);
+            if ((charX == centerX || charX == centerX-1) && (charY == centerY-1))
+            {
                 character.visibility = false;
             }
         }
@@ -275,8 +304,14 @@ public class CollisionChecker
             if((charX == 23 && charY == 13) || (charX == 22 && charY == 13) || (charX == 21 && charY == 13)
             ||(charX == 20 && charY == 13) || (charX == 19 && charY == 13) || (charX == 18 && charY == 13))
             {
-                collisionCheck = false;
+                if((character.y-33)/gamePanel.tileSize == 13 &&
+                        (character.y+13)/gamePanel.tileSize == 13)
+                {
+                    collisionCheck = false;
+                }
             }
         }
     }
+
+
 }

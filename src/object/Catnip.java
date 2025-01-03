@@ -13,11 +13,15 @@ public class Catnip extends Object
     public ObjectImages[] sprite = new ObjectImages[2];
     public boolean Harvested,isHarvesting = false;
     int frame = 0;
+
+
     public Catnip(GamePanel gamePanel)
     {
         this.gamePanel = gamePanel;
         getCatnipModel();
     }
+
+
     void getCatnipModel()
     {
         try
@@ -47,9 +51,10 @@ public class Catnip extends Object
             }
         }
     }
+
+
     public void Draw(Graphics2D g2)
     {
-
         int centerX = x * gamePanel.tileSize - gamePanel.player.x + gamePanel.player.centerX;
         int centerY = y * gamePanel.tileSize - gamePanel.player.y + gamePanel.player.centerY;
 
@@ -59,14 +64,11 @@ public class Catnip extends Object
                 ((y * gamePanel.tileSize) > (gamePanel.player.y - gamePanel.player.centerY - gamePanel.tileSize)))
         {
             g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-            g2.drawImage(sprite[0].image, centerX, centerY, 40, 40, null);
+            g2.drawImage(sprite[0].image, centerX+40, centerY, 40, 40, null);
             if(!Harvested)
             {
-                g2.drawImage(sprite[1].image, centerX, centerY, 40, 40, null);
+                g2.drawImage(sprite[1].image, centerX+40, centerY, 40, 40, null);
             }
-
-
-
         }
     }
 

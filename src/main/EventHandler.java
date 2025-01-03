@@ -5,36 +5,32 @@ import object.ObjectImages;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Random;
 
-import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 
 public class EventHandler {
     GamePanel gamePanel;
     KeyHandler pressedKey;
-    BufferedImage useImage;
-    boolean renderUse,airventSeen;
+
+    boolean renderUse,airventSeen,renderUseCatnip;
     public boolean bunkerStop;
+    public boolean trailStart = false;
     public boolean buttonState, elevationDown, elevationUp;
     public int charX,charY;
-    public int catnipsCount = 0;
+    public int catnipsCount = 3;
     public object.ObjectImages[] catnipBar = new ObjectImages[4];
+    public object.ObjectImages[] use = new ObjectImages[2];
+    public int randomBridge;
+    Random rand = new Random();
 
-    public EventHandler(GamePanel gamePanel, KeyHandler pressedKey) {
+    public EventHandler(GamePanel gamePanel, KeyHandler pressedKey)
+    {
         this.gamePanel = gamePanel;
         this.pressedKey = pressedKey;
         buttonState = true;
-        try
-        {
-            useImage = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/use.png")));
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
         getUIModel();
     }
 
@@ -43,6 +39,11 @@ public class EventHandler {
     {
         try
         {
+            use[0] = new ObjectImages();
+            use[1] = new ObjectImages();
+            use[0].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/use.png")));
+            use[1].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/useCatnip.png")));
+
             for (int i = 0; i < 4; i++)
             {
                 String path = "events/progressBar".concat(Integer.toString(i)).concat(".png");
@@ -50,9 +51,9 @@ public class EventHandler {
                 catnipBar[i].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
             }
         }
-        catch(IOException e)
+        catch (IOException e)
         {
-            System.out.println("Couldn't read UI model");
+            throw new RuntimeException(e);
         }
     }
 
@@ -62,12 +63,12 @@ public class EventHandler {
         pressedKey.UseInRange = false;
         elevationDown = false;
         elevationUp = false;
+        renderUseCatnip = false;
         charX = gamePanel.player.x / gamePanel.tileSize;
         charY = gamePanel.player.y / gamePanel.tileSize;
 
-
         catnip();
-
+        catnipTrail();
 
         if (abs(charX - gamePanel.airvent.x) <= 4
                 && abs(charY - gamePanel.airvent.y) <= 3) {
@@ -88,6 +89,7 @@ public class EventHandler {
                 pressedKey.UseInRange = true;
 
                 if (Objects.equals(pressedKey.lastReleasedKey, "use")) {
+                    randomBridge =  rand.nextInt(2);
                     buttonState = !buttonState;
                     pressedKey.lastReleasedKey = null;
                 }
@@ -119,7 +121,26 @@ public class EventHandler {
                 }
             }
         }
+
+
     }
+    public void catnipTrail()
+    {
+        charX = gamePanel.player.x / gamePanel.tileSize;
+        charY = gamePanel.player.y / gamePanel.tileSize;
+        if(!trailStart && catnipsCount == 3 &&
+            (abs(charX - gamePanel.cat.x) <= 1 && abs(charY - gamePanel.cat.y) <= 1))
+        {
+            renderUseCatnip = true;
+            pressedKey.UseInRange = true;
+            if (Objects.equals(pressedKey.lastReleasedKey, "use"))
+            {
+                trailStart = true;
+                pressedKey.lastReleasedKey = null;
+            }
+        }
+    }
+
 
     public void catnip() {
         charX = gamePanel.player.x / gamePanel.tileSize;
@@ -153,7 +174,6 @@ public class EventHandler {
                     }
                 }
             }
-
         }
     }
 
@@ -164,9 +184,12 @@ public class EventHandler {
         int y = gamePanel.player.centerY - gamePanel.tileSize/2;
         if(renderUse)
         {
-            g2.drawImage(useImage, x, y, gamePanel.tileSize/2, gamePanel.tileSize/2, null);
+            g2.drawImage(use[0].image, x, y, gamePanel.tileSize/2, gamePanel.tileSize/2, null);
         }
-
+        else if(renderUseCatnip)
+        {
+            g2.drawImage(use[1].image, x, y, gamePanel.tileSize/2, gamePanel.tileSize/2, null);
+        }
         if(catnipsCount > 0)
         {
             g2.drawImage(catnipBar[0].image, gamePanel.width-gamePanel.tileSize,

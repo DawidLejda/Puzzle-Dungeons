@@ -23,7 +23,7 @@ public class Cat extends Character
         direction = "down";
 
         x = 15;
-        y = 13;
+        y = 15;
         speed = 4;
     }
 
@@ -50,8 +50,8 @@ public class Cat extends Character
     public void Draw(Graphics2D g2)
     {
 
-        int centerX = x * gamePanel.tileSize - gamePanel.player.x + gamePanel.player.centerX;
-        int centerY = y * gamePanel.tileSize - gamePanel.player.y + gamePanel.player.centerY;
+        int centerX = x * gamePanel.tileSize - gamePanel.player.x + gamePanel.player.centerX + 7;
+        int centerY = y * gamePanel.tileSize - gamePanel.player.y + gamePanel.player.centerY + 10;
 
         if      (((x * gamePanel.tileSize) < (gamePanel.player.x + gamePanel.player.centerX + gamePanel.tileSize)) &&
                 ((y * gamePanel.tileSize) < (gamePanel.player.y + gamePanel.player.centerY + gamePanel.tileSize)) &&

@@ -83,7 +83,7 @@ public class BridgeRight extends Object
         }
         else
         {
-            if(gamePanel.ButtonState.randomBridge == 0)
+            if(gamePanel.event.randomBridge == 0)
             {
                 if (nonQuantumClicks >= 3)
                 {

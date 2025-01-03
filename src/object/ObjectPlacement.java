@@ -2,10 +2,10 @@ package object;
 
 import main.GamePanel;
 
+
 public class ObjectPlacement extends Object
 {
     GamePanel gamePanel;
-
     public ObjectPlacement(GamePanel gamePanel)
     {
         this.gamePanel = gamePanel;
@@ -71,5 +71,59 @@ public class ObjectPlacement extends Object
         gamePanel.catnips[2] = new Catnip(gamePanel);
         gamePanel.catnips[2].x = 21;
         gamePanel.catnips[2].y = 7;
+    }
+
+    public void Catnip_TrailPlacement()
+    {
+        gamePanel.player.speed = 2;
+        int charX = gamePanel.player.x/gamePanel.tileSize;
+        int charY = gamePanel.player.y/gamePanel.tileSize;
+        int i;
+        for(i = 0; i < gamePanel.trail.catnipSteps; i++)
+        {
+            if(gamePanel.trail.catnipPathX[i] != 0)
+            {
+                gamePanel.catnipTrails[i] = new Object();
+                gamePanel.catnipTrails[i].x = gamePanel.trail.catnipPathX[i];
+                gamePanel.catnipTrails[i].y = gamePanel.trail.catnipPathY[i];
+
+                if(gamePanel.trail.randomTrail[i] == 0)
+                {
+                    gamePanel.catnipTrails[i].image = gamePanel.trail.trailsIMG[0].image;
+                }
+                else
+                {
+                    gamePanel.catnipTrails[i].image = gamePanel.trail.trailsIMG[1].image;
+                }
+
+
+
+            }
+        }
+        i++;
+        if(gamePanel.event.catnipsCount > 0 &&
+            charX != gamePanel.trail.catnipPathX[i-1] || charY != gamePanel.trail.catnipPathY[i-1])
+        {
+            gamePanel.trail.catnipSteps++;
+            gamePanel.trail.catnipPathX[gamePanel.trail.catnipSteps] = charX;
+            gamePanel.trail.catnipPathY[gamePanel.trail.catnipSteps] = charY;
+        }
+
+        if(gamePanel.trail.catnipSteps <= 10)
+        {
+            gamePanel.event.catnipsCount = 3;
+        }
+        else if(gamePanel.trail.catnipSteps <= 20 &&  gamePanel.trail.catnipSteps > 11)
+        {
+            gamePanel.event.catnipsCount = 2;
+        }
+        else if(gamePanel.trail.catnipSteps <= 30 &&  gamePanel.trail.catnipSteps > 21)
+        {
+            gamePanel.event.catnipsCount = 1;
+        }
+        else if(gamePanel.trail.catnipSteps > 31)
+        {
+            gamePanel.event.catnipsCount = 0;
+        }
     }
 }

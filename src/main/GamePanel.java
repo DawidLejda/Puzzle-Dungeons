@@ -7,6 +7,7 @@ import object.*;
 import object.Object;
 import javax.swing.JPanel;
 import java.awt.*;
+import java.util.Arrays;
 
 public class GamePanel extends JPanel implements Runnable
 {
@@ -20,7 +21,7 @@ public class GamePanel extends JPanel implements Runnable
     public int frameCount = 0;
 
     Thread GameThread;
-    KeyHandler pressedKey = new KeyHandler();
+    public KeyHandler pressedKey = new KeyHandler(this);
 
     public Player player = new Player(this, pressedKey);
     public Cat cat = new Cat(this);
@@ -39,6 +40,8 @@ public class GamePanel extends JPanel implements Runnable
     public BridgeMid bridgeMid = new BridgeMid(this);
     public Object[][] trees = new Object[2][5];
     public Catnip[] catnips = new Catnip[3];
+    public CatnipTrail trail = new CatnipTrail(this);
+    public Object[] catnipTrails = new Object[50];
 
     // ********************************************************
 
@@ -97,10 +100,12 @@ public class GamePanel extends JPanel implements Runnable
 
     public void Update()
     {
+
         map.Update();
         player.Update();
         cat.Update();
         event.Update();
+        trail.Update();
         bunker.Update();
         airvent.Update();
         ButtonState.Update();
@@ -108,10 +113,29 @@ public class GamePanel extends JPanel implements Runnable
         ButtonElevationDown.Update();
         bridgeRight.Update();
         bridgeLeft.Update();
-        for (Catnip catnip : catnips) {
+        for (Catnip catnip : catnips)
+        {
             if (catnip != null) {
                 catnip.Update();
             }
+        }
+
+
+        if(event.trailStart)
+        {
+            trail.catnipPathX[0] = player.x/tileSize;
+            trail.catnipPathY[0] = player.y/tileSize;
+            event.trailStart = false;
+        }
+        if((trail.catnipPathY[0] != 0 && event.catnipsCount > 0) && !trail.stopTrailPlacement)
+        {
+            event.renderUseCatnip = false;
+            objectPlacement.Catnip_TrailPlacement();
+            player.speed = 2;
+        }
+        else
+        {
+            player.speed = 4;
         }
     }
 
@@ -121,7 +145,6 @@ public class GamePanel extends JPanel implements Runnable
         Graphics2D g2 = (Graphics2D) g;
 
         map.Draw(g2);
-
 
         if(!player.visibility)
         {
@@ -143,12 +166,25 @@ public class GamePanel extends JPanel implements Runnable
                     trees[1][i].draw(g2, this);
                 }
             }
-            for (Catnip catnip : catnips) {
-                if (catnip != null) {
+            for (Catnip catnip : catnips)
+            {
+                if (catnip != null)
+                {
                     catnip.Draw(g2);
                 }
             }
             cat.Draw(g2);
+            for (int i = 0; i < trail.catnipSteps; i++)
+            {
+                if(catnipTrails[i] != null)
+                {
+                    catnipTrails[i].draw(g2,this);
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
         else
@@ -169,9 +205,21 @@ public class GamePanel extends JPanel implements Runnable
                     trees[1][i].draw(g2, this);
                 }
             }
-            for (Catnip catnip : catnips) {
+            for (Catnip catnip : catnips)
+            {
                 if (catnip != null) {
                     catnip.Draw(g2);
+                }
+            }
+            for (int i = 0; i < trail.catnipSteps; i++)
+            {
+                if(catnipTrails[i] != null)
+                {
+                    catnipTrails[i].draw(g2,this);
+                }
+                else
+                {
+                    break;
                 }
             }
             cat.Draw(g2);
@@ -179,14 +227,20 @@ public class GamePanel extends JPanel implements Runnable
         }
 
         event.Draw(g2);
+        trail.Draw(g2);
+
         g2.drawString("FPS: " + averageFPS,3,12);
         g2.drawString("Vis: " + player.visibility,3,24);
-        g2.drawString("buttonState: " + event.buttonState,3,36);
+        g2.drawString("playerMoving: " + player.playerMoving,3,36);
         g2.drawString("LEFT: " + bridgeLeft.swapSkin,3,48);
         g2.drawString("RIGHT: " + bridgeRight.swapSkin,3,60);
-        g2.drawString("seen: " + event.airventSeen,3,72);
+        g2.drawString("catnipSteps: " + trail.catnipSteps,3,72);
         g2.drawString("X: " + player.x/tileSize,3,82);
         g2.drawString("Y: " + player.y/tileSize,3,94);
+        g2.drawString("pathX: " + Arrays.toString(trail.catnipPathX),3,106);
+        g2.drawString("pathY: " + Arrays.toString(trail.catnipPathY),3,118);
+        g2.drawString("catnipsCount: " + event.catnipsCount,3,130);
+        g2.drawString("stopTrailing: " + trail.stopTrailPlacement,3,142);
         g2.dispose();
     }
 

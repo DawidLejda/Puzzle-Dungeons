@@ -49,7 +49,7 @@ public class BridgeLeft extends Object
 
         if(!gamePanel.event.buttonState)
         {
-            if (gamePanel.ButtonState.randomBridge == 1)
+            if (gamePanel.event.randomBridge == 1)
             {
                 if (nonQuantumClicks >= 3)
                 {

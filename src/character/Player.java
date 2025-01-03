@@ -15,7 +15,7 @@ public class Player extends Character
 
     GamePanel gamePanel;
     KeyHandler pressedKey;
-    private boolean playerMoving;
+    public boolean playerMoving;
     private int swapSkin = 1;
     private int swapIdle = 1;
     private int animationFrame = 1;
@@ -115,7 +115,8 @@ public class Player extends Character
         else if (pressedKey.use)
         {
             direction = pressedKey.previousKey;
-            playerMoving = true;
+            playerMoving = false;
+            animationIdle++;
         }
         else
         {

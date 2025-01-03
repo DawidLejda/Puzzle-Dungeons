@@ -5,11 +5,17 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener
 {
-    public boolean UseInRange,bunkerStop;
+    GamePanel gamePanel;
+    public boolean UseInRange;
     public boolean left, right, up, down, use;
     public String lastPressedKey;
     public String lastReleasedKey;
     public String previousKey;
+
+    public KeyHandler(GamePanel gamePanel)
+    {
+        this.gamePanel = gamePanel;
+    }
 
     @Override
     public void keyTyped(KeyEvent e)
@@ -46,8 +52,11 @@ public class KeyHandler implements KeyListener
             case KeyEvent.VK_E:
                 if(UseInRange)
                 {
+                    if(!gamePanel.event.renderUseCatnip)
+                    {
+                        lastPressedKey = "up";
+                    }
                     use = true;
-                    lastPressedKey = "up";
                     break;
                 }
         }
