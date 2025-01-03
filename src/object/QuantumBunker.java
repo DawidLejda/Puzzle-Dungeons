@@ -60,21 +60,15 @@ public class QuantumBunker extends Object
             y = (rand.nextInt(25) + 13);
             if(gamePanel.map.starting_area[y][x] == 11 && gamePanel.map.starting_area[y][x + 1] == 11)
             {
-                if((x != gamePanel.airvent.x && y != gamePanel.airvent.y) ||
+                if((x != gamePanel.airvent.x && y != gamePanel.airvent.y) &&
+                        (x != gamePanel.airvent.x+1 && y != gamePanel.airvent.y+1)&&
                         (x != gamePanel.airvent.x+2 && y != gamePanel.airvent.y+2))
                 {
                     incorrectGround = true;
                 }
                 for (int i = 0, n = gamePanel.trees[0].length; i < n; i++)
                 {
-                    if(x != gamePanel.trees[0][i].x && y != gamePanel.trees[0][i].y)
-                    {
-                        incorrectGround = true;
-                    }
-                    else
-                    {
-                        incorrectGround = false;
-                    }
+                    incorrectGround = x != gamePanel.trees[0][i].x && y != gamePanel.trees[0][i].y;
                 }
             }
         } while (!incorrectGround);

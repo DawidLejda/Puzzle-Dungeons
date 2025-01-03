@@ -132,6 +132,10 @@ public class GamePanel extends JPanel implements Runnable
             event.renderUseCatnip = false;
             objectPlacement.Catnip_TrailPlacement();
             player.speed = 2;
+            if (trail.catnipPathY[2] != 0 )
+            {
+                cat.catStart = true;
+            }
         }
         else
         {

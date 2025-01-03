@@ -88,6 +88,7 @@ public class CatnipTrail extends Object
                 frame = 0;
             }
         }
+
     }
 
 
