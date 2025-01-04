@@ -16,11 +16,11 @@ public class QuantumBunker extends Object
     GamePanel gamePanel;
     public ObjectImages[] bunker = new ObjectImages[12];
     Random rand = new Random();
-    public boolean renderBunker;
-    private int frame,teleport_frame = 0;
+    public boolean renderBunker,materialize;
+    private int frame,reverseFrame,teleport_frame = 0;
     public int swapTeleport = 2;
-    boolean incorrectGround;
-
+    boolean incorrectGround,reverse;
+    public int []last_coordinates = new int[2];
     public QuantumBunker(GamePanel gamePanel)
     {
         this.gamePanel = gamePanel;
@@ -56,8 +56,8 @@ public class QuantumBunker extends Object
     {
         incorrectGround = false;
         do {
-            x = (rand.nextInt(17) + 3);
-            y = (rand.nextInt(25) + 13);
+            x = (rand.nextInt(17) + 4);
+            y = (rand.nextInt(15) + 15);
             if(gamePanel.map.starting_area[y][x] == 11 && gamePanel.map.starting_area[y][x + 1] == 11)
             {
                 if((x != gamePanel.airvent.x && y != gamePanel.airvent.y) &&
@@ -71,7 +71,8 @@ public class QuantumBunker extends Object
                     incorrectGround = x != gamePanel.trees[0][i].x && y != gamePanel.trees[0][i].y;
                 }
             }
-        } while (!incorrectGround);
+        } while (!incorrectGround );
+
         renderBunker =
                 gamePanel.map.starting_area[y][x] == 11 &&
                 gamePanel.map.starting_area[y][x + 1] == 11 &&
@@ -82,31 +83,56 @@ public class QuantumBunker extends Object
 
     public void Update()
     {
-        frame++;
-        if(frame >= 50 && !gamePanel.event.bunkerStop)
+        if(!materialize)
         {
-            getPseudoRandomCoordinates();
-            frame = 0;
-            swapTeleport = 2;
-        }
-
-        if(frame > 15){
-            teleport_frame++;
-            if(teleport_frame >= 4)
+            frame++;
+            if (frame >= 50 && !gamePanel.event.bunkerStop)
             {
-                if (swapTeleport >= 10)
-                {
-                    swapTeleport = 0;
-                }
-                if(swapTeleport != 0)
-                {
-                    swapTeleport += 2;
-                }
 
-                teleport_frame = 0;
+                getPseudoRandomCoordinates();
+                frame = 0;
+                swapTeleport = 2;
+            }
+
+            if (frame > 15) {
+                teleport_frame++;
+                if (teleport_frame >= 4) {
+                    if (swapTeleport >= 10) {
+                        swapTeleport = 0;
+                    }
+                    if (swapTeleport != 0) {
+                        swapTeleport += 2;
+                    }
+
+                    teleport_frame = 0;
+                }
+            }
+        }
+        else
+        {
+            if(reverse)
+            {
+                reverseFrame++;
+                if (reverseFrame > 15)
+                {
+                    swapTeleport--;
+                    reverseFrame = 0;
+                    if (swapTeleport <= 0)
+                    {
+                        reverse = false;
+                    }
+                }
+            }
+            if (x != last_coordinates[0])
+            {
+                frame = 0;
+                renderBunker = true;
+                x = last_coordinates[0];
+                y = last_coordinates[1];
             }
         }
     }
+
 
     public void DrawStanding(Graphics2D g2, GamePanel gamePanel)
     {
@@ -120,21 +146,32 @@ public class QuantumBunker extends Object
                     ((x * gamePanel.tileSize) > (gamePanel.player.x - gamePanel.player.centerX - gamePanel.tileSize)) &&
                     ((y * gamePanel.tileSize) > (gamePanel.player.y - gamePanel.player.centerY - gamePanel.tileSize)))
             {
-
-                if(frame <= 15 || gamePanel.event.bunkerStop)
+                if(!materialize)
                 {
-                    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                    g2.drawImage(bunker[0].image, centerX, centerY, gamePanel.tileSize,gamePanel.tileSize, null);
-                    g2.drawImage(bunker[1].image, centerX + gamePanel.tileSize, centerY, gamePanel.tileSize,gamePanel.tileSize, null);
+                    if (frame <= 15 || gamePanel.event.bunkerStop)
+                    {
+                        last_coordinates[0] = x;
+                        last_coordinates[1] = y;
+
+                        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+                        g2.drawImage(bunker[0].image, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+                        g2.drawImage(bunker[1].image, centerX + gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+                    } else {
+                        if (swapTeleport != 0) {
+                            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+                            g2.drawImage(bunker[swapTeleport].image, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+                            g2.drawImage(bunker[swapTeleport + 1].image, centerX + gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+                        }
+                    }
                 }
                 else
                 {
-                    if(swapTeleport != 0)
+                    if(swapTeleport > 0)
                     {
-                        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                        g2.drawImage(bunker[swapTeleport].image, centerX, centerY, gamePanel.tileSize,gamePanel.tileSize, null);
-                        g2.drawImage(bunker[swapTeleport + 1].image, centerX + gamePanel.tileSize, centerY, gamePanel.tileSize,gamePanel.tileSize, null);
+                        reverse = true;
                     }
+                    g2.drawImage(bunker[swapTeleport].image, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+                    g2.drawImage(bunker[swapTeleport + 1].image, centerX + gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
                 }
             }
         }

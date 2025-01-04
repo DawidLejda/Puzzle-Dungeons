@@ -16,13 +16,13 @@ public class EventHandler {
     KeyHandler pressedKey;
 
     boolean renderUse,airventSeen,renderUseCatnip;
-    public boolean bunkerStop;
+    public boolean bunkerStop,renderThrow;
     public boolean trailStart,catStart = false;
     public boolean buttonState, elevationDown, elevationUp;
     public int charX,charY;
     public int catnipsCount = 3;
     public object.ObjectImages[] catnipBar = new ObjectImages[4];
-    public object.ObjectImages[] use = new ObjectImages[2];
+    public object.ObjectImages[] use = new ObjectImages[3];
     public int randomBridge;
     Random rand = new Random();
 
@@ -41,9 +41,10 @@ public class EventHandler {
         {
             use[0] = new ObjectImages();
             use[1] = new ObjectImages();
+            use[2] = new ObjectImages();
             use[0].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/use.png")));
             use[1].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/useCatnip.png")));
-
+            use[2].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/throw.png")));
             for (int i = 0; i < 4; i++)
             {
                 String path = "events/progressBar".concat(Integer.toString(i)).concat(".png");
@@ -64,6 +65,7 @@ public class EventHandler {
         elevationDown = false;
         elevationUp = false;
         renderUseCatnip = false;
+        renderThrow = false;
         charX = gamePanel.player.x / gamePanel.tileSize;
         charY = gamePanel.player.y / gamePanel.tileSize;
 
@@ -76,14 +78,30 @@ public class EventHandler {
         }
 
         if (abs(charX - gamePanel.airvent.x) <= 4
-                && abs(charY - gamePanel.airvent.y) <= 3) {
+                && abs(charY - gamePanel.airvent.y) <= 3)
+        {
             int centerX = gamePanel.airvent.x + 1;
             int centerY = gamePanel.airvent.y + 1;
-            if ((charX == centerX) && (charY == centerY - 1)) {
-                renderUse = true;
+            if ((charX == centerX) && (charY == centerY - 1))
+            {
+
                 pressedKey.UseInRange = true;
-                if (pressedKey.use) {
-                    bunkerStop = true;
+                if(gamePanel.cat.stop)
+                {
+                    renderThrow = true;
+                    if (Objects.equals(pressedKey.lastReleasedKey, "use"))
+                    {
+                        gamePanel.bunker.materialize = true;
+                        pressedKey.lastReleasedKey = null;
+                    }
+                }
+                else
+                {
+                    renderUse = true;
+                    if (pressedKey.use)
+                    {
+                        bunkerStop = true;
+                    }
                 }
             }
 
@@ -114,7 +132,8 @@ public class EventHandler {
             }
         }
         else if (abs(charX - gamePanel.ButtonElevationDown.x) <= 1
-                && abs(charY - gamePanel.ButtonElevationDown.y) <= 1) {
+                && abs(charY - gamePanel.ButtonElevationDown.y) <= 1)
+        {
             if ((charX == gamePanel.ButtonElevationDown.x) && (charY == gamePanel.ButtonElevationDown.y))
             {
                 renderUse = true;
@@ -122,6 +141,22 @@ public class EventHandler {
 
                 if (Objects.equals(pressedKey.lastReleasedKey, "use")) {
                     elevationDown = true;
+                    pressedKey.lastReleasedKey = null;
+                }
+            }
+        }
+
+        else if(gamePanel.bunker.materialize &&
+                (abs(charX - gamePanel.bunker.x) <= 2
+                && abs(charY - gamePanel.bunker.y) <= 2))
+        {
+            if ((charX == gamePanel.bunker.x) && (charY == gamePanel.bunker.y ))
+            {
+                renderUse = true;
+                pressedKey.UseInRange = true;
+                if (Objects.equals(pressedKey.lastReleasedKey, "use"))
+                {
+                    System.out.println("wejscie do bunkra");
                     pressedKey.lastReleasedKey = null;
                 }
             }
@@ -194,6 +229,10 @@ public class EventHandler {
         else if(renderUseCatnip)
         {
             g2.drawImage(use[1].image, x, y, gamePanel.tileSize/2, gamePanel.tileSize/2, null);
+        }
+        else if(renderThrow)
+        {
+            g2.drawImage(use[2].image, x-20, y-25, gamePanel.tileSize, gamePanel.tileSize, null);
         }
         if(catnipsCount > 0)
         {

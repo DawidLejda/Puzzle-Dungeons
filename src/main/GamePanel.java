@@ -150,7 +150,7 @@ public class GamePanel extends JPanel implements Runnable
         {
             player.Draw(g2);
 
-            bunker.DrawStanding(g2, this);
+
             airvent.Draw(g2, this);
             ButtonState.Draw(g2);
             ButtonElevationUp.Draw(g2);
@@ -173,6 +173,7 @@ public class GamePanel extends JPanel implements Runnable
                     catnip.Draw(g2);
                 }
             }
+            bunker.DrawStanding(g2, this);
             cat.Draw(g2);
             for (int i = 0; i < trail.catnipSteps; i++)
             {
@@ -189,7 +190,6 @@ public class GamePanel extends JPanel implements Runnable
 
         else
         {
-            bunker.DrawStanding(g2, this);
             airvent.Draw(g2, this);
             ButtonState.Draw(g2);
             ButtonElevationUp.Draw(g2);
@@ -222,6 +222,7 @@ public class GamePanel extends JPanel implements Runnable
                     break;
                 }
             }
+            bunker.DrawStanding(g2, this);
             cat.Draw(g2);
             player.Draw(g2);
         }
@@ -244,7 +245,11 @@ public class GamePanel extends JPanel implements Runnable
         g2.drawString("catMove: " + cat.moving,3,194);
         g2.drawString("direction: " + cat.direction,3,210);
         g2.drawString("stop: " + cat.stop,3,259);
-        g2.drawString("stop: " + trail.last_index,3,280);
+        g2.drawString("bunkerStop: " +bunker.materialize,3,280);
+        g2.drawString("bunkerX: " +bunker.x,3,310);
+        g2.drawString("bunkerY: " +bunker.y,3,330);
+        g2.drawString("bunkercordX: " +bunker.last_coordinates[0],3,350);
+        g2.drawString("bunkercordY: " +bunker.last_coordinates[1],3,370);
         g2.dispose();
     }
 

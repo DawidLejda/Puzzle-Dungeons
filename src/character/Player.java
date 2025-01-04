@@ -25,6 +25,7 @@ public class Player extends Character
     public final int centerX;
     public final int centerY;
 
+
     public Player(GamePanel gamePanel, KeyHandler pressedKey)
     {
         this.gamePanel = gamePanel;
@@ -39,6 +40,7 @@ public class Player extends Character
         y = gamePanel.tileSize * 14;
         speed = 4;
     }
+
 
     public void getPlayerModel()
     {
@@ -75,17 +77,18 @@ public class Player extends Character
             gamePanel.gameRunning = false;
         }
     }
+
+
     void CollisionCheck()
     {
         visibility = true;
         collision = false;
         gamePanel.collisionChecker.CheckBridgeCollision(this);
-
         gamePanel.collisionChecker.CheckTileCollision(this);
-
         gamePanel.collisionChecker.CheckObjectVisibility(this);
-
     }
+
+
     public void Update() {
 
         if (pressedKey.left)
@@ -169,6 +172,7 @@ public class Player extends Character
             }
         }
     }
+
 
     public void Draw(Graphics2D g2)
     {
