@@ -15,6 +15,7 @@ public class Map extends bitmap
     GamePanel gamePanel;
     Player player;
 
+    public boolean mapSwap = false;
     private int animationFrame = 1;
     private int swapWater = 1;
     Random rand = new Random();
@@ -22,7 +23,8 @@ public class Map extends bitmap
     int chanceForWave = 0;
     int waveTime = 0;
 
-    public Tile[] tile = new Tile[100];
+    public Tile[] islandTile = new Tile[60];
+    public Tile[] bunkerTile = new Tile[20];
 
     public Map(GamePanel gamePanel, Player player)
     {
@@ -84,16 +86,25 @@ public class Map extends bitmap
         loadTileSet(53, "rock", "rock1", true);
         loadTileSet(54, "rock", "rock2", true);
 
+        //***********************************************************************************************
 
+        loadBunkerTile(0,"ground",false);
+        loadBunkerTile(1,"wallLeft",true);
+        loadBunkerTile(2,"wallRight",true);
+        loadBunkerTile(3,"wallTop",true);
+        loadBunkerTile(4,"wallBottom",true);
+        loadBunkerTile(5,"wallMaterial",true);
     }
+
+
     public void loadTileSet(int index, String directory, String name, boolean collision)
     {
         try
         {
-            tile[index] = new Tile();
-            tile[index].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/"+ directory + "/" + name +".png")));
-            tile[index].collision = collision;
-            tile[index].type = directory;
+            islandTile[index] = new Tile();
+            islandTile[index].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/"+ directory + "/" + name +".png")));
+            islandTile[index].collision = collision;
+            islandTile[index].type = directory;
         }
         catch (IOException e)
         {
@@ -101,6 +112,21 @@ public class Map extends bitmap
             gamePanel.gameRunning = false;
         }
     }
+    public void loadBunkerTile(int index, String name, boolean collision)
+    {
+        try
+        {
+            bunkerTile[index] = new Tile();
+            bunkerTile[index].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("tileset/bunker/" + name +".png")));
+            bunkerTile[index].collision = collision;
+        }
+        catch (IOException e)
+        {
+            System.out.println("Couldn't read tileset");
+            gamePanel.gameRunning = false;
+        }
+    }
+
 
     public void Update()
     {
@@ -122,74 +148,106 @@ public class Map extends bitmap
     {
         BufferedImage render_tile;
         int scale = gamePanel.tileSize;
-        for (int y = 0; y < mapHeight; y++)
+
+        if(!mapSwap)
         {
-            for (int x = 0; x < mapWidth; x++)
+            for (int y = 0; y < islandHeight; y++)
             {
-                int map_index = starting_area[y][x];
-                int centerX = x * gamePanel.tileSize - player.x + player.centerX;
-                int centerY = y * gamePanel.tileSize - player.y + player.centerY;
-
-                if (map_index == 21)
+                for (int x = 0; x < islandWidth; x++)
                 {
-                    try
+                    int map_index = island[y][x];
+                    int centerX = x * gamePanel.tileSize - player.x + player.centerX;
+                    int centerY = y * gamePanel.tileSize - player.y + player.centerY;
+
+                    if (map_index == 21)
                     {
-                        if(starting_area[y][x+chanceForWave] == 21)
+                        try
                         {
-                            starting_area[y][x+chanceForWave] = 20;
+                            if (island[y][x + chanceForWave] == 21)
+                            {
+                                island[y][x + chanceForWave] = 20;
+                            }
                         }
-                    } catch (ArrayIndexOutOfBoundsException ignored) {
+                        catch (ArrayIndexOutOfBoundsException ignored)
+                        {}
+
+
+                        if (chanceForWave != 0)
+                        {
+                            if (swapWater == 1)
+                            {
+                                render_tile = islandTile[1].image;
+                            }
+                            else if (swapWater == 2)
+                            {
+                                render_tile = islandTile[2].image;
+                            }
+                            else if (swapWater == 3)
+                            {
+                                render_tile = islandTile[3].image;
+                            }
+                            else if (swapWater == 4)
+                            {
+                                render_tile = islandTile[4].image;
+                            } else if (swapWater == 5)
+                            {
+                                render_tile = islandTile[5].image;
+                            }
+                            else if (swapWater == 6)
+                            {
+                                render_tile = islandTile[6].image;
+                            }
+                            else
+                            {
+                                render_tile = islandTile[7].image;
+                            }
+                        }
+                        else
+                        {
+                            render_tile = islandTile[7].image;
+                        }
 
                     }
-
-                    if (chanceForWave != 0 )
+                    else if (map_index == 20)
                     {
-                        if (swapWater == 1) {
-                            render_tile = tile[1].image;
-                        } else if (swapWater == 2) {
-                            render_tile = tile[2].image;
-                        } else if (swapWater == 3) {
-                            render_tile = tile[3].image;
-                        } else if (swapWater == 4) {
-                            render_tile = tile[4].image;
-                        } else if (swapWater == 5) {
-                            render_tile = tile[5].image;
-                        } else if (swapWater == 6) {
-                            render_tile = tile[6].image;
-                        } else {
-                            render_tile = tile[7].image;
+                        render_tile = islandTile[7].image;
+                        waveTime++;
+                        if (waveTime > 160)
+                        {
+                            waveTime = 0;
+                            island[y][x] = 21;
                         }
                     }
-                    else {
-                        render_tile = tile[7].image;
+                    else
+                    {
+                        render_tile = islandTile[map_index].image;
                     }
 
-                }
-                else if(map_index == 20)
-                {
-                    render_tile = tile[7].image;
-                    waveTime++;
-                    if (waveTime > 160)
-                    {
-                        waveTime = 0;
-                        starting_area[y][x] = 21;
-                    }
-                }
-                else
-                {
-                    render_tile = tile[map_index].image;
-                }
-                if (((x * gamePanel.tileSize) < (player.x + player.centerX + gamePanel.tileSize)) &&
-                   ((y * gamePanel.tileSize) < (player.y + player.centerY + gamePanel.tileSize)) &&
-                   ((x * gamePanel.tileSize) > (player.x - player.centerX - gamePanel.tileSize)) &&
-                   ((y * gamePanel.tileSize) > (player.y - player.centerY - gamePanel.tileSize)))
-
-                    {
-
+                    if (((x * gamePanel.tileSize) < (player.x + player.centerX + gamePanel.tileSize)) &&
+                            ((y * gamePanel.tileSize) < (player.y + player.centerY + gamePanel.tileSize)) &&
+                            ((x * gamePanel.tileSize) > (player.x - player.centerX - gamePanel.tileSize)) &&
+                            ((y * gamePanel.tileSize) > (player.y - player.centerY - gamePanel.tileSize))) {
                         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                        g2.drawImage(render_tile, centerX, centerY, scale,scale, null);
+                        g2.drawImage(render_tile, centerX, centerY, scale, scale, null);
                     }
 
+                }
+            }
+        }
+        else
+        {
+            for (int y = 0; y < bunkerHeight; y++)
+            {
+                for (int x = 0; x < bunkerWidth; x++)
+                {
+                    int map_index = bunker[y][x];
+                    int centerX = x * gamePanel.tileSize - player.x + player.centerX;
+                    int centerY = y * gamePanel.tileSize - player.y + player.centerY;
+                    render_tile = bunkerTile[map_index].image;
+
+                    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+                    g2.drawImage(render_tile, centerX, centerY, scale, scale, null);
+                }
             }
         }
     }

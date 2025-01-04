@@ -14,6 +14,7 @@ public class CollisionChecker
         this.gamePanel = gamePanel;
     }
 
+
     public void CheckTileCollision(Character character)
     {
 
@@ -21,7 +22,6 @@ public class CollisionChecker
         playerRight = (character.x + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2));
         playerTop = (character.y - gamePanel.tileSize) + (int) (gamePanel.tileSize - (gamePanel.tileSize / 2.3)) + gamePanel.tileSize;
         playerBottom = (character.y + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2)-4);
-
 
 
         // Corner coordinates of character BOX;
@@ -32,54 +32,112 @@ public class CollisionChecker
 
         int mapIndex1,mapIndex2;
 
-        switch(character.direction)
+        if(!gamePanel.map.mapSwap)
         {
+            switch(character.direction)
+            {
 
-            case "left":
-                X_Left = (playerLeft - character.speed) / gamePanel.tileSize;
-                mapIndex1 = gamePanel.map.starting_area[Y_Top][X_Left];
-                mapIndex2 = gamePanel.map.starting_area[Y_Bottom][X_Left];
+                case "left":
+                    X_Left = (playerLeft - character.speed) / gamePanel.tileSize;
+                    mapIndex1 = gamePanel.map.island[Y_Top][X_Left];
+                    mapIndex2 = gamePanel.map.island[Y_Bottom][X_Left];
 
-                if(gamePanel.map.tile[mapIndex1].collision || gamePanel.map.tile[mapIndex2].collision)
-                {
-                    if(collisionCheck)
+                    if(gamePanel.map.islandTile[mapIndex1].collision || gamePanel.map.islandTile[mapIndex2].collision)
+                    {
+                        if(collisionCheck)
+                        {
+                            character.collision = true;
+                        }
+                    }
+                    break;
+                case "right":
+                    X_Right = (playerRight + character.speed) / gamePanel.tileSize;
+                    mapIndex1 = gamePanel.map.island[Y_Top][X_Right];
+                    mapIndex2 = gamePanel.map.island[Y_Bottom][X_Right];
+                    if(gamePanel.map.islandTile[mapIndex1].collision || gamePanel.map.islandTile[mapIndex2].collision)
+                    {
+                        if(collisionCheck)
+                        {
+                            character.collision = true;
+                        }
+                    }
+                    break;
+                case "up":
+                    Y_Top = (playerTop - character.speed) / gamePanel.tileSize;
+                    mapIndex1 = gamePanel.map.island[Y_Top][X_Left];
+                    mapIndex2 = gamePanel.map.island[Y_Top][X_Right];
+                    if(gamePanel.map.islandTile[mapIndex1].collision || gamePanel.map.islandTile[mapIndex2].collision)
                     {
                         character.collision = true;
                     }
-                }
-                break;
-            case "right":
-                X_Right = (playerRight + character.speed) / gamePanel.tileSize;
-                mapIndex1 = gamePanel.map.starting_area[Y_Top][X_Right];
-                mapIndex2 = gamePanel.map.starting_area[Y_Bottom][X_Right];
-                if(gamePanel.map.tile[mapIndex1].collision || gamePanel.map.tile[mapIndex2].collision)
-                {
-                    if(collisionCheck)
+                    break;
+                case "down":
+                    Y_Bottom = (playerBottom + character.speed) / gamePanel.tileSize;
+                    mapIndex1 = gamePanel.map.island[Y_Bottom][X_Left];
+                    mapIndex2 = gamePanel.map.island[Y_Bottom][X_Right];
+                    if(gamePanel.map.islandTile[mapIndex1].collision || gamePanel.map.islandTile[mapIndex2].collision)
                     {
                         character.collision = true;
                     }
-                }
-                break;
-            case "up":
-                Y_Top = (playerTop - character.speed) / gamePanel.tileSize;
-                mapIndex1 = gamePanel.map.starting_area[Y_Top][X_Left];
-                mapIndex2 = gamePanel.map.starting_area[Y_Top][X_Right];
-                if(gamePanel.map.tile[mapIndex1].collision || gamePanel.map.tile[mapIndex2].collision)
-                {
-                    character.collision = true;
-                }
-                break;
-            case "down":
-                Y_Bottom = (playerBottom + character.speed) / gamePanel.tileSize;
-                mapIndex1 = gamePanel.map.starting_area[Y_Bottom][X_Left];
-                mapIndex2 = gamePanel.map.starting_area[Y_Bottom][X_Right];
-                if(gamePanel.map.tile[mapIndex1].collision || gamePanel.map.tile[mapIndex2].collision)
-                {
-                    character.collision = true;
-                }
-                break;
+                    break;
+            }
+        }
+
+        else
+        {
+            switch(character.direction)
+            {
+
+                case "left":
+                    X_Left = (playerLeft - character.speed) / gamePanel.tileSize;
+                    mapIndex1 = gamePanel.map.bunker[Y_Top][X_Left];
+                    mapIndex2 = gamePanel.map.bunker[Y_Bottom][X_Left];
+
+                    if(gamePanel.map.bunkerTile[mapIndex1].collision || gamePanel.map.bunkerTile[mapIndex2].collision)
+                    {
+                        if(collisionCheck)
+                        {
+                            character.collision = true;
+                        }
+                    }
+                    break;
+                case "right":
+                    X_Right = (playerRight + character.speed) / gamePanel.tileSize;
+                    mapIndex1 = gamePanel.map.bunker[Y_Top][X_Right];
+                    mapIndex2 = gamePanel.map.bunker[Y_Bottom][X_Right];
+                    if(gamePanel.map.bunkerTile[mapIndex1].collision || gamePanel.map.bunkerTile[mapIndex2].collision)
+                    {
+                        if(collisionCheck)
+                        {
+                            character.collision = true;
+                        }
+                    }
+                    break;
+                case "up":
+                    Y_Top = (playerTop - character.speed) / gamePanel.tileSize;
+                    mapIndex1 = gamePanel.map.bunker[Y_Top][X_Left];
+                    mapIndex2 = gamePanel.map.bunker[Y_Top][X_Right];
+                    if(gamePanel.map.bunkerTile[mapIndex1].collision || gamePanel.map.bunkerTile[mapIndex2].collision)
+                    {
+                        character.collision = true;
+                    }
+                    break;
+                case "down":
+                    Y_Bottom = (playerBottom + character.speed) / gamePanel.tileSize;
+                    mapIndex1 = gamePanel.map.bunker[Y_Bottom][X_Left];
+                    mapIndex2 = gamePanel.map.bunker[Y_Bottom][X_Right];
+                    if(gamePanel.map.bunkerTile[mapIndex1].collision || gamePanel.map.bunkerTile[mapIndex2].collision)
+                    {
+                        character.collision = true;
+                    }
+                    break;
+            }
         }
     }
+
+
+
+
     public void CheckObject_2width(Character character,int objX, int objY)
     {
         for (int i = 0; i < 2; i++) {

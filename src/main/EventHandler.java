@@ -159,6 +159,9 @@ public class EventHandler {
                 pressedKey.UseInRange = true;
                 if (Objects.equals(pressedKey.lastReleasedKey, "use"))
                 {
+                    gamePanel.map.mapSwap = !gamePanel.map.mapSwap;
+                    gamePanel.player.x = 26 * gamePanel.tileSize;
+                    gamePanel.player.y = 11 * gamePanel.tileSize+40;
                     System.out.println("wejscie do bunkra");
                     pressedKey.lastReleasedKey = null;
                 }

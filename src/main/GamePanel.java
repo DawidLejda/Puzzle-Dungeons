@@ -100,42 +100,37 @@ public class GamePanel extends JPanel implements Runnable
 
     public void Update()
     {
-
-        map.Update();
         player.Update();
-        cat.Update();
-        event.Update();
-        trail.Update();
-        bunker.Update();
-        airvent.Update();
-        ButtonState.Update();
-        ButtonElevationUp.Update();
-        ButtonElevationDown.Update();
-        bridgeRight.Update();
-        bridgeLeft.Update();
-        for (Catnip catnip : catnips)
+        if(!map.mapSwap)
         {
-            if (catnip != null) {
-                catnip.Update();
+            map.Update();
+            trail.Update();
+            event.Update();
+            bunker.Update();
+            airvent.Update();
+            ButtonState.Update();
+            ButtonElevationUp.Update();
+            ButtonElevationDown.Update();
+            bridgeRight.Update();
+            bridgeLeft.Update();
+            for (Catnip catnip : catnips) {
+                if (catnip != null) {
+                    catnip.Update();
+                }
             }
-        }
-
-
-        if(event.trailStart)
-        {
-            trail.catnipPathX[0] = player.x/tileSize;
-            trail.catnipPathY[0] = player.y/tileSize;
-            event.trailStart = false;
-        }
-        if(!cat.stop && (trail.catnipPathY[0] != 0 && event.catnipsCount > 0) && !trail.stopTrailPlacement)
-        {
-            event.renderUseCatnip = false;
-            objectPlacement.Catnip_TrailPlacement();
-            player.speed = 2;
-        }
-        else
-        {
-            player.speed = 4;
+            if (event.trailStart) {
+                trail.catnipPathX[0] = player.x / tileSize;
+                trail.catnipPathY[0] = player.y / tileSize;
+                event.trailStart = false;
+            }
+            if (!cat.stop && (trail.catnipPathY[0] != 0 && event.catnipsCount > 0) && !trail.stopTrailPlacement) {
+                event.renderUseCatnip = false;
+                objectPlacement.Catnip_TrailPlacement();
+                player.speed = 2;
+            } else {
+                player.speed = 4;
+            }
+            cat.Update();
         }
     }
 
@@ -144,101 +139,110 @@ public class GamePanel extends JPanel implements Runnable
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        map.Draw(g2);
-
-        if(cat.throwAction)
+        if(!map.mapSwap)
         {
-            cat.Draw(g2);
-            airvent.Draw(g2, this);
+            map.Draw(g2);
+
+            if (cat.throwAction)
+            {
+                cat.Draw(g2);
+                airvent.Draw(g2, this);
+            }
+
+            if (!player.visibility)
+            {
+                player.Draw(g2);
+                cat.Draw(g2);
+                airvent.Draw(g2, this);
+                ButtonState.Draw(g2);
+                ButtonElevationUp.Draw(g2);
+                ButtonElevationDown.Draw(g2);
+                bridgeLeft.Draw(g2);
+                bridgeRight.Draw(g2);
+                bridgeMid.draw(g2, this);
+                for (int i = 0, n = trees[0].length; i < n; i++)
+                {
+                    if (trees[0][i] != null && trees[1][i] != null)
+                    {
+                        trees[0][i].draw(g2, this);
+                        trees[1][i].draw(g2, this);
+                    }
+                }
+                for (Catnip catnip : catnips)
+                {
+                    if (catnip != null)
+                    {
+                        catnip.Draw(g2);
+                    }
+                }
+                bunker.DrawStanding(g2, this);
+                for (int i = 0; i < trail.catnipSteps; i++)
+                {
+                    if (catnipTrails[i] != null)
+                    {
+                        catnipTrails[i].draw(g2, this);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if (!cat.throwAction)
+                {
+                    airvent.Draw(g2, this);
+                }
+                ButtonState.Draw(g2);
+                ButtonElevationUp.Draw(g2);
+                ButtonElevationDown.Draw(g2);
+                bridgeLeft.Draw(g2);
+                bridgeRight.Draw(g2);
+                bridgeMid.draw(g2, this);
+                for (int i = 0, n = trees[0].length; i < n; i++)
+                {
+                    if (trees[0][i] != null && trees[1][i] != null)
+                    {
+                        trees[0][i].draw(g2, this);
+                        trees[1][i].draw(g2, this);
+                    }
+                }
+                for (Catnip catnip : catnips)
+                {
+                    if (catnip != null)
+                    {
+                        catnip.Draw(g2);
+                    }
+                }
+                for (int i = 0; i < trail.catnipSteps; i++)
+                {
+                    if (catnipTrails[i] != null)
+                    {
+                        catnipTrails[i].draw(g2, this);
+                    } else
+                    {
+                        break;
+                    }
+                }
+                bunker.DrawStanding(g2, this);
+                if (!cat.throwAction)
+                {
+                    cat.Draw(g2);
+                }
+                player.Draw(g2);
+            }
+
+            event.Draw(g2);
+            trail.Draw(g2);
         }
 
-        if(!player.visibility)
-        {
-            player.Draw(g2);
-            cat.Draw(g2);
-            airvent.Draw(g2, this);
-            ButtonState.Draw(g2);
-            ButtonElevationUp.Draw(g2);
-            ButtonElevationDown.Draw(g2);
-            bridgeLeft.Draw(g2);
-            bridgeRight.Draw(g2);
-            bridgeMid.draw(g2,this);
-            for (int i = 0, n = trees[0].length; i < n; i++)
-            {
-                if (trees[0][i] != null && trees[1][i] != null)
-                {
-                    trees[0][i].draw(g2, this);
-                    trees[1][i].draw(g2, this);
-                }
-            }
-            for (Catnip catnip : catnips)
-            {
-                if (catnip != null)
-                {
-                    catnip.Draw(g2);
-                }
-            }
-            bunker.DrawStanding(g2, this);
-            for (int i = 0; i < trail.catnipSteps; i++)
-            {
-                if(catnipTrails[i] != null )
-                {
-                    catnipTrails[i].draw(g2,this);
-                }
-                else
-                {
-                    break;
-                }
-            }
-        }
 
         else
         {
-            if(!cat.throwAction)
-            {
-                airvent.Draw(g2, this);
-            }
-            ButtonState.Draw(g2);
-            ButtonElevationUp.Draw(g2);
-            ButtonElevationDown.Draw(g2);
-            bridgeLeft.Draw(g2);
-            bridgeRight.Draw(g2);
-            bridgeMid.draw(g2,this);
-            for (int i = 0, n = trees[0].length; i < n; i++)
-            {
-                if (trees[0][i] != null && trees[1][i] != null)
-                {
-                    trees[0][i].draw(g2, this);
-                    trees[1][i].draw(g2, this);
-                }
-            }
-            for (Catnip catnip : catnips)
-            {
-                if (catnip != null) {
-                    catnip.Draw(g2);
-                }
-            }
-            for (int i = 0; i < trail.catnipSteps; i++)
-            {
-                if(catnipTrails[i] != null )
-                {
-                    catnipTrails[i].draw(g2,this);
-                }
-                else
-                {
-                    break;
-                }
-            }
-            bunker.DrawStanding(g2, this);
-            if(!cat.throwAction)
-            {
-                cat.Draw(g2);
-            }
+            map.Draw(g2);
             player.Draw(g2);
         }
-
-        event.Draw(g2);
-        trail.Draw(g2);
 
         g2.drawString("FPS: " + averageFPS,3,12);
         g2.drawString("Vis: " + player.visibility,3,24);

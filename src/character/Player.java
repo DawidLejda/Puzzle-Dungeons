@@ -85,7 +85,10 @@ public class Player extends Character
         collision = false;
         gamePanel.collisionChecker.CheckBridgeCollision(this);
         gamePanel.collisionChecker.CheckTileCollision(this);
-        gamePanel.collisionChecker.CheckObjectVisibility(this);
+        if(!gamePanel.map.mapSwap)
+        {
+            gamePanel.collisionChecker.CheckObjectVisibility(this);
+        }
     }
 
 
@@ -126,7 +129,9 @@ public class Player extends Character
             animationIdle++;
             playerMoving = false;
         }
+
         CollisionCheck();
+
         if(!collision)
         {
             if (pressedKey.left)

@@ -251,7 +251,6 @@ public class Cat extends Character
             if(materializeCoordinates[0] > 0)
             {
                 moving = true;
-                System.out.println("x: "+materializeCoordinates[0]);
                 direction = "right";
                 materializeCoordinates[0] -= speed;
                 x += speed;
@@ -259,7 +258,6 @@ public class Cat extends Character
             else if (materializeCoordinates[1] > 0)
             {
                 moving = true;
-                System.out.println("y: "+materializeCoordinates[1]);
                 direction = "up";
                 materializeCoordinates[1] -= speed;
                 y -= speed;

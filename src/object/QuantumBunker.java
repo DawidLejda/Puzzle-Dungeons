@@ -58,7 +58,7 @@ public class QuantumBunker extends Object
         do {
             x = (rand.nextInt(17) + 4);
             y = (rand.nextInt(15) + 15);
-            if(gamePanel.map.starting_area[y][x] == 11 && gamePanel.map.starting_area[y][x + 1] == 11)
+            if(gamePanel.map.island[y][x] == 11 && gamePanel.map.island[y][x + 1] == 11)
             {
                 if((x != gamePanel.airvent.x && y != gamePanel.airvent.y) &&
                         (x != gamePanel.airvent.x+1 && y != gamePanel.airvent.y+1)&&
@@ -74,8 +74,8 @@ public class QuantumBunker extends Object
         } while (!incorrectGround );
 
         renderBunker =
-                gamePanel.map.starting_area[y][x] == 11 &&
-                gamePanel.map.starting_area[y][x + 1] == 11 &&
+                gamePanel.map.island[y][x] == 11 &&
+                gamePanel.map.island[y][x + 1] == 11 &&
                 abs(gamePanel.player.x / gamePanel.tileSize - x) > 2 &&
                 abs(gamePanel.player.x / gamePanel.tileSize - (x + 1)) > 2 &&
                 abs(gamePanel.player.y / gamePanel.tileSize - y) > 2;
