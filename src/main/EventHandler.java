@@ -58,7 +58,20 @@ public class EventHandler {
         }
     }
 
-    public void Update() {
+    public void Update()
+    {
+        if(!gamePanel.map.mapSwap)
+        {
+            IslandUpdate();
+        }
+        else
+        {
+            BunkerUpdate();
+        }
+    }
+
+    void IslandUpdate()
+    {
         renderUse = false;
         bunkerStop = false;
         pressedKey.UseInRange = false;
@@ -160,16 +173,31 @@ public class EventHandler {
                 if (Objects.equals(pressedKey.lastReleasedKey, "use"))
                 {
                     gamePanel.map.mapSwap = !gamePanel.map.mapSwap;
-                    gamePanel.player.x = 26 * gamePanel.tileSize;
-                    gamePanel.player.y = 11 * gamePanel.tileSize+40;
+                    gamePanel.player.x = 18 * gamePanel.tileSize;
+                    gamePanel.player.y = 18 * gamePanel.tileSize+20;
+
                     System.out.println("wejscie do bunkra");
                     pressedKey.lastReleasedKey = null;
                 }
             }
         }
+    }
 
+
+    void BunkerUpdate()
+    {
+        if(gamePanel.player.x/ gamePanel.tileSize == 18 &&
+        gamePanel.player.y/gamePanel.tileSize == 19)
+        {
+            gamePanel.map.mapSwap = false;
+            gamePanel.player.x = gamePanel.bunker.x*gamePanel.tileSize + 30;
+            gamePanel.player.y = gamePanel.bunker.y*gamePanel.tileSize + 30;
+        }
 
     }
+
+
+
     public void catnipTrail()
     {
         charX = gamePanel.player.x / gamePanel.tileSize;

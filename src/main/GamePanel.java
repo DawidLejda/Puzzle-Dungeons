@@ -43,6 +43,8 @@ public class GamePanel extends JPanel implements Runnable
     public CatnipTrail trail = new CatnipTrail(this);
     public Object[] catnipTrails = new Object[50];
 
+    public Teleport teleport = new Teleport(this);
+
     // ********************************************************
 
     public GamePanel()
@@ -101,11 +103,12 @@ public class GamePanel extends JPanel implements Runnable
     public void Update()
     {
         player.Update();
+        event.Update();
+
         if(!map.mapSwap)
         {
             map.Update();
             trail.Update();
-            event.Update();
             bunker.Update();
             airvent.Update();
             ButtonState.Update();
@@ -113,21 +116,26 @@ public class GamePanel extends JPanel implements Runnable
             ButtonElevationDown.Update();
             bridgeRight.Update();
             bridgeLeft.Update();
-            for (Catnip catnip : catnips) {
-                if (catnip != null) {
+            for (Catnip catnip : catnips)
+            {
+                if (catnip != null)
+                {
                     catnip.Update();
                 }
             }
-            if (event.trailStart) {
+            if (event.trailStart)
+            {
                 trail.catnipPathX[0] = player.x / tileSize;
                 trail.catnipPathY[0] = player.y / tileSize;
                 event.trailStart = false;
             }
-            if (!cat.stop && (trail.catnipPathY[0] != 0 && event.catnipsCount > 0) && !trail.stopTrailPlacement) {
+            if (!cat.stop && (trail.catnipPathY[0] != 0 && event.catnipsCount > 0) && !trail.stopTrailPlacement)
+            {
                 event.renderUseCatnip = false;
                 objectPlacement.Catnip_TrailPlacement();
                 player.speed = 2;
-            } else {
+            } else
+            {
                 player.speed = 4;
             }
             cat.Update();
@@ -241,6 +249,7 @@ public class GamePanel extends JPanel implements Runnable
         else
         {
             map.Draw(g2);
+            teleport.Draw(g2);
             player.Draw(g2);
         }
 
