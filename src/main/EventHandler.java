@@ -173,7 +173,7 @@ public class EventHandler {
                 if (Objects.equals(pressedKey.lastReleasedKey, "use"))
                 {
                     gamePanel.map.mapSwap = !gamePanel.map.mapSwap;
-                    gamePanel.player.x = 18 * gamePanel.tileSize;
+                    gamePanel.player.x = 17 * gamePanel.tileSize;
                     gamePanel.player.y = 18 * gamePanel.tileSize+20;
 
                     System.out.println("wejscie do bunkra");
@@ -186,7 +186,7 @@ public class EventHandler {
 
     void BunkerUpdate()
     {
-        if(gamePanel.player.x/ gamePanel.tileSize == 18 &&
+        if(gamePanel.player.x/ gamePanel.tileSize == 17 &&
         gamePanel.player.y/gamePanel.tileSize == 19)
         {
             gamePanel.map.mapSwap = false;

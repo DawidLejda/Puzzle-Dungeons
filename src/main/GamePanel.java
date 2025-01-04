@@ -7,7 +7,6 @@ import object.*;
 import object.Object;
 import javax.swing.JPanel;
 import java.awt.*;
-import java.util.Arrays;
 
 public class GamePanel extends JPanel implements Runnable
 {
@@ -44,7 +43,7 @@ public class GamePanel extends JPanel implements Runnable
     public Object[] catnipTrails = new Object[50];
 
     public Teleport teleport = new Teleport(this);
-
+    public Computer bunkerComputer = new Computer(this);
     // ********************************************************
 
     public GamePanel()
@@ -248,9 +247,21 @@ public class GamePanel extends JPanel implements Runnable
 
         else
         {
-            map.Draw(g2);
-            teleport.Draw(g2);
-            player.Draw(g2);
+            if (!player.visibility)
+            {
+                map.Draw(g2);
+                player.Draw(g2);
+
+                teleport.Draw(g2);
+                bunkerComputer.Draw(g2);
+            }
+            else
+            {
+                map.Draw(g2);
+                teleport.Draw(g2);
+                bunkerComputer.Draw(g2);
+                player.Draw(g2);
+            }
         }
 
         g2.drawString("FPS: " + averageFPS,3,12);
@@ -258,21 +269,7 @@ public class GamePanel extends JPanel implements Runnable
         g2.drawString("playerMoving: " + player.playerMoving,3,36);
         g2.drawString("X: " + player.x/tileSize,3,82);
         g2.drawString("Y: " + player.y/tileSize,3,94);
-        g2.drawString("pathX: " + Arrays.toString(trail.catnipPathX),3,106);
-        g2.drawString("pathY: " + Arrays.toString(trail.catnipPathY),3,118);
-        g2.drawString("catnipsCount: " + event.catnipsCount,3,130);
-        g2.drawString("stopTrailing: " + trail.stopTrailPlacement,3,142);
-        g2.drawString("catStart: " + event.catStart,3,154);
-        g2.drawString(cat.x+"    catX: " + cat.x/tileSize,3,170);
-        g2.drawString(cat.y+"    catY: " + cat.y/tileSize,3,182);
-        g2.drawString("catMove: " + cat.moving,3,194);
-        g2.drawString("direction: " + cat.direction,3,210);
-        g2.drawString("stop: " + cat.stop,3,259);
-        g2.drawString("throwAction: " +cat.throwAction,3,280);
-        g2.drawString("animationX: " +cat.materializeCoordinates[0],3,310);
-        g2.drawString("animationY: " +cat.materializeCoordinates[1],3,330);
-        g2.drawString("bunkercordX: " +bunker.last_coordinates[0],3,350);
-        g2.drawString("bunkercordY: " +bunker.last_coordinates[1],3,370);
+
         g2.dispose();
     }
 

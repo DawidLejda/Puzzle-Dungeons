@@ -264,114 +264,130 @@ public class CollisionChecker
         int charX,charY,centerX,centerY;
         charX = character.x/gamePanel.tileSize;
         charY = character.y/gamePanel.tileSize;
-        for (int i = 0, n = gamePanel.trees[0].length; i < n; i++) {
+        if(!gamePanel.map.mapSwap)
+        {
+            for (int i = 0, n = gamePanel.trees[0].length; i < n; i++) {
 
-            if(abs(charX- gamePanel.trees[1][i].x) <= 1 && abs(charY - gamePanel.trees[1][i].y) <= 1)
+                if(abs(charX- gamePanel.trees[1][i].x) <= 1 && abs(charY - gamePanel.trees[1][i].y) <= 1)
+                {
+                    centerX = gamePanel.trees[1][i].x;
+                    centerY = gamePanel.trees[1][i].y;
+                    CheckTreeCollision(character, gamePanel.trees[0][i].x, gamePanel.trees[0][i].y);
+                    if ((charX == centerX || charX == centerX-1) && (charY == centerY ||charY == centerY-1)) {
+                        character.visibility = false;
+                    }
+                }
+            }
+
+            for (int i = 0; i < 3; i++)
             {
-                centerX = gamePanel.trees[1][i].x;
-                centerY = gamePanel.trees[1][i].y;
-                CheckTreeCollision(character, gamePanel.trees[0][i].x, gamePanel.trees[0][i].y);
-                if ((charX == centerX || charX == centerX-1) && (charY == centerY ||charY == centerY-1)) {
+
+                if (abs(charX - gamePanel.airvent.x) <= 4 && abs(charY - gamePanel.airvent.y) <= 3) {
+                    CheckObject_2width(character, gamePanel.airvent.x, gamePanel.airvent.y);
+                    centerX = gamePanel.airvent.x + i;
+                    centerY = gamePanel.airvent.y + i;
+                    if ((charX == centerX) && (charY == centerY - (i+1) )) {
+                        character.visibility = false;
+                    }
+                }
+            }
+
+            centerX = gamePanel.ButtonState.x;
+            centerY = gamePanel.ButtonState.y;
+            if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
+                CheckObjectCollision(character,centerX,centerY);
+                if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
+
                     character.visibility = false;
                 }
             }
-        }
 
-        for (int i = 0; i < 3; i++)
-        {
+            centerX = gamePanel.ButtonElevationUp.x;
+            centerY = gamePanel.ButtonElevationUp.y;
+            if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
+                CheckObjectCollision(character, centerX, centerY);
+                if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
 
-            if (abs(charX - gamePanel.airvent.x) <= 4 && abs(charY - gamePanel.airvent.y) <= 3) {
-                CheckObject_2width(character, gamePanel.airvent.x, gamePanel.airvent.y);
-                centerX = gamePanel.airvent.x + i;
-                centerY = gamePanel.airvent.y + i;
-                if ((charX == centerX) && (charY == centerY - (i+1) )) {
                     character.visibility = false;
                 }
             }
-        }
 
-        centerX = gamePanel.ButtonState.x;
-        centerY = gamePanel.ButtonState.y;
-        if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
-            CheckObjectCollision(character,centerX,centerY);
-            if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
+            centerX = gamePanel.ButtonElevationDown.x;
+            centerY = gamePanel.ButtonElevationDown.y;
+            if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
+                CheckObjectCollision(character, centerX, centerY);
+                if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
 
-                character.visibility = false;
-            }
-        }
-
-        centerX = gamePanel.ButtonElevationUp.x;
-        centerY = gamePanel.ButtonElevationUp.y;
-        if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
-            CheckObjectCollision(character, centerX, centerY);
-            if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
-
-                character.visibility = false;
-            }
-        }
-
-        centerX = gamePanel.ButtonElevationDown.x;
-        centerY = gamePanel.ButtonElevationDown.y;
-        if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
-            CheckObjectCollision(character, centerX, centerY);
-            if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
-
-                character.visibility = false;
-            }
-        }
-
-        for(int i = 0, n = gamePanel.catnips.length; i < n; i++)
-        {
-            centerX = gamePanel.catnips[i].x;
-            centerY = gamePanel.catnips[i].y;
-            if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1)
-            {
-                if ((charX == centerX || charX == centerX-1) &&
-                        (((character.y+28)/gamePanel.tileSize) == centerY-1))
-                {
                     character.visibility = false;
                 }
             }
-        }
 
-        if(!gamePanel.cat.throwAction)
-        {
-            centerX = gamePanel.cat.x / gamePanel.tileSize;
-            centerY = gamePanel.cat.y / gamePanel.tileSize;
-            if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1)
+            for(int i = 0, n = gamePanel.catnips.length; i < n; i++)
             {
-                if (!gamePanel.cat.stop)
+                centerX = gamePanel.catnips[i].x;
+                centerY = gamePanel.catnips[i].y;
+                if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1)
                 {
-                    CheckObjectCollision(character, centerX, centerY);
+                    if ((charX == centerX || charX == centerX-1) &&
+                            (((character.y+28)/gamePanel.tileSize) == centerY-1))
+                    {
+                        character.visibility = false;
+                    }
                 }
-                else
+            }
+
+            if(!gamePanel.cat.throwAction)
+            {
+                centerX = gamePanel.cat.x / gamePanel.tileSize;
+                centerY = gamePanel.cat.y / gamePanel.tileSize;
+                if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1)
                 {
-                    CheckObjectCollision(character, 14, 29);
+                    if (!gamePanel.cat.stop)
+                    {
+                        CheckObjectCollision(character, centerX, centerY);
+                    }
+                    else
+                    {
+                        CheckObjectCollision(character, 14, 29);
+                    }
+                    if ((charX == centerX || charX == centerX - 1) && (charY == centerY - 1))
+                    {
+                        if (!gamePanel.cat.stop) {
+                            character.visibility = false;
+                        }
+                    }
                 }
-                if ((charX == centerX || charX == centerX - 1) && (charY == centerY - 1))
+            }
+
+
+            if(gamePanel.bunker.materialize)
+            {
+                centerX = gamePanel.bunker.x;
+                centerY = gamePanel.bunker.y;
+                if (abs(charX - centerX) <= 2 && abs(charY - centerY) <= 2)
                 {
-                    if (!gamePanel.cat.stop) {
+                    CheckObject_2width(character,centerX-1,centerY);
+                    if ((charX == centerX || charX == centerX-1 || charX == centerX+1 ) && (charY == centerY-1))
+                    {
+
                         character.visibility = false;
                     }
                 }
             }
         }
-
-
-        if(gamePanel.bunker.materialize)
+        else
         {
-            centerX = gamePanel.bunker.x;
-            centerY = gamePanel.bunker.y;
-            if (abs(charX - centerX) <= 2 && abs(charY - centerY) <= 2)
-            {
-                CheckObject_2width(character,centerX-1,centerY);
-                if ((charX == centerX || charX == centerX-1 || charX == centerX+1 ) && (charY == centerY-1))
-                {
+            centerX = gamePanel.bunkerComputer.x;
+            centerY = gamePanel.bunkerComputer.y;
+            if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1) {
+                CheckObjectCollision(character, centerX, centerY);
+                if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
 
                     character.visibility = false;
                 }
             }
         }
+
     }
 
     public void CheckBridgeCollision(Character character)

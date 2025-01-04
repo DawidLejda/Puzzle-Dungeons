@@ -64,6 +64,13 @@ public class Teleport extends Object
     }
 
 
+
+    public void Update()
+    {
+
+    }
+
+
     public void Draw(Graphics2D g2)
     {
         int bitSwitch = 0;
