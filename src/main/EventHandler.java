@@ -86,7 +86,7 @@ public class EventHandler {
             {
 
                 pressedKey.UseInRange = true;
-                if(!gamePanel.cat.throwAction)
+                if(!gamePanel.cat.throwAction && gamePanel.event.catnipsCount >= 2)
                 {
                     if (gamePanel.cat.stop)
                     {
@@ -95,6 +95,7 @@ public class EventHandler {
                         {
                             gamePanel.cat.throwAction = true;
                             gamePanel.bunker.materialize = true;
+                            gamePanel.event.catnipsCount = 0;
                             pressedKey.lastReleasedKey = null;
                         }
                     } else
@@ -148,9 +149,9 @@ public class EventHandler {
             }
         }
 
-        else if(gamePanel.bunker.materialize &&
+        if(gamePanel.bunker.materialize &&
                 (abs(charX - gamePanel.bunker.x) <= 2
-                && abs(charY - gamePanel.bunker.y) <= 2))
+                        && abs(charY - gamePanel.bunker.y) <= 2))
         {
             if ((charX == gamePanel.bunker.x) && (charY == gamePanel.bunker.y ))
             {
@@ -171,7 +172,7 @@ public class EventHandler {
         charX = gamePanel.player.x / gamePanel.tileSize;
         charY = gamePanel.player.y / gamePanel.tileSize;
         if(!trailStart && catnipsCount == 3 &&
-            (abs(charX - gamePanel.cat.x/gamePanel.tileSize) <= 1 && abs(charY - gamePanel.cat.y/gamePanel.tileSize) <= 1))
+                (abs(charX - gamePanel.cat.x/gamePanel.tileSize) <= 1 && abs(charY - gamePanel.cat.y/gamePanel.tileSize) <= 1))
         {
             renderUseCatnip = true;
             pressedKey.UseInRange = true;
