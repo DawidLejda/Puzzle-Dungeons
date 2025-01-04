@@ -18,7 +18,7 @@ public class Cat extends Character
     Random rand = new Random();
     private int swapSkin = 0;
     private int swapIdle = 0;
-    public boolean moving = false;
+    public boolean moving,throwAction = false;
     public boolean [] visited = new boolean[50];
     public boolean stop = false;
     int frame,idle_frame,time = 0;
@@ -26,6 +26,7 @@ public class Cat extends Character
     public object.ObjectImages[][] Sprite = new ObjectImages[4][4];
     public object.ObjectImages[] IdleSprite = new ObjectImages[4];
     String previous_direction;
+    public int [] materializeCoordinates = new int [2];
 
     public Cat(GamePanel gamePanel)
     {
@@ -35,6 +36,8 @@ public class Cat extends Character
         y = 15 * gamePanel.tileSize;
         speed = 3;
         Arrays.fill(visited,false);
+        materializeCoordinates[0] = 18;
+        materializeCoordinates[1] = 60;
     }
 
     void getCatModel()
@@ -81,44 +84,42 @@ public class Cat extends Character
 
     public void Update()
     {
-
-        if(!moving && direction == null)
+        if(!throwAction)
         {
-            if(x/gamePanel.tileSize == 14 && y/gamePanel.tileSize == 29)
-            {
-                stop = true;
-            }
-            if((x-speed)/gamePanel.tileSize == 14 && y/gamePanel.tileSize == 29)
-            {
-                x -= speed;
-                stop = true;
-            }
-            else if((x+speed)/gamePanel.tileSize == 14 && y/gamePanel.tileSize == 29)
-            {
-                x += speed;
-                stop = true;
-            }
-            else if(x/gamePanel.tileSize == 14 && (y-speed)/gamePanel.tileSize == 29)
-            {
-                y += speed;
-                stop = true;
-            }
-            else if(x/gamePanel.tileSize == 14 && (y+speed)/gamePanel.tileSize == 29)
-            {
-                y -= speed;
-                stop = true;
-            }
-            else if(y == 1852)
-            {
-                y += 4;
-                stop = true;
+            if (!moving && direction == null) {
+                if (x / gamePanel.tileSize == 14 && y / gamePanel.tileSize == 29) {
+                    stop = true;
+                }
+                if ((x - speed) / gamePanel.tileSize == 14 && y / gamePanel.tileSize == 29) {
+                    x -= speed;
+                    stop = true;
+                } else if ((x + speed) / gamePanel.tileSize == 14 && y / gamePanel.tileSize == 29) {
+                    x += speed;
+                    stop = true;
+                } else if (x / gamePanel.tileSize == 14 && (y - speed) / gamePanel.tileSize == 29) {
+                    y += speed;
+                    stop = true;
+                } else if (x / gamePanel.tileSize == 14 && (y + speed) / gamePanel.tileSize == 29) {
+                    y -= speed;
+                    stop = true;
+                } else if (y == 1852) {
+                    y += 4;
+                    stop = true;
+                }
             }
         }
-
-        if(gamePanel.event.catStart && !stop)
+        else
         {
-            direction();
+            playerThrowAction();
+        }
 
+
+        if(gamePanel.event.catStart && !stop || throwAction)
+        {
+            if(!throwAction)
+            {
+                direction();
+            }
 
             if(direction != null && !waitForPlayer())
             {
@@ -241,30 +242,57 @@ public class Cat extends Character
     }
 
 
+    void playerThrowAction()
+    {
+        direction = null;
+        moving = false;
+        if(gamePanel.bunker.materialize)
+        {
+            if(materializeCoordinates[0] > 0)
+            {
+                moving = true;
+                System.out.println("x: "+materializeCoordinates[0]);
+                direction = "right";
+                materializeCoordinates[0] -= speed;
+                x += speed;
+            }
+            else if (materializeCoordinates[1] > 0)
+            {
+                moving = true;
+                System.out.println("y: "+materializeCoordinates[1]);
+                direction = "up";
+                materializeCoordinates[1] -= speed;
+                y -= speed;
+            }
+        }
+    }
+
     public void Draw(Graphics2D g2)
     {
+
         BufferedImage image = null;
-
-        if(moving)
+        if(materializeCoordinates[1] >= 0)
         {
-            image = switch (direction) {
-                case "up" -> Sprite[0][swapSkin].image;
-                case "down" -> Sprite[1][swapSkin].image;
-                case "left" -> Sprite[2][swapSkin].image;
-                case "right" -> Sprite[3][swapSkin].image;
-                default -> image;
-            };
+            if (moving)
+            {
+                image = switch (direction)
+                {
+                    case "up" -> Sprite[0][swapSkin].image;
+                    case "down" -> Sprite[1][swapSkin].image;
+                    case "left" -> Sprite[2][swapSkin].image;
+                    case "right" -> Sprite[3][swapSkin].image;
+                    default -> image;
+                };
+            } else
+            {
+                image = IdleSprite[swapIdle].image;
+            }
+
+            int centerX = x - gamePanel.player.x + gamePanel.player.centerX + 7;
+            int centerY = y - gamePanel.player.y + gamePanel.player.centerY + 10;
+
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            g2.drawImage(image, centerX, centerY, 40, 40, null);
         }
-
-        else
-        {
-            image = IdleSprite[swapIdle].image;
-        }
-
-        int centerX = x  - gamePanel.player.x + gamePanel.player.centerX + 7;
-        int centerY = y  - gamePanel.player.y + gamePanel.player.centerY + 10;
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-        g2.drawImage(image, centerX, centerY, 40, 40, null);
-
     }
 }

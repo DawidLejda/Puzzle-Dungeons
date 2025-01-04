@@ -276,23 +276,25 @@ public class CollisionChecker
             }
         }
 
-        centerX = gamePanel.cat.x/gamePanel.tileSize;
-        centerY = gamePanel.cat.y/gamePanel.tileSize;
-        if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1)
+        if(!gamePanel.cat.throwAction)
         {
-            if(!gamePanel.cat.stop)
+            centerX = gamePanel.cat.x / gamePanel.tileSize;
+            centerY = gamePanel.cat.y / gamePanel.tileSize;
+            if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1)
             {
-                CheckObjectCollision(character, centerX, centerY);
-            }
-            else
-            {
-                CheckObjectCollision(character,14,29);
-            }
-            if ((charX == centerX || charX == centerX-1) && (charY == centerY-1))
-            {
-                if(!gamePanel.cat.stop)
+                if (!gamePanel.cat.stop)
                 {
-                    character.visibility = false;
+                    CheckObjectCollision(character, centerX, centerY);
+                }
+                else
+                {
+                    CheckObjectCollision(character, 14, 29);
+                }
+                if ((charX == centerX || charX == centerX - 1) && (charY == centerY - 1))
+                {
+                    if (!gamePanel.cat.stop) {
+                        character.visibility = false;
+                    }
                 }
             }
         }

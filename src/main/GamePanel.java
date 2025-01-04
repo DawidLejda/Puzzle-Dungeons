@@ -146,11 +146,16 @@ public class GamePanel extends JPanel implements Runnable
 
         map.Draw(g2);
 
+        if(cat.throwAction)
+        {
+            cat.Draw(g2);
+            airvent.Draw(g2, this);
+        }
+
         if(!player.visibility)
         {
             player.Draw(g2);
-
-
+            cat.Draw(g2);
             airvent.Draw(g2, this);
             ButtonState.Draw(g2);
             ButtonElevationUp.Draw(g2);
@@ -174,7 +179,6 @@ public class GamePanel extends JPanel implements Runnable
                 }
             }
             bunker.DrawStanding(g2, this);
-            cat.Draw(g2);
             for (int i = 0; i < trail.catnipSteps; i++)
             {
                 if(catnipTrails[i] != null )
@@ -190,7 +194,10 @@ public class GamePanel extends JPanel implements Runnable
 
         else
         {
-            airvent.Draw(g2, this);
+            if(!cat.throwAction)
+            {
+                airvent.Draw(g2, this);
+            }
             ButtonState.Draw(g2);
             ButtonElevationUp.Draw(g2);
             ButtonElevationDown.Draw(g2);
@@ -223,7 +230,10 @@ public class GamePanel extends JPanel implements Runnable
                 }
             }
             bunker.DrawStanding(g2, this);
-            cat.Draw(g2);
+            if(!cat.throwAction)
+            {
+                cat.Draw(g2);
+            }
             player.Draw(g2);
         }
 
@@ -245,9 +255,9 @@ public class GamePanel extends JPanel implements Runnable
         g2.drawString("catMove: " + cat.moving,3,194);
         g2.drawString("direction: " + cat.direction,3,210);
         g2.drawString("stop: " + cat.stop,3,259);
-        g2.drawString("bunkerStop: " +bunker.materialize,3,280);
-        g2.drawString("bunkerX: " +bunker.x,3,310);
-        g2.drawString("bunkerY: " +bunker.y,3,330);
+        g2.drawString("throwAction: " +cat.throwAction,3,280);
+        g2.drawString("animationX: " +cat.materializeCoordinates[0],3,310);
+        g2.drawString("animationY: " +cat.materializeCoordinates[1],3,330);
         g2.drawString("bunkercordX: " +bunker.last_coordinates[0],3,350);
         g2.drawString("bunkercordY: " +bunker.last_coordinates[1],3,370);
         g2.dispose();

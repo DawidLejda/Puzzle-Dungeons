@@ -29,6 +29,7 @@ public class AirVent extends Object
     {
         int n = 9;
         try{
+            image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("objects/airvent/thrown.png")));
             for (int j = 0; j < 2; j++)
             {
                 for (int i = 0; i < n; i++)
@@ -99,6 +100,10 @@ public class AirVent extends Object
             g2.drawImage(left, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
             g2.drawImage(middle, centerX+ gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
             g2.drawImage(right, centerX + 2* gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+            if(gamePanel.cat.throwAction)
+            {
+                g2.drawImage(image, centerX + gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+            }
         }
     }
 

@@ -86,21 +86,23 @@ public class EventHandler {
             {
 
                 pressedKey.UseInRange = true;
-                if(gamePanel.cat.stop)
+                if(!gamePanel.cat.throwAction)
                 {
-                    renderThrow = true;
-                    if (Objects.equals(pressedKey.lastReleasedKey, "use"))
+                    if (gamePanel.cat.stop)
                     {
-                        gamePanel.bunker.materialize = true;
-                        pressedKey.lastReleasedKey = null;
-                    }
-                }
-                else
-                {
-                    renderUse = true;
-                    if (pressedKey.use)
+                        renderThrow = true;
+                        if (Objects.equals(pressedKey.lastReleasedKey, "use"))
+                        {
+                            gamePanel.cat.throwAction = true;
+                            gamePanel.bunker.materialize = true;
+                            pressedKey.lastReleasedKey = null;
+                        }
+                    } else
                     {
-                        bunkerStop = true;
+                        renderUse = true;
+                        if (pressedKey.use) {
+                            bunkerStop = true;
+                        }
                     }
                 }
             }
