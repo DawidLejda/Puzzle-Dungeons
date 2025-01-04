@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
-
+import static java.lang.Math.abs;
 
 public class Cat extends Character
 {
@@ -33,7 +33,7 @@ public class Cat extends Character
         getCatModel();
         x = 15 * gamePanel.tileSize;
         y = 15 * gamePanel.tileSize;
-        speed = 2;
+        speed = 3;
         Arrays.fill(visited,false);
     }
 
@@ -82,13 +82,12 @@ public class Cat extends Character
     public void Update()
     {
 
-        if(!moving && direction == null )
+        if(!moving && direction == null)
         {
             if(x/gamePanel.tileSize == 14 && y/gamePanel.tileSize == 29)
             {
                 stop = true;
             }
-
             if((x-speed)/gamePanel.tileSize == 14 && y/gamePanel.tileSize == 29)
             {
                 x -= speed;
@@ -104,7 +103,6 @@ public class Cat extends Character
                 y += speed;
                 stop = true;
             }
-
             else if(x/gamePanel.tileSize == 14 && (y+speed)/gamePanel.tileSize == 29)
             {
                 y -= speed;
@@ -119,8 +117,10 @@ public class Cat extends Character
 
         if(gamePanel.event.catStart && !stop)
         {
-            move();
-            if(direction != null)
+            direction();
+
+
+            if(direction != null && !waitForPlayer())
             {
                 switch (direction)
                 {
@@ -147,8 +147,6 @@ public class Cat extends Character
                 }
             }
         }
-
-
 
 
         time++;
@@ -188,13 +186,14 @@ public class Cat extends Character
     }
 
 
-    void move()
+    void direction()
     {
 
         for(int i = 0; i < 50; i++)
         {
             int nextX = gamePanel.trail.catnipPathX[i];
             int nextY = gamePanel.trail.catnipPathY[i];
+
             if(!visited[i])
             {
                 if (x / gamePanel.tileSize + 1 == nextX)
@@ -232,6 +231,16 @@ public class Cat extends Character
 
         }
     }
+
+
+
+    boolean waitForPlayer()
+    {
+        return abs(x / gamePanel.tileSize - gamePanel.player.x / gamePanel.tileSize) <= 1 &&
+                abs(y / gamePanel.tileSize - gamePanel.player.y / gamePanel.tileSize) <= 1;
+    }
+
+
     public void Draw(Graphics2D g2)
     {
         BufferedImage image = null;

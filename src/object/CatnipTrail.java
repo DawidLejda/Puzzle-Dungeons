@@ -15,6 +15,7 @@ public class CatnipTrail extends Object
     public int [] catnipPathX = new int[50];
     public int [] catnipPathY = new int[50];
     public int catnipSteps = 0;
+    public int last_index = 0;
     public boolean stopTrailPlacement = false;
     Random rand = new Random();
     public ObjectImages [] trailsIMG = new ObjectImages[2];
@@ -70,11 +71,15 @@ public class CatnipTrail extends Object
                     if(catnipPathX[i] == 14 && catnipPathY[i] == 29)
                     {
                         stopTrailPlacement = true;
+                        catnipPathX[i+1] = 0;
+                        catnipPathY[i+1] = 0;
+                        last_index = i;
                         break;
                     }
                 }
             }
         }
+
         if((catnipPathY[0] != 0 && gamePanel.event.catnipsCount > 0 && !stopTrailPlacement))
         {
             frame++;

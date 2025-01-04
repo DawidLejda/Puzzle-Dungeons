@@ -244,6 +244,7 @@ public class GamePanel extends JPanel implements Runnable
         g2.drawString("catMove: " + cat.moving,3,194);
         g2.drawString("direction: " + cat.direction,3,210);
         g2.drawString("stop: " + cat.stop,3,259);
+        g2.drawString("stop: " + trail.last_index,3,280);
         g2.dispose();
     }
 
