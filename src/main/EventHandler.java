@@ -72,7 +72,6 @@ public class EventHandler {
         if(gamePanel.teleport.gameEND && Objects.equals(pressedKey.lastReleasedKey, "space")
                 && gamePanel.gameState != menuState)
         {
-            System.out.println("event");
             gamePanel.gameState = gamePanel.stateMain;
             menuState = 0;
             pressedKey.lastReleasedKey = null;
@@ -191,7 +190,6 @@ public class EventHandler {
                         gamePanel.cat.x = 9 * gamePanel.tileSize;
                         gamePanel.cat.y = 15 * gamePanel.tileSize + 32;
                     }
-                    System.out.println("wejscie do bunkra");
                     pressedKey.lastReleasedKey = null;
                 }
             }
@@ -267,12 +265,10 @@ public class EventHandler {
         {
             if(gamePanel.gameState == gamePanel.statePause)
             {
-                System.out.println("koniec pauzy");
                 gamePanel.gameState = gamePanel.statePlay;
             }
             else if(gamePanel.gameState == gamePanel.statePlay)
             {
-                System.out.println("pauza");
                 gamePanel.gameState = gamePanel.statePause;
                 pauseState = 0;
             }
@@ -308,7 +304,6 @@ public class EventHandler {
                 }
                 else
                 {
-                    System.out.println("zakonczono gre");
                     gamePanel.gameRunning = false;
                     System. exit(0);
                 }
@@ -343,7 +338,6 @@ public class EventHandler {
             }
             else if(menuState == 1)
             {
-                System.out.println("zakonczono gre");
                 gamePanel.gameRunning = false;
                 System. exit(0);
             }
