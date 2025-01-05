@@ -71,6 +71,10 @@ public class ObjectPlacement extends Object
         gamePanel.catnips[2] = new Catnip(gamePanel);
         gamePanel.catnips[2].x = 21;
         gamePanel.catnips[2].y = 7;
+
+        gamePanel.catnips[3] = new Catnip(gamePanel);
+        gamePanel.catnips[3].x = 40;
+        gamePanel.catnips[3].y = 8;
     }
 
     public void Catnip_TrailPlacement()

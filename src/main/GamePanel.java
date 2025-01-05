@@ -38,7 +38,7 @@ public class GamePanel extends JPanel implements Runnable
     public BridgeRight bridgeRight = new BridgeRight(this);
     public BridgeMid bridgeMid = new BridgeMid(this);
     public Object[][] trees = new Object[2][5];
-    public Catnip[] catnips = new Catnip[3];
+    public Catnip[] catnips = new Catnip[4];
     public CatnipTrail trail = new CatnipTrail(this);
     public Object[] catnipTrails = new Object[50];
 
@@ -287,8 +287,8 @@ public class GamePanel extends JPanel implements Runnable
         g2.drawString("FPS: " + averageFPS,3,12);
         g2.drawString("Vis: " + player.visibility,3,24);
         g2.drawString("playerMoving: " + player.playerMoving,3,36);
-        g2.drawString("X: " + player.x/tileSize,3,82);
-        g2.drawString("Y: " + player.y/tileSize,3,94);
+        g2.drawString("lewa: " + bridgeLeft.swapSkin,3,82);
+        g2.drawString("prawa: " + bridgeRight.swapSkin,3,94);
 
         g2.dispose();
     }

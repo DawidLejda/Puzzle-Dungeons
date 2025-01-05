@@ -30,7 +30,14 @@ public class Object
                 ((x * gamePanel.tileSize) > (gamePanel.player.x - gamePanel.player.centerX - gamePanel.tileSize)) &&
                 ((y * gamePanel.tileSize) > (gamePanel.player.y - gamePanel.player.centerY - gamePanel.tileSize)))
         {
-            g2.drawImage(image, centerX, centerY, gamePanel.tileSize,gamePanel.tileSize, null);
+            if(x == 21 && y == 14)
+            {
+                g2.drawImage(image, centerX, centerY, gamePanel.tileSize+10,gamePanel.tileSize+10, null);
+            }
+            else
+            {
+                g2.drawImage(image, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+            }
         }
     }
 

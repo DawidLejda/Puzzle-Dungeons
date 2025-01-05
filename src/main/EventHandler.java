@@ -126,23 +126,29 @@ public class EventHandler {
                             gamePanel.event.catnipsCount = 0;
                             pressedKey.lastReleasedKey = null;
                         }
-                    } else
+                    }
+                }
+                else
+                {
+                    renderUse = true;
+                    if (pressedKey.use)
                     {
-                        renderUse = true;
-                        if (pressedKey.use) {
-                            bunkerStop = true;
-                        }
+                        bunkerStop = true;
                     }
                 }
             }
 
-        } else if (abs(charX - gamePanel.ButtonState.x) <= 1
-                && abs(charY - gamePanel.ButtonState.y) <= 1) {
-            if ((charX == gamePanel.ButtonState.x) && (charY == gamePanel.ButtonState.y)) {
+        }
+        else if (abs(charX - gamePanel.ButtonState.x) <= 1
+                && abs(charY - gamePanel.ButtonState.y) <= 1)
+        {
+            if ((charX == gamePanel.ButtonState.x) && (charY == gamePanel.ButtonState.y))
+            {
                 renderUse = true;
                 pressedKey.UseInRange = true;
 
-                if (Objects.equals(pressedKey.lastReleasedKey, "use")) {
+                if (Objects.equals(pressedKey.lastReleasedKey, "use"))
+                {
                     randomBridge =  rand.nextInt(2);
                     buttonState = !buttonState;
                     pressedKey.lastReleasedKey = null;
@@ -150,7 +156,8 @@ public class EventHandler {
             }
         }
         else if (abs(charX - gamePanel.ButtonElevationUp.x) <= 1
-                && abs(charY - gamePanel.ButtonElevationUp.y) <= 1) {
+                && abs(charY - gamePanel.ButtonElevationUp.y) <= 1)
+        {
             if ((charX == gamePanel.ButtonElevationUp.x) && (charY == gamePanel.ButtonElevationUp.y))
             {
                 renderUse = true;
@@ -191,7 +198,7 @@ public class EventHandler {
                     gamePanel.map.mapSwap = !gamePanel.map.mapSwap;
                     gamePanel.player.x = 17 * gamePanel.tileSize;
                     gamePanel.player.y = 18 * gamePanel.tileSize+20;
-                    gamePanel.cat.x = 8 * gamePanel.tileSize;
+                    gamePanel.cat.x = 9 * gamePanel.tileSize;
                     gamePanel.cat.y = 15 * gamePanel.tileSize+32;
 
                     System.out.println("wejscie do bunkra");
@@ -309,7 +316,8 @@ public class EventHandler {
         charY = gamePanel.player.y / gamePanel.tileSize;
 
         if (!airventSeen && abs(charX - gamePanel.airvent.x) <= 5
-                && abs(charY - gamePanel.airvent.y) <= 5) {
+                && abs(charY - gamePanel.airvent.y) <= 5)
+        {
             airventSeen = true;
         }
 
@@ -318,7 +326,7 @@ public class EventHandler {
             for (int i = 0, n = gamePanel.catnips.length; i < n; i++)
             {
                 gamePanel.catnips[i].isHarvesting = false;
-                if(!gamePanel.catnips[i].Harvested)
+                if(!gamePanel.catnips[i].Harvested && catnipsCount < 3)
                 {
                     if (abs(charX - gamePanel.catnips[i].x) <= 1
                             && abs(charY - gamePanel.catnips[i].y) <= 1)

@@ -15,7 +15,7 @@ public class Map extends bitmap
     GamePanel gamePanel;
     Player player;
 
-    public boolean mapSwap = true;
+    public boolean mapSwap = false;
     private int animationFrame = 1;
     private int swapWater = 1;
     Random rand = new Random();

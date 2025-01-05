@@ -12,7 +12,7 @@ public class BridgeRight extends Object
 {
     GamePanel gamePanel;
     public ObjectImages[] bridgeRight = new ObjectImages[9];
-    public int swapSkin = 4;
+    public int swapSkin = 3;
     public Boolean[] ElevationLevel = new Boolean[9];
     int nonQuantumClicks = 0;
     public BridgeRight(GamePanel gamePanel)
@@ -22,7 +22,7 @@ public class BridgeRight extends Object
         x = 22;
         y = 14;
         Arrays.fill(ElevationLevel, false);
-        ElevationLevel[4] = true;
+        ElevationLevel[3] = true;
     }
 
 
@@ -98,7 +98,7 @@ public class BridgeRight extends Object
                         nonQuantumClicks++;
                         if (ElevationLevel[i])
                         {
-                            if (i + 1 != n)
+                            if (swapSkin < n)
                             {
                                 ElevationLevel[i] = false;
                                 ElevationLevel[i + 1] = true;
@@ -140,7 +140,7 @@ public class BridgeRight extends Object
         {
             g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 
-            g2.drawImage(bridgeRight[swapSkin].image, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+            g2.drawImage(bridgeRight[swapSkin].image, centerX+10, centerY, gamePanel.tileSize+10, gamePanel.tileSize+10, null);
         }
     }
 
