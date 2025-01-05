@@ -98,6 +98,13 @@ public class Map extends bitmap
         loadBunkerTile(6,"ground_catnip",false);
         loadBunkerTile(7,"wall_vent",true);
         loadBunkerTile(8,"wallMaterial2",true);
+        //1l dolny 2p dolny 3l gorny
+        loadBunkerTile(9,"corner1",true);
+        loadBunkerTile(10,"corner2",true);
+        loadBunkerTile(11,"corner3",true);
+        loadBunkerTile(12,"corner4",true);
+        loadBunkerTile(13,"corner5",true);
+        loadBunkerTile(14,"corner6",true);
     }
 
 

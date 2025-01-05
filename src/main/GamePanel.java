@@ -101,7 +101,11 @@ public class GamePanel extends JPanel implements Runnable
 
     public void Update()
     {
-        player.Update();
+        if(!teleport.playerDesintegration)
+        {
+            player.Update();
+        }
+
         event.Update();
 
 
@@ -273,7 +277,10 @@ public class GamePanel extends JPanel implements Runnable
                 teleport.Draw(g2);
                 bunkerComputer.Draw(g2);
                 event.Draw(g2);
-                player.Draw(g2);
+                if(!teleport.playerDesintegration)
+                {
+                    player.Draw(g2);
+                }
             }
         }
 

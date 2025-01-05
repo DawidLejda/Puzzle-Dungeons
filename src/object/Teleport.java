@@ -14,12 +14,13 @@ public class Teleport extends Object
     GamePanel gamePanel;
     Random rand = new Random();
     public ObjectImages[] center = new ObjectImages[6];
+    public ObjectImages[] desintegrateIMG = new ObjectImages[7];
     public ObjectImages[][] module = new ObjectImages[2][4];
     public ObjectImages[][] binaryBits= new ObjectImages[4][2];
     int [][] randomBits = new int[4][20];
     int [] bitSwitch = new int [4];
-    public boolean teleportRender,teleportReady,playerDisintegration,gameEnd = false;
-    int frame,wait, frameCenter, swapSkin, swapCenter = 0;
+    public boolean teleportRender,teleportReady, playerDesintegration,gameEND = false;
+    int frame, wait, frameCenter, swapSkin, desintegrationSkin, swapCenter = 0;
 
     public Teleport(GamePanel gamepanel)
     {
@@ -71,6 +72,12 @@ public class Teleport extends Object
                 center[i+1].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
             }
 
+            for(int i = 0; i < 7; i++)
+            {
+                path = "player/desintegrate/desintegrate".concat(Integer.toString(i+1)).concat(".png");
+                desintegrateIMG[i] = new ObjectImages();
+                desintegrateIMG[i].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
+            }
         }
         catch(IOException e){
             System.out.println("Couldn't read tileset");
@@ -92,13 +99,14 @@ public class Teleport extends Object
                 swapSkin = 0;
             }
         }
+
         if(!teleportReady)
         {
             if((gamePanel.player.x+30)/gamePanel.tileSize == x &&
             gamePanel.player.y/gamePanel.tileSize == y-1)
             {
                 frameCenter++;
-                if (frameCenter > 300)
+                if (frameCenter > 150)
                 {
                     teleportReady = true;
                     frameCenter = 0;
@@ -111,37 +119,59 @@ public class Teleport extends Object
         }
         else
         {
-            if(!playerDisintegration)
-            {
-                wait++;
-                frameCenter++;
-                if(frameCenter >= 7)
-                {
-                    frameCenter = 0;
-                    swapCenter++;
-                    if(swapCenter >= 5)
-                    {
-                        swapCenter = 0;
-                    }
-                }
+            gamePanel.player.collision = true;
 
-                gamePanel.player.collision = true;
-                if(wait > 70)
+            frameCenter++;
+            if(frameCenter >= 7)
+            {
+                frameCenter = 0;
+                swapCenter++;
+                if(swapCenter >= 5)
                 {
-                    gameEnd = true;
+                    swapCenter = 0;
                 }
             }
 
+            if(!playerDesintegration)
+            {
+                wait++;
+                if(wait > 120)
+                {
+                    playerDesintegration = true;
+                    desintegrationSkin = 0;
+                    wait = 0;
+                }
+            }
+            else
+            {
+                Desintegrate();
+            }
+        }
+    }
+
+    void Desintegrate()
+    {
+        wait++;
+        if (wait > 18)
+        {
+            wait = 0;
+            desintegrationSkin++;
+            if(desintegrationSkin >= 7)
+            {
+                gameEND = true;
+            }
         }
     }
 
 
     public void Draw(Graphics2D g2)
     {
-
-
         int centerX = x * gamePanel.tileSize - gamePanel.player.x + gamePanel.player.centerX;
         int centerY = y * gamePanel.tileSize - gamePanel.player.y + gamePanel.player.centerY;
+
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+
+
 
         if      ((((x+2) * gamePanel.tileSize) < (gamePanel.player.x + gamePanel.player.centerX + gamePanel.tileSize)) &&
                 (((y) * gamePanel.tileSize) < (gamePanel.player.y + gamePanel.player.centerY + gamePanel.tileSize)) &&
@@ -159,7 +189,7 @@ public class Teleport extends Object
                         (((y) * gamePanel.tileSize) > (gamePanel.player.y - gamePanel.player.centerY - gamePanel.tileSize))))
 
         {
-            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+
             g2.drawImage(center[0].image, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
 
             if(!teleportRender)
@@ -206,7 +236,19 @@ public class Teleport extends Object
                 {
                     g2.drawImage(center[swapCenter+1].image, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
                 }
+            }
+            if(playerDesintegration && desintegrationSkin < 7)
+            {
+                g2.drawImage(desintegrateIMG[desintegrationSkin].image, gamePanel.player.centerX, gamePanel.player.centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+            }
 
+            if(gameEND)
+            {
+                g2.setColor(Color.white);
+                g2.setFont(new Font("Arial", Font.BOLD, 70));
+                g2.drawString("Game Over", gamePanel.player.centerX-180, gamePanel.player.centerY);
+                g2.setFont(new Font("Arial", Font.PLAIN, 15));
+                g2.drawString("press space [e] to return to main menu", gamePanel.player.centerX-100, gamePanel.player.centerY+60);
             }
         }
     }

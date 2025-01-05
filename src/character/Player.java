@@ -89,11 +89,6 @@ public class Player extends Character
             gamePanel.collisionChecker.CheckTileCollision(this);
 
             gamePanel.collisionChecker.CheckObjectVisibility(this);
-
-        }
-        else
-        {
-            collision = true;
         }
     }
 

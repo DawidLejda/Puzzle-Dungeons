@@ -250,7 +250,7 @@ public class EventHandler {
                     if(!minigameFinished)
                     {
                         frame++;
-                        if(frame > 6)
+                        if(frame > 4)
                         {
                             frame = 0;
                             swapSkin++;
