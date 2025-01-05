@@ -18,6 +18,10 @@ public class GamePanel extends JPanel implements Runnable
     public int averageFPS;
     public boolean gameRunning = true;
     public int frameCount = 0;
+    public  int gameState;
+    public final int stateMain = 0;
+    public final int statePlay = 1;
+    public final int statePause = 2;
 
     Thread GameThread;
     public KeyHandler pressedKey = new KeyHandler(this);
@@ -56,6 +60,7 @@ public class GamePanel extends JPanel implements Runnable
 
     public void Placement()
     {
+        gameState = statePlay;
         objectPlacement.TreePlacement();
         objectPlacement.CatnipPlacement();
     }
@@ -101,58 +106,64 @@ public class GamePanel extends JPanel implements Runnable
 
     public void Update()
     {
-        if(!teleport.playerDesintegration)
-        {
-            player.Update();
-        }
 
         event.Update();
-
-
-        if(!map.mapSwap)
+        if(gameState == statePlay)
         {
-            map.Update();
-            trail.Update();
-            bunker.Update();
-            airvent.Update();
-            ButtonState.Update();
-            ButtonElevationUp.Update();
-            ButtonElevationDown.Update();
-            bridgeRight.Update();
-            bridgeLeft.Update();
-            for (Catnip catnip : catnips)
+            if(!teleport.playerDesintegration)
             {
-                if (catnip != null)
+                player.Update();
+            }
+
+            if(!map.mapSwap)
+            {
+                map.Update();
+                trail.Update();
+                bunker.Update();
+                airvent.Update();
+                ButtonState.Update();
+                ButtonElevationUp.Update();
+                ButtonElevationDown.Update();
+                bridgeRight.Update();
+                bridgeLeft.Update();
+                for (Catnip catnip : catnips)
                 {
-                    catnip.Update();
+                    if (catnip != null)
+                    {
+                        catnip.Update();
+                    }
+                }
+                if (event.trailStart)
+                {
+                    trail.catnipPathX[0] = player.x / tileSize;
+                    trail.catnipPathY[0] = player.y / tileSize;
+                    event.trailStart = false;
+                }
+                if (!cat.stop && (trail.catnipPathY[0] != 0 && event.catnipsCount > 0) && !trail.stopTrailPlacement)
+                {
+                    event.renderUseCatnip = false;
+                    objectPlacement.Catnip_TrailPlacement();
+                    player.speed = 2;
+                } else
+                {
+                    player.speed = 4;
                 }
             }
-            if (event.trailStart)
+            else
             {
-                trail.catnipPathX[0] = player.x / tileSize;
-                trail.catnipPathY[0] = player.y / tileSize;
-                event.trailStart = false;
+                bunkerComputer.Update();
+                if(teleport.teleportRender)
+                {
+                    teleport.Update();
+                }
             }
-            if (!cat.stop && (trail.catnipPathY[0] != 0 && event.catnipsCount > 0) && !trail.stopTrailPlacement)
-            {
-                event.renderUseCatnip = false;
-                objectPlacement.Catnip_TrailPlacement();
-                player.speed = 2;
-            } else
-            {
-                player.speed = 4;
-            }
+
+            cat.Update();
         }
         else
         {
-            bunkerComputer.Update();
-            if(teleport.teleportRender)
-            {
-                teleport.Update();
-            }
-        }
 
-        cat.Update();
+        }
     }
 
     public void paintComponent(Graphics g)
@@ -160,131 +171,132 @@ public class GamePanel extends JPanel implements Runnable
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        if(!map.mapSwap)
+        if(gameState == statePlay)
         {
-            map.Draw(g2);
-
-            if (!player.visibility)
-            {
-                player.Draw(g2);
-                if(!cat.INBUNKER)
-                {
-                    cat.Draw(g2);
-                }
-                airvent.Draw(g2, this);
-                ButtonState.Draw(g2);
-                ButtonElevationUp.Draw(g2);
-                ButtonElevationDown.Draw(g2);
-                bridgeLeft.Draw(g2);
-                bridgeRight.Draw(g2);
-                bridgeMid.draw(g2, this);
-                for (int i = 0, n = trees[0].length; i < n; i++)
-                {
-                    if (trees[0][i] != null && trees[1][i] != null)
-                    {
-                        trees[0][i].draw(g2, this);
-                        trees[1][i].draw(g2, this);
-                    }
-                }
-                for (Catnip catnip : catnips)
-                {
-                    if (catnip != null)
-                    {
-                        catnip.Draw(g2);
-                    }
-                }
-                bunker.DrawStanding(g2, this);
-                for (int i = 0; i < trail.catnipSteps; i++)
-                {
-                    if (catnipTrails[i] != null)
-                    {
-                        catnipTrails[i].draw(g2, this);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                airvent.Draw(g2, this);
-                ButtonState.Draw(g2);
-                ButtonElevationUp.Draw(g2);
-                ButtonElevationDown.Draw(g2);
-                bridgeLeft.Draw(g2);
-                bridgeRight.Draw(g2);
-                bridgeMid.draw(g2, this);
-                for (int i = 0, n = trees[0].length; i < n; i++)
-                {
-                    if (trees[0][i] != null && trees[1][i] != null)
-                    {
-                        trees[0][i].draw(g2, this);
-                        trees[1][i].draw(g2, this);
-                    }
-                }
-                for (Catnip catnip : catnips)
-                {
-                    if (catnip != null)
-                    {
-                        catnip.Draw(g2);
-                    }
-                }
-                for (int i = 0; i < trail.catnipSteps; i++)
-                {
-                    if (catnipTrails[i] != null)
-                    {
-                        catnipTrails[i].draw(g2, this);
-                    } else
-                    {
-                        break;
-                    }
-                }
-                bunker.DrawStanding(g2, this);
-                if (!cat.throwAction && !cat.INBUNKER)
-                {
-                    cat.Draw(g2);
-                }
-                player.Draw(g2);
-            }
-
-            event.Draw(g2);
-            trail.Draw(g2);
-        }
-
-
-        else
-        {
-            if (!player.visibility)
+            if(!map.mapSwap)
             {
                 map.Draw(g2);
-                player.Draw(g2);
 
-                cat.Draw(g2);
-                teleport.Draw(g2);
-                bunkerComputer.Draw(g2);
-            }
-            else
-            {
-                map.Draw(g2);
-                cat.Draw(g2);
-                teleport.Draw(g2);
-                bunkerComputer.Draw(g2);
-                event.Draw(g2);
-                if(!teleport.playerDesintegration)
+                if (!player.visibility)
                 {
                     player.Draw(g2);
+                    if(!cat.INBUNKER)
+                    {
+                        cat.Draw(g2);
+                    }
+                    airvent.Draw(g2, this);
+                    ButtonState.Draw(g2);
+                    ButtonElevationUp.Draw(g2);
+                    ButtonElevationDown.Draw(g2);
+                    bridgeLeft.Draw(g2);
+                    bridgeRight.Draw(g2);
+                    bridgeMid.draw(g2, this);
+                    for (int i = 0, n = trees[0].length; i < n; i++)
+                    {
+                        if (trees[0][i] != null && trees[1][i] != null)
+                        {
+                            trees[0][i].draw(g2, this);
+                            trees[1][i].draw(g2, this);
+                        }
+                    }
+                    for (Catnip catnip : catnips)
+                    {
+                        if (catnip != null)
+                        {
+                            catnip.Draw(g2);
+                        }
+                    }
+                    bunker.DrawStanding(g2, this);
+                    for (int i = 0; i < trail.catnipSteps; i++)
+                    {
+                        if (catnipTrails[i] != null)
+                        {
+                            catnipTrails[i].draw(g2, this);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    airvent.Draw(g2, this);
+                    ButtonState.Draw(g2);
+                    ButtonElevationUp.Draw(g2);
+                    ButtonElevationDown.Draw(g2);
+                    bridgeLeft.Draw(g2);
+                    bridgeRight.Draw(g2);
+                    bridgeMid.draw(g2, this);
+                    for (int i = 0, n = trees[0].length; i < n; i++)
+                    {
+                        if (trees[0][i] != null && trees[1][i] != null)
+                        {
+                            trees[0][i].draw(g2, this);
+                            trees[1][i].draw(g2, this);
+                        }
+                    }
+                    for (Catnip catnip : catnips)
+                    {
+                        if (catnip != null)
+                        {
+                            catnip.Draw(g2);
+                        }
+                    }
+                    for (int i = 0; i < trail.catnipSteps; i++)
+                    {
+                        if (catnipTrails[i] != null)
+                        {
+                            catnipTrails[i].draw(g2, this);
+                        } else
+                        {
+                            break;
+                        }
+                    }
+                    bunker.DrawStanding(g2, this);
+                    if (!cat.throwAction && !cat.INBUNKER)
+                    {
+                        cat.Draw(g2);
+                    }
+                    player.Draw(g2);
+                }
+
+                event.Draw(g2);
+                trail.Draw(g2);
+            }
+
+
+            else
+            {
+                if (!player.visibility)
+                {
+                    map.Draw(g2);
+                    player.Draw(g2);
+
+                    cat.Draw(g2);
+                    teleport.Draw(g2);
+                    bunkerComputer.Draw(g2);
+                }
+                else
+                {
+                    map.Draw(g2);
+                    cat.Draw(g2);
+                    teleport.Draw(g2);
+                    bunkerComputer.Draw(g2);
+                    event.Draw(g2);
+                    if(!teleport.playerDesintegration)
+                    {
+                        player.Draw(g2);
+                    }
                 }
             }
+            g2.drawString("FPS: " + averageFPS,3,12);
+            g2.dispose();
         }
-
-        g2.drawString("FPS: " + averageFPS,3,12);
-        g2.drawString("Vis: " + player.visibility,3,24);
-        g2.drawString("playerMoving: " + player.playerMoving,3,36);
-        g2.drawString("lewa: " + bridgeLeft.swapSkin,3,82);
-        g2.drawString("prawa: " + bridgeRight.swapSkin,3,94);
-
-        g2.dispose();
+        else
+        {
+            event.DrawPauseScreen(g2);
+        }
     }
 
 }

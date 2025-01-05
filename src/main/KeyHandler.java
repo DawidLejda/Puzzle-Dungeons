@@ -31,34 +31,37 @@ public class KeyHandler implements KeyListener
         {
             previousKey = lastPressedKey;
         }
-        switch(e.getKeyCode())
+        if(gamePanel.gameState != gamePanel.statePause)
         {
-            case KeyEvent.VK_A:
-                left = true;
-                lastPressedKey = "left";
-                break;
-            case KeyEvent.VK_D:
-                right = true;
-                lastPressedKey = "right";
-                break;
-            case KeyEvent.VK_W:
-                up = true;
-                lastPressedKey = "up";
-                break;
-            case KeyEvent.VK_S:
-                down = true;
-                lastPressedKey = "down";
-                break;
-            case KeyEvent.VK_E:
-                if(UseInRange)
-                {
-                    if(!gamePanel.event.renderUseCatnip)
-                    {
-                        lastPressedKey = "up";
-                    }
-                    use = true;
+            switch(e.getKeyCode())
+            {
+                case KeyEvent.VK_A:
+                    left = true;
+                    lastPressedKey = "left";
                     break;
-                }
+                case KeyEvent.VK_D:
+                    right = true;
+                    lastPressedKey = "right";
+                    break;
+                case KeyEvent.VK_W:
+                    up = true;
+                    lastPressedKey = "up";
+                    break;
+                case KeyEvent.VK_S:
+                    down = true;
+                    lastPressedKey = "down";
+                    break;
+                case KeyEvent.VK_E:
+                    if(UseInRange)
+                    {
+                        if(!gamePanel.event.renderUseCatnip)
+                        {
+                            lastPressedKey = "up";
+                        }
+                        use = true;
+                        break;
+                    }
+            }
         }
         lastReleasedKey = null;
     }
@@ -81,6 +84,7 @@ public class KeyHandler implements KeyListener
                 up = false;
                 break;
             case KeyEvent.VK_S:
+
                 down = false;
                 lastReleasedKey = "down";
                 break;
@@ -91,6 +95,19 @@ public class KeyHandler implements KeyListener
                     lastReleasedKey = "use";
                 }
 
+                break;
+            case KeyEvent.VK_ESCAPE:
+
+                if(gamePanel.gameState != gamePanel.stateMain)
+                {
+                    lastReleasedKey = "esc";
+                }
+            case KeyEvent.VK_SPACE:
+
+                if(gamePanel.gameState != gamePanel.statePlay)
+                {
+                    lastReleasedKey = "space";
+                }
         }
     }
 }
