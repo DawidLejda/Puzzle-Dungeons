@@ -18,7 +18,7 @@ public class Cat extends Character
     Random rand = new Random();
     private int swapSkin = 0;
     private int swapIdle = 0;
-    public boolean moving,throwAction = false;
+    public boolean moving,throwAction,INBUNKER = false;
     public boolean [] visited = new boolean[50];
     public boolean stop = false;
     int frame,idle_frame,time = 0;

@@ -198,9 +198,12 @@ public class EventHandler {
                     gamePanel.map.mapSwap = !gamePanel.map.mapSwap;
                     gamePanel.player.x = 17 * gamePanel.tileSize;
                     gamePanel.player.y = 18 * gamePanel.tileSize+20;
-                    gamePanel.cat.x = 9 * gamePanel.tileSize;
-                    gamePanel.cat.y = 15 * gamePanel.tileSize+32;
-
+                    if(!gamePanel.cat.INBUNKER)
+                    {
+                        gamePanel.cat.INBUNKER = true;
+                        gamePanel.cat.x = 9 * gamePanel.tileSize;
+                        gamePanel.cat.y = 15 * gamePanel.tileSize + 32;
+                    }
                     System.out.println("wejscie do bunkra");
                     pressedKey.lastReleasedKey = null;
                 }

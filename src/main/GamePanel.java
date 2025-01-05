@@ -164,16 +164,13 @@ public class GamePanel extends JPanel implements Runnable
         {
             map.Draw(g2);
 
-            if (cat.throwAction)
-            {
-                cat.Draw(g2);
-                airvent.Draw(g2, this);
-            }
-
             if (!player.visibility)
             {
                 player.Draw(g2);
-                cat.Draw(g2);
+                if(!cat.INBUNKER)
+                {
+                    cat.Draw(g2);
+                }
                 airvent.Draw(g2, this);
                 ButtonState.Draw(g2);
                 ButtonElevationUp.Draw(g2);
@@ -211,10 +208,7 @@ public class GamePanel extends JPanel implements Runnable
             }
             else
             {
-                if (!cat.throwAction)
-                {
-                    airvent.Draw(g2, this);
-                }
+                airvent.Draw(g2, this);
                 ButtonState.Draw(g2);
                 ButtonElevationUp.Draw(g2);
                 ButtonElevationDown.Draw(g2);
@@ -247,7 +241,7 @@ public class GamePanel extends JPanel implements Runnable
                     }
                 }
                 bunker.DrawStanding(g2, this);
-                if (!cat.throwAction)
+                if (!cat.throwAction && !cat.INBUNKER)
                 {
                     cat.Draw(g2);
                 }
