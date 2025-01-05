@@ -28,7 +28,7 @@ public class EventHandler {
     public int randomBridge;
     public boolean teleportMinigame, minigameFinished, renderMinigame = false;
     int frame, swapSkin = 0;
-    int pauseState;
+    int pauseState,menuState = 0;
 
 
     public EventHandler(GamePanel gamePanel, KeyHandler pressedKey) {
@@ -68,14 +68,21 @@ public class EventHandler {
     }
 
     public void Update() {
-
-        inGameState();
-
-
-        if (!gamePanel.map.mapSwap) {
+        System.out.println(gamePanel.gameState);
+        if(gamePanel.gameState != gamePanel.stateMain)
+        {
+            inGameState();
+        }
+        if(gamePanel.gameState == gamePanel.stateMain)
+        {
+            MainMenuState();
+        }
+        if (!gamePanel.map.mapSwap)
+        {
             IslandUpdate();
         }
-        else {
+        else
+        {
             BunkerUpdate();
         }
     }
@@ -287,6 +294,7 @@ public class EventHandler {
                 else if(pauseState == 1)
                 {
                     gamePanel.gameState = gamePanel.stateMain;
+                    menuState = 0;
                 }
                 else
                 {
@@ -299,6 +307,40 @@ public class EventHandler {
 
     }
 
+
+    void MainMenuState()
+    {
+        if (Objects.equals(pressedKey.lastReleasedKey, "down"))
+        {
+            if (menuState < 1) {
+                menuState++;
+            }
+            pressedKey.lastReleasedKey = null;
+        }
+        else if (Objects.equals(pressedKey.lastReleasedKey, "up"))
+        {
+            if (menuState > 0)
+            {
+                menuState--;
+            }
+            pressedKey.lastReleasedKey = null;
+        }
+        else if (Objects.equals(pressedKey.lastReleasedKey, "space"))
+        {
+            if (menuState == 0)
+            {
+                gamePanel.gameState = gamePanel.statePlay;
+            }
+            else if(menuState == 1)
+            {
+                System.out.println("zakonczono gre");
+                gamePanel.gameRunning = false;
+                System. exit(0);
+            }
+
+            pressedKey.lastReleasedKey = null;
+        }
+    }
      void catnipTrail()
     {
         charX = gamePanel.player.x / gamePanel.tileSize;
@@ -365,11 +407,11 @@ public class EventHandler {
             g2.fillRect(gamePanel.tileSize*4-32,gamePanel.tileSize*3, gamePanel.width/2, gamePanel.height/2);
         }
         g2.setColor(Color.BLACK);
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD,60F));
+        g2.setFont(new Font("Arial", Font.PLAIN, 60));
 
         g2.drawString("PAUSE MENU", gamePanel.tileSize*4+16,gamePanel.tileSize*3-32);
 
-        g2.setFont(g2.getFont().deriveFont(Font.PLAIN,30));
+        g2.setFont(new Font("Arial", Font.PLAIN, 30));
         if (pauseState == 0)
         {
             g2.setColor(Color.YELLOW);
@@ -406,7 +448,40 @@ public class EventHandler {
 
     public void DrawTitleScreen(Graphics2D g2)
     {
-
+        g2.setColor(new Color(70,120,200));
+        {
+            g2.fillRect(0,0, gamePanel.width, gamePanel.height);
+        }
+        g2.setColor(new Color(200,200,230));
+        {
+            g2.fillRect(gamePanel.tileSize*4-32,gamePanel.tileSize*3, gamePanel.width/2, gamePanel.height/2);
+        }
+        g2.setColor(Color.BLACK);
+        g2.setFont(new Font("Arial", Font.PLAIN, 90));
+        g2.drawString("Puzzle Dungeons", gamePanel.tileSize*2,gamePanel.tileSize*2);
+        g2.setFont(new Font("Arial", Font.PLAIN, 50));
+        if (menuState == 0)
+        {
+            g2.setColor(Color.YELLOW);
+            g2.drawString("START GAME", gamePanel.tileSize*5,gamePanel.tileSize*5);
+            g2.setColor(Color.BLACK);
+        }
+        else
+        {
+            g2.drawString("START GAME", gamePanel.tileSize*5,gamePanel.tileSize*5);
+        }
+        if (menuState == 1)
+        {
+            g2.setColor(Color.YELLOW);
+            g2.drawString("EXIT", gamePanel.tileSize*6-60,gamePanel.tileSize*6);
+            g2.setColor(Color.BLACK);
+        }
+        else
+        {
+            g2.drawString("EXIT", gamePanel.tileSize*6-60,gamePanel.tileSize*6);
+        }
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN,15F));
+        g2.drawString("press space to confirm", gamePanel.tileSize*6,gamePanel.tileSize*8);
     }
 
     public void Draw(Graphics2D g2)

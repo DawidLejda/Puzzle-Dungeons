@@ -12,7 +12,7 @@ public class BridgeRight extends Object
 {
     GamePanel gamePanel;
     public ObjectImages[] bridgeRight = new ObjectImages[9];
-    public int swapSkin = 3;
+    public int swapSkin = 2;
     public Boolean[] ElevationLevel = new Boolean[9];
     int nonQuantumClicks = 0;
     public BridgeRight(GamePanel gamePanel)
@@ -22,7 +22,7 @@ public class BridgeRight extends Object
         x = 22;
         y = 14;
         Arrays.fill(ElevationLevel, false);
-        ElevationLevel[3] = true;
+        ElevationLevel[2] = true;
     }
 
 

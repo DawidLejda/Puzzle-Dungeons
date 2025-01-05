@@ -60,7 +60,7 @@ public class GamePanel extends JPanel implements Runnable
 
     public void Placement()
     {
-        gameState = statePlay;
+        gameState = stateMain;
         objectPlacement.TreePlacement();
         objectPlacement.CatnipPlacement();
     }
@@ -159,10 +159,6 @@ public class GamePanel extends JPanel implements Runnable
             }
 
             cat.Update();
-        }
-        else
-        {
-
         }
     }
 
@@ -295,7 +291,14 @@ public class GamePanel extends JPanel implements Runnable
         }
         else
         {
-            event.DrawPauseScreen(g2);
+            if(gameState == statePause)
+            {
+                event.DrawPauseScreen(g2);
+            }
+            else
+            {
+                event.DrawTitleScreen(g2);
+            }
         }
     }
 

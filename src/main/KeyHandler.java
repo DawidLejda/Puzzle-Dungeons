@@ -31,7 +31,7 @@ public class KeyHandler implements KeyListener
         {
             previousKey = lastPressedKey;
         }
-        if(gamePanel.gameState != gamePanel.statePause)
+        if(gamePanel.gameState == gamePanel.statePlay)
         {
             switch(e.getKeyCode())
             {
