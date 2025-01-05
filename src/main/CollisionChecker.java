@@ -342,7 +342,7 @@ public class CollisionChecker
                 centerY = gamePanel.cat.y / gamePanel.tileSize;
                 if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1)
                 {
-                    if (!gamePanel.cat.stop)
+                    if (!gamePanel.cat.stop )
                     {
                         CheckObjectCollision(character, centerX, centerY);
                     }
@@ -375,6 +375,8 @@ public class CollisionChecker
                 }
             }
         }
+
+
         else
         {
             centerX = gamePanel.bunkerComputer.x;
@@ -383,6 +385,17 @@ public class CollisionChecker
                 CheckObjectCollision(character, centerX, centerY);
                 if ((charX == centerX || charX == centerX-1) && (charY == centerY-1)) {
 
+                    character.visibility = false;
+                }
+            }
+
+            centerX = gamePanel.cat.x / gamePanel.tileSize;
+            centerY = gamePanel.cat.y / gamePanel.tileSize;
+            if (abs(charX - centerX) <= 1 && abs(charY - centerY) <= 1)
+            {
+                CheckObjectCollision(character, centerX, centerY);
+                if ((charX == centerX || charX == centerX - 1) && (charY == centerY - 1))
+                {
                     character.visibility = false;
                 }
             }

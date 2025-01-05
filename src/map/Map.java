@@ -94,6 +94,10 @@ public class Map extends bitmap
         loadBunkerTile(3,"wallTop",true);
         loadBunkerTile(4,"wallBottom",true);
         loadBunkerTile(5,"wallMaterial",true);
+
+        loadBunkerTile(6,"ground_catnip",false);
+        loadBunkerTile(7,"wall_vent",true);
+        loadBunkerTile(8,"wallMaterial2",true);
     }
 
 

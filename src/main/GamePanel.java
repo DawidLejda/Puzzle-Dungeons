@@ -104,6 +104,7 @@ public class GamePanel extends JPanel implements Runnable
         player.Update();
         event.Update();
 
+
         if(!map.mapSwap)
         {
             map.Update();
@@ -137,8 +138,13 @@ public class GamePanel extends JPanel implements Runnable
             {
                 player.speed = 4;
             }
-            cat.Update();
         }
+        else
+        {
+            bunkerComputer.Update();
+        }
+
+        cat.Update();
     }
 
     public void paintComponent(Graphics g)
@@ -252,14 +258,17 @@ public class GamePanel extends JPanel implements Runnable
                 map.Draw(g2);
                 player.Draw(g2);
 
+                cat.Draw(g2);
                 teleport.Draw(g2);
                 bunkerComputer.Draw(g2);
             }
             else
             {
                 map.Draw(g2);
+                cat.Draw(g2);
                 teleport.Draw(g2);
                 bunkerComputer.Draw(g2);
+                event.Draw(g2);
                 player.Draw(g2);
             }
         }

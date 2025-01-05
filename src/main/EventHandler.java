@@ -15,15 +15,19 @@ public class EventHandler {
     GamePanel gamePanel;
     KeyHandler pressedKey;
 
-    boolean renderUse,airventSeen,renderUseCatnip;
+    boolean renderUse,airventSeen,renderUseCatnip,renderUseTeleport;
     public boolean bunkerStop,renderThrow;
     public boolean trailStart,catStart = false;
     public boolean buttonState, elevationDown, elevationUp;
     public int charX,charY;
-    public int catnipsCount = 3;
+    public int catnipsCount = 0;
     public object.ObjectImages[] catnipBar = new ObjectImages[4];
-    public object.ObjectImages[] use = new ObjectImages[3];
+    public object.ObjectImages[] minigame = new ObjectImages[8];
+    public object.ObjectImages[] use = new ObjectImages[5];
     public int randomBridge;
+    public boolean teleportMinigame,minigameFinished,renderMinigame = false;
+    int frame, swapSkin = 0;
+
     Random rand = new Random();
 
     public EventHandler(GamePanel gamePanel, KeyHandler pressedKey)
@@ -37,19 +41,30 @@ public class EventHandler {
 
     public void getUIModel()
     {
+        String path;
         try
         {
             use[0] = new ObjectImages();
             use[1] = new ObjectImages();
             use[2] = new ObjectImages();
+            use[3] = new ObjectImages();
+            use[4] = new ObjectImages();
             use[0].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/use.png")));
             use[1].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/useCatnip.png")));
             use[2].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/throw.png")));
+            use[3].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/useTeleport.png")));
+            use[4].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/minigameframe1.png")));
             for (int i = 0; i < 4; i++)
             {
-                String path = "events/progressBar".concat(Integer.toString(i)).concat(".png");
+                path = "events/progressBar".concat(Integer.toString(i)).concat(".png");
                 catnipBar[i] = new ObjectImages();
                 catnipBar[i].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
+            }
+            for(int i = 0; i < 8; i++)
+            {
+                path = "events/minigameBar".concat(Integer.toString(i+1)).concat(".png");
+                minigame[i] = new ObjectImages();
+                minigame[i].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
             }
         }
         catch (IOException e)
@@ -133,7 +148,8 @@ public class EventHandler {
                     pressedKey.lastReleasedKey = null;
                 }
             }
-        } else if (abs(charX - gamePanel.ButtonElevationUp.x) <= 1
+        }
+        else if (abs(charX - gamePanel.ButtonElevationUp.x) <= 1
                 && abs(charY - gamePanel.ButtonElevationUp.y) <= 1) {
             if ((charX == gamePanel.ButtonElevationUp.x) && (charY == gamePanel.ButtonElevationUp.y))
             {
@@ -175,6 +191,8 @@ public class EventHandler {
                     gamePanel.map.mapSwap = !gamePanel.map.mapSwap;
                     gamePanel.player.x = 17 * gamePanel.tileSize;
                     gamePanel.player.y = 18 * gamePanel.tileSize+20;
+                    gamePanel.cat.x = 8 * gamePanel.tileSize;
+                    gamePanel.cat.y = 15 * gamePanel.tileSize+32;
 
                     System.out.println("wejscie do bunkra");
                     pressedKey.lastReleasedKey = null;
@@ -186,13 +204,83 @@ public class EventHandler {
 
     void BunkerUpdate()
     {
-        if(gamePanel.player.x/ gamePanel.tileSize == 17 &&
-        gamePanel.player.y/gamePanel.tileSize == 19)
+        charX = gamePanel.player.x / gamePanel.tileSize;
+        charY = gamePanel.player.y / gamePanel.tileSize;
+        renderUse = false;
+        renderUseTeleport = false;
+        renderMinigame = false;
+
+        if(charX == 17 && charY== 19)
         {
             gamePanel.map.mapSwap = false;
             gamePanel.player.x = gamePanel.bunker.x*gamePanel.tileSize + 30;
             gamePanel.player.y = gamePanel.bunker.y*gamePanel.tileSize + 30;
         }
+
+        else if (abs(charX - gamePanel.bunkerComputer.x) <= 1
+                && abs(charY - gamePanel.bunkerComputer.y) <= 1)
+        {
+            if ((charX == gamePanel.bunkerComputer.x) && (charY == gamePanel.bunkerComputer.y))
+            {
+                if(!teleportMinigame)
+                {
+                    if(!gamePanel.bunkerComputer.initializeTeleportation)
+                    {
+                        renderUse = true;
+                        pressedKey.UseInRange = true;
+                        if (Objects.equals(pressedKey.lastReleasedKey, "use"))
+                        {
+                            gamePanel.bunkerComputer.computerInteraction++;
+                            pressedKey.lastReleasedKey = null;
+                        }
+                    }
+                    else
+                    {
+                        renderUseTeleport = true;
+                        pressedKey.UseInRange = true;
+                        if (Objects.equals(pressedKey.lastReleasedKey, "use"))
+                        {
+                            teleportMinigame = true;
+                            pressedKey.lastReleasedKey = null;
+                        }
+                    }
+                }
+                else
+                {
+                    if(!minigameFinished)
+                    {
+                        frame++;
+                        if(frame > 6)
+                        {
+                            frame = 0;
+                            swapSkin++;
+                            if(swapSkin >= 7)
+                            {
+                                swapSkin = 0;
+                            }
+                        }
+                        renderMinigame = true;
+                        pressedKey.UseInRange = true;
+                        if (Objects.equals(pressedKey.lastReleasedKey, "use"))
+                        {
+                            if(swapSkin == 3 || swapSkin == 4)
+                            {
+                                minigameFinished = true;
+                                gamePanel.teleport.teleportRender = true;
+                            }
+                            else
+                            {
+                                swapSkin = 7;
+                                frame = -8;
+                            }
+                            pressedKey.lastReleasedKey = null;
+                        }
+                    }
+
+                }
+            }
+        }
+
 
     }
 
@@ -256,25 +344,39 @@ public class EventHandler {
     {
         int x = gamePanel.player.centerX + gamePanel.tileSize/3;
         int y = gamePanel.player.centerY - gamePanel.tileSize/2;
+        int scale = gamePanel.tileSize;
         if(renderUse)
         {
-            g2.drawImage(use[0].image, x, y, gamePanel.tileSize/2, gamePanel.tileSize/2, null);
+            g2.drawImage(use[0].image, x, y, scale/2, scale/2, null);
         }
         else if(renderUseCatnip)
         {
-            g2.drawImage(use[1].image, x, y, gamePanel.tileSize/2, gamePanel.tileSize/2, null);
+            g2.drawImage(use[1].image, x, y, scale/2, scale/2, null);
         }
         else if(renderThrow)
         {
-            g2.drawImage(use[2].image, x-20, y-25, gamePanel.tileSize, gamePanel.tileSize, null);
+            g2.drawImage(use[2].image, x-20, y-25, scale, scale, null);
         }
+        else if(renderUseTeleport)
+        {
+            g2.drawImage(use[3].image, x, y, scale/2, scale/2, null);
+        }
+        else if(!minigameFinished && teleportMinigame && renderMinigame)
+        {
+            System.out.println(swapSkin);
+            g2.drawImage(use[4].image, x, y+96, scale/2, scale/2, null);
+            g2.drawImage(minigame[swapSkin].image, x, y+96, scale/2, scale/2, null);
+        }
+
         if(catnipsCount > 0)
         {
-            g2.drawImage(catnipBar[0].image, gamePanel.width-gamePanel.tileSize,
-                    0, gamePanel.tileSize, gamePanel.tileSize, null);
+            g2.drawImage(catnipBar[0].image, gamePanel.width-scale,
+                    0, scale, scale, null);
 
-            g2.drawImage(catnipBar[catnipsCount].image, gamePanel.width-gamePanel.tileSize,
-                    0, gamePanel.tileSize, gamePanel.tileSize, null);
+            g2.drawImage(catnipBar[catnipsCount].image, gamePanel.width-scale,
+                    0, scale, scale, null);
         }
+
+
     }
 }
