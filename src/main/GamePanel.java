@@ -142,6 +142,10 @@ public class GamePanel extends JPanel implements Runnable
         else
         {
             bunkerComputer.Update();
+            if(teleport.teleportRender)
+            {
+                teleport.Update();
+            }
         }
 
         cat.Update();

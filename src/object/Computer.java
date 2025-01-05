@@ -120,7 +120,7 @@ public class Computer extends Object
             else if(gamePanel.teleport.teleportRender && !finishedEffect)
             {
                 stopEffect = true;
-                g2.drawImage(computerEffects[9-swapEffect].image, centerX, centerY, gamePanel.tileSize,gamePanel.tileSize, null);
+                g2.drawImage(computerEffects[8-swapEffect].image, centerX, centerY, gamePanel.tileSize,gamePanel.tileSize, null);
             }
             else if(finishedEffect)
             {

@@ -363,7 +363,6 @@ public class EventHandler {
         }
         else if(!minigameFinished && teleportMinigame && renderMinigame)
         {
-            System.out.println(swapSkin);
             g2.drawImage(use[4].image, x, y+96, scale/2, scale/2, null);
             g2.drawImage(minigame[swapSkin].image, x, y+96, scale/2, scale/2, null);
         }

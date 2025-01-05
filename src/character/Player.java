@@ -81,13 +81,20 @@ public class Player extends Character
 
     void CollisionCheck()
     {
-        visibility = true;
-        collision = false;
-        gamePanel.collisionChecker.CheckBridgeCollision(this);
-        gamePanel.collisionChecker.CheckTileCollision(this);
+        if(!gamePanel.teleport.teleportReady)
+        {
+            visibility = true;
+            collision = false;
+            gamePanel.collisionChecker.CheckBridgeCollision(this);
+            gamePanel.collisionChecker.CheckTileCollision(this);
 
-        gamePanel.collisionChecker.CheckObjectVisibility(this);
+            gamePanel.collisionChecker.CheckObjectVisibility(this);
 
+        }
+        else
+        {
+            collision = true;
+        }
     }
 
 

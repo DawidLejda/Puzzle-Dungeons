@@ -5,15 +5,21 @@ import main.GamePanel;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Random;
 
 public class Teleport extends Object
 {
     GamePanel gamePanel;
+    Random rand = new Random();
     public ObjectImages[] center = new ObjectImages[6];
     public ObjectImages[][] module = new ObjectImages[2][4];
     public ObjectImages[][] binaryBits= new ObjectImages[4][2];
-    public boolean teleportRender = false;
+    int [][] randomBits = new int[4][20];
+    int [] bitSwitch = new int [4];
+    public boolean teleportRender,teleportReady,playerDisintegration,gameEnd = false;
+    int frame,wait, frameCenter, swapSkin, swapCenter = 0;
 
     public Teleport(GamePanel gamepanel)
     {
@@ -21,6 +27,14 @@ public class Teleport extends Object
         getTeleportModel();
         x = 11;
         y = 12;
+
+        for (int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 20; j++)
+            {
+                randomBits[i][j] = rand.nextInt(3);
+            }
+        }
     }
 
     void getTeleportModel()
@@ -67,13 +81,64 @@ public class Teleport extends Object
 
     public void Update()
     {
+        frame++;
+        if(frame > 10)
+        {
+            frame = 0;
+            swapSkin++;
 
+            if(swapSkin >= 19)
+            {
+                swapSkin = 0;
+            }
+        }
+        if(!teleportReady)
+        {
+            if((gamePanel.player.x+30)/gamePanel.tileSize == x &&
+            gamePanel.player.y/gamePanel.tileSize == y-1)
+            {
+                frameCenter++;
+                if (frameCenter > 300)
+                {
+                    teleportReady = true;
+                    frameCenter = 0;
+                }
+            }
+            else
+            {
+                frameCenter = 0;
+            }
+        }
+        else
+        {
+            if(!playerDisintegration)
+            {
+                wait++;
+                frameCenter++;
+                if(frameCenter >= 7)
+                {
+                    frameCenter = 0;
+                    swapCenter++;
+                    if(swapCenter >= 5)
+                    {
+                        swapCenter = 0;
+                    }
+                }
+
+                gamePanel.player.collision = true;
+                if(wait > 70)
+                {
+                    gameEnd = true;
+                }
+            }
+
+        }
     }
 
 
     public void Draw(Graphics2D g2)
     {
-        int bitSwitch = 0;
+
 
         int centerX = x * gamePanel.tileSize - gamePanel.player.x + gamePanel.player.centerX;
         int centerY = y * gamePanel.tileSize - gamePanel.player.y + gamePanel.player.centerY;
@@ -97,10 +162,52 @@ public class Teleport extends Object
             g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g2.drawImage(center[0].image, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
 
-            g2.drawImage(module[bitSwitch][1].image, centerX + gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
-            g2.drawImage(module[bitSwitch][0].image, centerX - gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
-            g2.drawImage(module[bitSwitch][2].image, centerX, centerY - gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
-            g2.drawImage(module[bitSwitch][3].image, centerX, centerY + gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
+            if(!teleportRender)
+            {
+                g2.drawImage(module[0][1].image, centerX + gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+                g2.drawImage(module[0][0].image, centerX - gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+                g2.drawImage(module[0][2].image, centerX, centerY - gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
+                g2.drawImage(module[0][3].image, centerX, centerY + gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
+            }
+            else
+            {
+                Arrays.fill(bitSwitch,0);
+
+                for(int i = 0; i < 4; i++)
+                {
+                    if(randomBits[i][swapSkin] != 2)
+                    {
+                        bitSwitch[i] = 1;
+                    }
+                }
+                g2.drawImage(module[bitSwitch[1]][1].image, centerX + gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+                g2.drawImage(module[bitSwitch[0]][0].image, centerX - gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+                g2.drawImage(module[bitSwitch[2]][2].image, centerX, centerY - gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
+                g2.drawImage(module[bitSwitch[3]][3].image, centerX, centerY + gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
+
+                if(randomBits[1][swapSkin] != 2)
+                {
+                    g2.drawImage(binaryBits[1][randomBits[1][swapSkin]].image, centerX + gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+                }
+                if(randomBits[0][swapSkin] != 2)
+                {
+                    g2.drawImage(binaryBits[0][randomBits[0][swapSkin]].image, centerX - gamePanel.tileSize, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+                }
+                if(randomBits[2][swapSkin] != 2)
+                {
+                    g2.drawImage(binaryBits[2][randomBits[2][swapSkin]].image, centerX, centerY - gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
+                }
+                if(randomBits[3][swapSkin] != 2)
+                {
+                    g2.drawImage(binaryBits[3][randomBits[3][swapSkin]].image, centerX, centerY + gamePanel.tileSize, gamePanel.tileSize, gamePanel.tileSize, null);
+                }
+
+                if(teleportReady)
+                {
+                    g2.drawImage(center[swapCenter+1].image, centerX, centerY, gamePanel.tileSize, gamePanel.tileSize, null);
+                }
+
+            }
         }
     }
 }
