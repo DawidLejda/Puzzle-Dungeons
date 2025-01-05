@@ -53,12 +53,12 @@ public class BridgeRight extends Object
                 {
                     if (ElevationLevel[i])
                     {
-                        if (i + 1 != ElevationLevel.length &&
+                        if (swapSkin + 1 != n &&
                         gamePanel.bridgeLeft.swapSkin + 1 != n)
                         {
                             ElevationLevel[i] = false;
-                            ElevationLevel[i + 1] = true;
-                            swapSkin = i + 1;
+                            ElevationLevel[swapSkin + 1] = true;
+                            swapSkin = swapSkin + 1;
                             gamePanel.bridgeLeft.swapSkin += 1;
                         }
                         break;
@@ -68,12 +68,12 @@ public class BridgeRight extends Object
                 {
                     if (ElevationLevel[i])
                     {
-                        if (i - 1 >= 0 &&
+                        if (swapSkin - 1 >= 0 &&
                         gamePanel.bridgeLeft.swapSkin - 1 >= 0)
                         {
                             ElevationLevel[i] = false;
-                            ElevationLevel[i - 1] = true;
-                            swapSkin = i - 1;
+                            ElevationLevel[swapSkin - 1] = true;
+                            swapSkin = swapSkin - 1;
                             gamePanel.bridgeLeft.swapSkin -= 1;
                         }
                         break;
@@ -98,11 +98,11 @@ public class BridgeRight extends Object
                         nonQuantumClicks++;
                         if (ElevationLevel[i])
                         {
-                            if (swapSkin < n)
+                            if (swapSkin < n && swapSkin + 1 < n)
                             {
                                 ElevationLevel[i] = false;
-                                ElevationLevel[i + 1] = true;
-                                swapSkin = i + 1;
+                                ElevationLevel[swapSkin + 1] = true;
+                                swapSkin += 1;
                             }
                             break;
                         }
@@ -111,11 +111,11 @@ public class BridgeRight extends Object
                         nonQuantumClicks++;
                         if (ElevationLevel[i])
                         {
-                            if (i - 1 >= 0)
+                            if (swapSkin - 1 >= 0)
                             {
                                 ElevationLevel[i] = false;
-                                ElevationLevel[i - 1] = true;
-                                swapSkin = i - 1;
+                                ElevationLevel[swapSkin - 1] = true;
+                                swapSkin -= 1;
                             }
                             break;
                         }

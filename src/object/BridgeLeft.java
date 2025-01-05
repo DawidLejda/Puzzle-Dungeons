@@ -67,8 +67,8 @@ public class BridgeLeft extends Object
                             if (swapSkin < n && swapSkin + 1 < n)
                             {
                                 ElevationLevel[i] = false;
-                                ElevationLevel[i + 1] = true;
-                                swapSkin = i + 1;
+                                ElevationLevel[swapSkin + 1] = true;
+                                swapSkin += 1;
                             }
                             break;
                         }
@@ -81,8 +81,8 @@ public class BridgeLeft extends Object
                             if (swapSkin - 1 >= 0 && swapSkin  >= 0)
                             {
                                 ElevationLevel[i] = false;
-                                ElevationLevel[i - 1] = true;
-                                swapSkin = i - 1;
+                                ElevationLevel[swapSkin - 1] = true;
+                                swapSkin -= 1;
                             }
                             break;
                         }

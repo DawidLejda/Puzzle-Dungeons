@@ -248,7 +248,7 @@ public class Teleport extends Object
                 g2.setFont(new Font("Arial", Font.BOLD, 70));
                 g2.drawString("Game Over", gamePanel.player.centerX-180, gamePanel.player.centerY);
                 g2.setFont(new Font("Arial", Font.PLAIN, 15));
-                g2.drawString("press space [e] to return to main menu", gamePanel.player.centerX-100, gamePanel.player.centerY+60);
+                g2.drawString("press space space to return to main menu", gamePanel.player.centerX-100, gamePanel.player.centerY+60);
             }
         }
     }

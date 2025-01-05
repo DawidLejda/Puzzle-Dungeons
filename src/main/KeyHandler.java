@@ -104,8 +104,9 @@ public class KeyHandler implements KeyListener
                 }
             case KeyEvent.VK_SPACE:
 
-                if(gamePanel.gameState != gamePanel.statePlay)
+                if(gamePanel.gameState != gamePanel.statePlay || gamePanel.teleport.gameEND)
                 {
+                    System.out.println("key");
                     lastReleasedKey = "space";
                 }
         }

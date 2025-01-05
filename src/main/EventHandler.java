@@ -68,7 +68,17 @@ public class EventHandler {
     }
 
     public void Update() {
-        System.out.println(gamePanel.gameState);
+
+        if(gamePanel.teleport.gameEND && Objects.equals(pressedKey.lastReleasedKey, "space")
+                && gamePanel.gameState != menuState)
+        {
+            System.out.println("event");
+            gamePanel.gameState = gamePanel.stateMain;
+            menuState = 0;
+            pressedKey.lastReleasedKey = null;
+            gamePanel.teleport.gameEND = false;
+        }
+
         if(gamePanel.gameState != gamePanel.stateMain)
         {
             inGameState();
@@ -398,11 +408,8 @@ public class EventHandler {
 
     public void DrawPauseScreen(Graphics2D g2)
     {
-        g2.setColor(new Color(70,120,200));
-        {
-            g2.fillRect(0,0, gamePanel.width, gamePanel.height);
-        }
-        g2.setColor(new Color(200,200,230));
+        gamePanel.map.Draw(g2);
+        g2.setColor(new Color(200,200,230,128));
         {
             g2.fillRect(gamePanel.tileSize*4-32,gamePanel.tileSize*3, gamePanel.width/2, gamePanel.height/2);
         }

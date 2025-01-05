@@ -106,7 +106,6 @@ public class GamePanel extends JPanel implements Runnable
 
     public void Update()
     {
-
         event.Update();
         if(gameState == statePlay)
         {
@@ -167,7 +166,7 @@ public class GamePanel extends JPanel implements Runnable
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        if(gameState == statePlay)
+        if(gameState != stateMain)
         {
             if(!map.mapSwap)
             {
@@ -287,18 +286,17 @@ public class GamePanel extends JPanel implements Runnable
                 }
             }
             g2.drawString("FPS: " + averageFPS,3,12);
-            g2.dispose();
-        }
-        else
-        {
+
             if(gameState == statePause)
             {
                 event.DrawPauseScreen(g2);
             }
-            else
-            {
-                event.DrawTitleScreen(g2);
-            }
+            g2.dispose();
+        }
+        else
+        {
+            event.DrawTitleScreen(g2);
+
         }
     }
 
