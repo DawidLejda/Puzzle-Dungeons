@@ -16,21 +16,27 @@ public class EventHandler {
     KeyHandler pressedKey;
     Random rand = new Random();
 
-    boolean renderUse, airventSeen, renderUseCatnip, renderUseTeleport;
-    public boolean bunkerStop, renderThrow;
-    public boolean trailStart, catStart = false;
-    public boolean buttonState, elevationDown, elevationUp;
-    public int charX, charY;
-    public int catnipsCount = 0;
-    public object.ObjectImages[] catnipBar = new ObjectImages[4];
-    public object.ObjectImages[] minigame = new ObjectImages[8];
-    public object.ObjectImages[] use = new ObjectImages[5];
-    public int randomBridge;
-    public boolean teleportMinigame, minigameFinished, renderMinigame = false;
-    int frame, swapSkin = 0;
-    int pauseState,menuState = 0;
+    boolean renderUse, renderUseCatnip, renderUseTeleport; // Flags for rendering UI elements
+    public boolean bunkerStop, renderThrow; // Flags for bunker and throwing actions
+    public boolean trailStart, catStart = false; // Flags for catnip trail and cat movement
+    public boolean buttonState, elevationDown, elevationUp; // Flags for button and bridge states
+    boolean airventSeen; // Flag enabling collection of catnips
+    public int charX, charY; // Player's position in tile coordinates
+    public int catnipsCount = 0; // Number of catnips collected
+    public ObjectImages[] catnipBar = new ObjectImages[4]; // Images for the catnip progress bar
+    public ObjectImages[] minigame = new ObjectImages[8]; // Images for the teleport minigame
+    public ObjectImages[] use = new ObjectImages[5]; // Images for interaction prompts
+    public int randomBridge; // Randomly selects which bridge button to activate
+    public boolean teleportMinigame, minigameFinished, renderMinigame = false; // Flags for the teleport minigame
+    int frame, swapSkin = 0; // Animation frame and skin index for the minigame
+    int pauseState, menuState = 0; // State variables for pause and main menus
 
-
+    /**
+     * Constructor for the EventHandler class.
+     *
+     * @param gamePanel The GamePanel object associated with the event handler.
+     * @param pressedKey The KeyHandler object used for player input.
+     */
     public EventHandler(GamePanel gamePanel, KeyHandler pressedKey) {
         this.gamePanel = gamePanel;
         this.pressedKey = pressedKey;
@@ -38,10 +44,13 @@ public class EventHandler {
         getUIModel();
     }
 
-
+    /**
+     * Loads the images for UI elements and events.
+     */
     public void getUIModel() {
         String path;
         try {
+            // Load interaction prompt images
             use[0] = new ObjectImages();
             use[1] = new ObjectImages();
             use[2] = new ObjectImages();
@@ -51,12 +60,13 @@ public class EventHandler {
             use[1].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/useCatnip.png")));
             use[2].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/throw.png")));
             use[3].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/useTeleport.png")));
-            use[4].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("events/minigameframe1.png")));
             for (int i = 0; i < 4; i++) {
                 path = "events/progressBar".concat(Integer.toString(i)).concat(".png");
                 catnipBar[i] = new ObjectImages();
                 catnipBar[i].image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
             }
+
+            // Load teleport minigame images
             for (int i = 0; i < 8; i++) {
                 path = "events/minigameBar".concat(Integer.toString(i + 1)).concat(".png");
                 minigame[i] = new ObjectImages();
@@ -67,36 +77,40 @@ public class EventHandler {
         }
     }
 
+    /**
+     * Updates the game state and handles events.
+     */
     public void Update() {
-
-        if(gamePanel.teleport.gameEND && Objects.equals(pressedKey.lastReleasedKey, "space")
-                && gamePanel.gameState != menuState)
-        {
+        // Check for game over and space bar press to return to main menu
+        if (gamePanel.teleport.gameEND && Objects.equals(pressedKey.lastReleasedKey, "space")
+                && gamePanel.gameState != menuState) {
             gamePanel.gameState = gamePanel.stateMain;
             menuState = 0;
             pressedKey.lastReleasedKey = null;
             gamePanel.teleport.gameEND = false;
         }
 
-        if(gamePanel.gameState != gamePanel.stateMain)
-        {
+        // Handle in-game events and menu states
+        if (gamePanel.gameState != gamePanel.stateMain) {
             inGameState();
         }
-        if(gamePanel.gameState == gamePanel.stateMain)
-        {
+        if (gamePanel.gameState == gamePanel.stateMain) {
             MainMenuState();
         }
-        if (!gamePanel.map.mapSwap)
-        {
+
+        // Update events based on the current map
+        if (!gamePanel.map.mapSwap) {
             IslandUpdate();
-        }
-        else
-        {
+        } else {
             BunkerUpdate();
         }
     }
 
+    /**
+     * Handles events and interactions on the island map.
+     */
     void IslandUpdate() {
+        // Reset flags and variables
         renderUse = false;
         bunkerStop = false;
         pressedKey.UseInRange = false;
@@ -104,16 +118,20 @@ public class EventHandler {
         elevationUp = false;
         renderUseCatnip = false;
         renderThrow = false;
+        // Get player's tile coordinates
         charX = gamePanel.player.x / gamePanel.tileSize;
         charY = gamePanel.player.y / gamePanel.tileSize;
 
+        // Handle catnip and catnip trail events
         catnip();
         catnipTrail();
 
+        // Start cat movement after enough catnips thrown
         if (!catStart && gamePanel.trail.catnipSteps > 4) {
             catStart = true;
         }
 
+        // Check for interaction with the air vent
         if (abs(charX - gamePanel.airvent.x) <= 4
                 && abs(charY - gamePanel.airvent.y) <= 3) {
             int centerX = gamePanel.airvent.x + 1;
@@ -141,6 +159,8 @@ public class EventHandler {
 
         } else if (abs(charX - gamePanel.ButtonState.x) <= 1
                 && abs(charY - gamePanel.ButtonState.y) <= 1) {
+
+            // handle bridge quantum state button interaction
             if ((charX == gamePanel.ButtonState.x) && (charY == gamePanel.ButtonState.y)) {
                 renderUse = true;
                 pressedKey.UseInRange = true;
@@ -151,6 +171,9 @@ public class EventHandler {
                     pressedKey.lastReleasedKey = null;
                 }
             }
+
+            // handle bridge button interaction
+            // handle bridge elevation up button interaction
         } else if (abs(charX - gamePanel.ButtonElevationUp.x) <= 1
                 && abs(charY - gamePanel.ButtonElevationUp.y) <= 1) {
             if ((charX == gamePanel.ButtonElevationUp.x) && (charY == gamePanel.ButtonElevationUp.y)) {
@@ -162,6 +185,7 @@ public class EventHandler {
                     pressedKey.lastReleasedKey = null;
                 }
             }
+            // handle bridge elevation down button interaction
         } else if (abs(charX - gamePanel.ButtonElevationDown.x) <= 1
                 && abs(charY - gamePanel.ButtonElevationDown.y) <= 1) {
             if ((charX == gamePanel.ButtonElevationDown.x) && (charY == gamePanel.ButtonElevationDown.y)) {
@@ -175,6 +199,7 @@ public class EventHandler {
             }
         }
 
+        // Check for interaction with the materialized bunker
         if (gamePanel.bunker.materialize &&
                 (abs(charX - gamePanel.bunker.x) <= 2
                         && abs(charY - gamePanel.bunker.y) <= 2)) {
@@ -196,7 +221,9 @@ public class EventHandler {
         }
     }
 
-
+    /**
+     * Handles events and interactions in the bunker map.
+     */
     void BunkerUpdate() {
         charX = gamePanel.player.x / gamePanel.tileSize;
         charY = gamePanel.player.y / gamePanel.tileSize;
@@ -258,7 +285,9 @@ public class EventHandler {
 
     }
 
-
+    /**
+     * Handles in-game menu and pause state.
+     */
     void inGameState()
     {
         if (Objects.equals(pressedKey.lastReleasedKey, "esc"))
@@ -312,7 +341,9 @@ public class EventHandler {
 
     }
 
-
+    /**
+     * Handles the main menu state.
+     */
     void MainMenuState()
     {
         if (Objects.equals(pressedKey.lastReleasedKey, "down"))
@@ -345,6 +376,10 @@ public class EventHandler {
             pressedKey.lastReleasedKey = null;
         }
     }
+
+    /**
+     * Handles catnip trail placement and interaction.
+     */
      void catnipTrail()
     {
         charX = gamePanel.player.x / gamePanel.tileSize;
@@ -362,7 +397,9 @@ public class EventHandler {
         }
     }
 
-
+    /**
+     * Handles catnip harvesting interaction.
+     */
      void catnip() {
         charX = gamePanel.player.x / gamePanel.tileSize;
         charY = gamePanel.player.y / gamePanel.tileSize;

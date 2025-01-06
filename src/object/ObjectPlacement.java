@@ -2,19 +2,25 @@ package object;
 
 import main.GamePanel;
 
-
-public class ObjectPlacement extends Object
-{
+/**
+ * This class is responsible for placing various objects on the game map.
+ */
+public class ObjectPlacement extends Object {
     GamePanel gamePanel;
-    public ObjectPlacement(GamePanel gamePanel)
-    {
+
+    /**
+     * Constructor for the ObjectPlacement class.
+     *
+     * @param gamePanel The GamePanel object associated with the object placement.
+     */
+    public ObjectPlacement(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }
 
-    public void TreePlacement()
-    {
-
-        //*******************
+    /**
+     * Places tree objects on the game map.
+     */
+    public void TreePlacement() {
         gamePanel.trees[1][0] = new TreeTop();
         gamePanel.trees[1][0].x = 22;
         gamePanel.trees[1][0].y = 8;
@@ -54,12 +60,12 @@ public class ObjectPlacement extends Object
         gamePanel.trees[0][4] = new TreeBottom();
         gamePanel.trees[0][4].x = 43;
         gamePanel.trees[0][4].y = 13;
-
     }
 
-
-    public void CatnipPlacement()
-    {
+    /**
+     * Places catnip objects on the game map.
+     */
+    public void CatnipPlacement() {
         gamePanel.catnips[0] = new Catnip(gamePanel);
         gamePanel.catnips[0].x = 33;
         gamePanel.catnips[0].y = 15;
@@ -77,56 +83,43 @@ public class ObjectPlacement extends Object
         gamePanel.catnips[3].y = 8;
     }
 
-    public void Catnip_TrailPlacement()
-    {
+    /**
+     * Places catnip trail objects on the game map based on the player's movement.
+     */
+    public void Catnip_TrailPlacement() {
         gamePanel.player.speed = 2;
-        int charX = (gamePanel.player.x+10)/gamePanel.tileSize;
-        int charY = (gamePanel.player.y+10)/gamePanel.tileSize;
+        int charX = (gamePanel.player.x + 10) / gamePanel.tileSize;
+        int charY = (gamePanel.player.y + 10) / gamePanel.tileSize;
         int i;
-        for(i = 0; i < gamePanel.trail.catnipSteps; i++)
-        {
-            if(gamePanel.trail.catnipPathX[i] != 0)
-            {
+        for (i = 0; i < gamePanel.trail.catnipSteps; i++) {
+            if (gamePanel.trail.catnipPathX[i] != 0) {
                 gamePanel.catnipTrails[i] = new Object();
                 gamePanel.catnipTrails[i].x = gamePanel.trail.catnipPathX[i];
                 gamePanel.catnipTrails[i].y = gamePanel.trail.catnipPathY[i];
 
-                if(gamePanel.trail.randomTrail[i] == 0)
-                {
+                if (gamePanel.trail.randomTrail[i] == 0) {
                     gamePanel.catnipTrails[i].image = gamePanel.trail.trailsIMG[0].image;
-                }
-                else
-                {
+                } else {
                     gamePanel.catnipTrails[i].image = gamePanel.trail.trailsIMG[1].image;
                 }
-
-
-
             }
         }
         i++;
-        if(gamePanel.event.catnipsCount > 0 && !gamePanel.trail.stopTrailPlacement &&
-            charX != gamePanel.trail.catnipPathX[i-1] || charY != gamePanel.trail.catnipPathY[i-1])
-        {
+        if (gamePanel.event.catnipsCount > 0 && !gamePanel.trail.stopTrailPlacement &&
+                (charX != gamePanel.trail.catnipPathX[i - 1] || charY != gamePanel.trail.catnipPathY[i - 1])) {
             gamePanel.trail.catnipSteps++;
             gamePanel.trail.catnipPathX[gamePanel.trail.catnipSteps] = charX;
             gamePanel.trail.catnipPathY[gamePanel.trail.catnipSteps] = charY;
         }
 
-        if(gamePanel.trail.catnipSteps <= 10)
-        {
+        // Adjust the number of available catnips based on the length of the trail
+        if (gamePanel.trail.catnipSteps <= 10) {
             gamePanel.event.catnipsCount = 3;
-        }
-        else if(gamePanel.trail.catnipSteps <= 20 &&  gamePanel.trail.catnipSteps > 11)
-        {
+        } else if (gamePanel.trail.catnipSteps <= 20 && gamePanel.trail.catnipSteps > 11) {
             gamePanel.event.catnipsCount = 2;
-        }
-        else if(gamePanel.trail.catnipSteps <= 30 &&  gamePanel.trail.catnipSteps > 21)
-        {
+        } else if (gamePanel.trail.catnipSteps <= 30 && gamePanel.trail.catnipSteps > 21) {
             gamePanel.event.catnipsCount = 1;
-        }
-        else if(gamePanel.trail.catnipSteps > 31)
-        {
+        } else if (gamePanel.trail.catnipSteps > 31) {
             gamePanel.event.catnipsCount = 0;
         }
     }

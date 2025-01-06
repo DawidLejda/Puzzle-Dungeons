@@ -1,9 +1,15 @@
 package map;
 
-
+/**
+ * This class stores the bitmap data for the game maps.
+ */
 public class bitmap
 {
 
+    /**
+     * 2D array representing the tile layout of the island map.
+     * Each number corresponds to a specific tile type.
+     */
     public int[][] island = new int[][]
             {
                     {20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20},
@@ -48,7 +54,10 @@ public class bitmap
                     {20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20},
             };
 
-
+        /**
+        * 2D array representing the tile layout of the bunker map.
+        * Each number corresponds to a specific tile type.
+        */
         public int [][] bunker = new int[][]
                 {
                         {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5},
@@ -77,12 +86,12 @@ public class bitmap
                         {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5},
                         {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5},
                         {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5},
-
                 };
 
-
+    // Height and width of the island map
     public int islandHeight = island.length;
     public int islandWidth = island[0].length;
+    // Height and width of the bunker map
     public int bunkerHeight = bunker.length;
     public int bunkerWidth = bunker[0].length;
 }

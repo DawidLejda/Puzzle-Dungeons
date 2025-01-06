@@ -3,28 +3,42 @@ import character.Character;
 
 import static java.lang.Math.abs;
 
+/**
+ * This class handles collision detection between the player,
+ * the cat, and various objects and tiles in the game.
+ */
 public class CollisionChecker
 {
     GamePanel gamePanel;
 
-    public int playerLeft,playerRight,playerTop,playerBottom;
-    public boolean collisionCheck = true;
+    public int playerLeft, playerRight, playerTop, playerBottom; // Player's collision box boundaries
+    public boolean collisionCheck = true; // Flag to enable/disable collision checks
+
+    /**
+     * Constructor for the CollisionChecker class.
+     *
+     * @param gamePanel The GamePanel object associated with the collision checker.
+     */
     public CollisionChecker(GamePanel gamePanel)
     {
         this.gamePanel = gamePanel;
     }
 
-
+    /**
+     * Checks for collisions between the character and tiles on the map.
+     *
+     * @param character The character to check for collisions.
+     */
     public void CheckTileCollision(Character character)
     {
-
+        // Calculate the boundaries of the character's collision box
         playerLeft = (character.x - gamePanel.tileSize) + (gamePanel.tileSize - (gamePanel.tileSize / 2)) + gamePanel.tileSize;
         playerRight = (character.x + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2));
         playerTop = (character.y - gamePanel.tileSize) + (int) (gamePanel.tileSize - (gamePanel.tileSize / 2.3)) + gamePanel.tileSize;
         playerBottom = (character.y + gamePanel.tileSize) - (gamePanel.tileSize - (gamePanel.tileSize / 2)-4);
 
 
-        // Corner coordinates of character BOX;
+        // Calculate the tile coordinates of the character's collision box corners
         int X_Left = playerLeft / gamePanel.tileSize;
         int X_Right = playerRight / gamePanel.tileSize;
         int Y_Top = playerTop / gamePanel.tileSize;
@@ -36,7 +50,7 @@ public class CollisionChecker
         {
             switch(character.direction)
             {
-
+                // Check collisions with island tiles
                 case "left":
                     X_Left = (playerLeft - character.speed) / gamePanel.tileSize;
                     mapIndex1 = gamePanel.map.island[Y_Top][X_Left];
@@ -82,9 +96,9 @@ public class CollisionChecker
                     break;
             }
         }
-
         else
         {
+            // Check collisions with bunker tiles
             switch(character.direction)
             {
 
@@ -135,9 +149,13 @@ public class CollisionChecker
         }
     }
 
-
-
-
+    /**
+     * Checks for collisions between the character and an object that is 2 tiles wide.
+     *
+     * @param character The character to check for collisions.
+     * @param objX      The x-coordinate of the object in tile coordinates.
+     * @param objY      The y-coordinate of the object in tile coordinates.
+     */
     public void CheckObject_2width(Character character,int objX, int objY)
     {
         for (int i = 0; i < 2; i++) {
@@ -179,7 +197,13 @@ public class CollisionChecker
         }
     }
 
-
+    /**
+     * Checks for collisions between the character and an object.
+     *
+     * @param character The character to check for collisions.
+     * @param centerX   The x-coordinate of the object's center in tile coordinates.
+     * @param centerY   The y-coordinate of the object's center in tile coordinates.
+     */
     public void CheckObjectCollision(Character character, int centerX, int centerY)
     {
         int X_Left = playerLeft / gamePanel.tileSize;
@@ -218,6 +242,14 @@ public class CollisionChecker
                 break;
         }
     }
+
+    /**
+     * Checks for collisions between the character and a tree object.
+     *
+     * @param character The character to check for collisions.
+     * @param centerX   The x-coordinate of the tree's center in tile coordinates.
+     * @param centerY   The y-coordinate of the tree's center in tile coordinates.
+     */
     public void CheckTreeCollision(Character character, int centerX, int centerY)
     {
 
@@ -259,6 +291,11 @@ public class CollisionChecker
             }
     }
 
+    /**
+     * Checks if the character should be hidden behind an object.
+     *
+     * @param character The character to check for visibility.
+     */
     public void CheckObjectVisibility(Character character)
     {
         int charX,charY,centerX,centerY;
@@ -359,7 +396,6 @@ public class CollisionChecker
                 }
             }
 
-
             if(gamePanel.bunker.materialize)
             {
                 centerX = gamePanel.bunker.x;
@@ -375,7 +411,6 @@ public class CollisionChecker
                 }
             }
         }
-
 
         else
         {
@@ -400,9 +435,13 @@ public class CollisionChecker
                 }
             }
         }
-
     }
 
+    /**
+     * Checks for collisions with the bridge, taking into account the bridge's state.
+     *
+     * @param character The character to check for collisions.
+     */
     public void CheckBridgeCollision(Character character)
     {
         int charX = character.x/gamePanel.tileSize;

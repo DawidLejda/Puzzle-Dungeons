@@ -10,24 +10,29 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class Player extends Character
-{
-
+/**
+ * Represents the player character in the game.
+ */
+public class Player extends Character {
     GamePanel gamePanel;
     KeyHandler pressedKey;
-    public boolean playerMoving;
-    private int swapSkin = 1;
-    private int swapIdle = 1;
-    private int animationFrame = 1;
-    private int animationIdle = 1;
-    public object.ObjectImages[][] Sprite = new ObjectImages[4][6];
-    public object.ObjectImages[][] IdleSprite = new ObjectImages[4][5];
-    public final int centerX;
-    public final int centerY;
+    public boolean playerMoving; // Indicates if the player is currently moving
+    private int swapSkin = 1; // Index for the walking animation sprite sheet
+    private int swapIdle = 1; // Index for the idle animation sprite sheet
+    private int animationFrame = 1; // Counter for walking animation frames
+    private int animationIdle = 1; // Counter for idle animation frames
+    public ObjectImages[][] Sprite = new ObjectImages[4][6]; // Stores the walking animation sprites
+    public ObjectImages[][] IdleSprite = new ObjectImages[4][5]; // Stores the idle animation sprites
+    public final int centerX; // X-coordinate of the player's center on the screen
+    public final int centerY; // Y-coordinate of the player's center on the screen
 
-
-    public Player(GamePanel gamePanel, KeyHandler pressedKey)
-    {
+    /**
+     * Constructor for the Player class.
+     *
+     * @param gamePanel The GamePanel object associated with the player.
+     * @param pressedKey The KeyHandler object used for player input.
+     */
+    public Player(GamePanel gamePanel, KeyHandler pressedKey) {
         this.gamePanel = gamePanel;
         this.pressedKey = pressedKey;
         getPlayerModel();
@@ -40,24 +45,19 @@ public class Player extends Character
         speed = 4;
     }
 
-
-    public void getPlayerModel()
-    {
+    /**
+     * Loads the player character model images.
+     */
+    public void getPlayerModel() {
         try {
             String direction;
             for (int j = 0; j < 4; j++) {
-                if (j == 0) {
-                    direction = "down";
-                }
-                else if (j == 1) {
-                    direction = "up";
-                }
-                else if (j == 2) {
-                    direction = "left";
-                }
-                else {
-                    direction = "right";
-                }
+                direction = switch (j) {
+                    case 0 -> "down";
+                    case 1 -> "up";
+                    case 2 -> "left";
+                    default -> "right";
+                };
                 for (int i = 0; i < 6; i++) {
                     String path = "player/move/".concat(direction).concat(Integer.toString(i + 1)).concat(".png");
                     Sprite[j][i] = new ObjectImages();
@@ -69,108 +69,83 @@ public class Player extends Character
                     }
                 }
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             System.out.println("Couldn't read player character model file");
             gamePanel.gameRunning = false;
         }
     }
 
-
-    void CollisionCheck()
-    {
-        if(!gamePanel.teleport.teleportReady)
-        {
+    /**
+     * Checks for collisions with tiles and objects in the game.
+     */
+    void CollisionCheck() {
+        if (!gamePanel.teleport.teleportReady) {
             visibility = true;
             collision = false;
             gamePanel.collisionChecker.CheckBridgeCollision(this);
             gamePanel.collisionChecker.CheckTileCollision(this);
-
             gamePanel.collisionChecker.CheckObjectVisibility(this);
         }
     }
 
-
+    /**
+     * Updates the player's state, including movement, animation, and collision checks.
+     */
     public void Update() {
-
-        if (pressedKey.left)
-        {
+        if (pressedKey.left) {
             direction = "left";
             animationFrame++;
             playerMoving = true;
-        }
-        else if (pressedKey.right)
-        {
+        } else if (pressedKey.right) {
             direction = "right";
             animationFrame++;
             playerMoving = true;
-        }
-        else if (pressedKey.up)
-        {
+        } else if (pressedKey.up) {
             direction = "up";
             animationFrame++;
             playerMoving = true;
-        }
-        else if (pressedKey.down)
-        {
+        } else if (pressedKey.down) {
             direction = "down";
             animationFrame++;
             playerMoving = true;
-        }
-        else if (pressedKey.use)
-        {
+        } else if (pressedKey.use) {
             direction = pressedKey.previousKey;
             playerMoving = false;
             animationIdle++;
-        }
-        else
-        {
+        } else {
             animationIdle++;
             playerMoving = false;
         }
 
         CollisionCheck();
 
-        if(!collision)
-        {
-            if (pressedKey.left)
-            {
+        // Move the player if there is no collision
+        if (!collision) {
+            if (pressedKey.left) {
                 x -= speed;
-            }
-            else if (pressedKey.right)
-            {
+            } else if (pressedKey.right) {
                 x += speed;
-            }
-            else if (pressedKey.up)
-            {
+            } else if (pressedKey.up) {
                 y -= speed;
-            }
-            else if (pressedKey.down)
-            {
+            } else if (pressedKey.down) {
                 y += speed;
             }
         }
 
-        if (playerMoving)
-        {
-            if (animationFrame >= 5)
-            {
+        // Update walking animation
+        if (playerMoving) {
+            if (animationFrame >= 5) {
                 swapSkin++;
-                if (swapSkin > 5)
-                {
+                if (swapSkin > 5) {
                     swapSkin = 1;
                 }
                 animationFrame = 0;
             }
-        }
-        else
-        {
-            if (animationIdle >= 12)
-            {
+        } else {
+            // Update idle animation
+            if (animationIdle >= 12) {
                 swapIdle++;
-                if (swapIdle > 4)
-                {
+                if (swapIdle > 4) {
                     swapIdle = 1;
                 }
                 animationIdle = 0;
@@ -178,13 +153,16 @@ public class Player extends Character
         }
     }
 
-
-    public void Draw(Graphics2D g2)
-    {
+    /**
+     * Draws the player on the screen.
+     *
+     * @param g2 The Graphics2D object used for drawing.
+     */
+    public void Draw(Graphics2D g2) {
         BufferedImage image = null;
 
-        if(playerMoving)
-        {
+        if (playerMoving) {
+            // Select the appropriate walking animation sprite based on the direction
             image = switch (pressedKey.lastPressedKey) {
                 case "down" -> Sprite[0][swapSkin].image;
                 case "up" -> Sprite[1][swapSkin].image;
@@ -192,12 +170,9 @@ public class Player extends Character
                 case "right" -> Sprite[3][swapSkin].image;
                 default -> image;
             };
-        }
-
-        else
-        {
-            if (pressedKey.lastReleasedKey != null)
-            {
+        } else {
+            // Select the appropriate idle animation sprite based on the last pressed or released key
+            if (pressedKey.lastReleasedKey != null) {
                 image = switch (pressedKey.lastReleasedKey) {
                     case "down" -> IdleSprite[0][swapIdle].image;
                     case "up" -> IdleSprite[1][swapIdle].image;
@@ -206,19 +181,16 @@ public class Player extends Character
                     case "right" -> IdleSprite[3][swapIdle].image;
                     default -> image;
                 };
-            }
-            else if(pressedKey.previousKey != null)
-            {
-                    image = switch (pressedKey.previousKey) {
-                        case "down" -> IdleSprite[0][swapIdle].image;
-                        case "up" -> IdleSprite[1][swapIdle].image;
-                        case "use" -> IdleSprite[1][swapIdle].image;
-                        case "left" -> IdleSprite[2][swapIdle].image;
-                        case "right" -> IdleSprite[3][swapIdle].image;
-                        default -> image;};
-            }
-            else
-            {
+            } else if (pressedKey.previousKey != null) {
+                image = switch (pressedKey.previousKey) {
+                    case "down" -> IdleSprite[0][swapIdle].image;
+                    case "up" -> IdleSprite[1][swapIdle].image;
+                    case "use" -> IdleSprite[1][swapIdle].image;
+                    case "left" -> IdleSprite[2][swapIdle].image;
+                    case "right" -> IdleSprite[3][swapIdle].image;
+                    default -> image;
+                };
+            } else {
                 image = IdleSprite[0][swapIdle].image;
             }
         }

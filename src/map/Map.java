@@ -26,6 +26,12 @@ public class Map extends bitmap
     public Tile[] islandTile = new Tile[60];
     public Tile[] bunkerTile = new Tile[20];
 
+    /**
+     * Constructor for the Map class.
+     *
+     * @param gamePanel The GamePanel object associated with the map.
+     * @param player    The Player object associated with the map.
+     */
     public Map(GamePanel gamePanel, Player player)
     {
         this.gamePanel = gamePanel;
@@ -86,8 +92,8 @@ public class Map extends bitmap
         loadTileSet(53, "rock", "rock1", true);
         loadTileSet(54, "rock", "rock2", true);
 
+        // Load bunker tiles
         //***********************************************************************************************
-
         loadBunkerTile(0,"ground",false);
         loadBunkerTile(1,"wallLeft",true);
         loadBunkerTile(2,"wallRight",true);
@@ -98,7 +104,7 @@ public class Map extends bitmap
         loadBunkerTile(6,"ground_catnip",false);
         loadBunkerTile(7,"wall_vent",true);
         loadBunkerTile(8,"wallMaterial2",true);
-        //1l dolny 2p dolny 3l gorny
+
         loadBunkerTile(9,"corner1",true);
         loadBunkerTile(10,"corner2",true);
         loadBunkerTile(11,"corner3",true);
@@ -107,7 +113,14 @@ public class Map extends bitmap
         loadBunkerTile(14,"corner6",true);
     }
 
-
+    /**
+     * Loads a single tile for the island map.
+     *
+     * @param index     The index of the tile in the islandTile array.
+     * @param directory The directory where the tile image is located.
+     * @param name      The name of the tile image file.
+     * @param collision Indicates whether the tile has collision.
+     */
     public void loadTileSet(int index, String directory, String name, boolean collision)
     {
         try
@@ -123,6 +136,14 @@ public class Map extends bitmap
             gamePanel.gameRunning = false;
         }
     }
+
+    /**
+     * Loads a single tile for the bunker map.
+     *
+     * @param index     The index of the tile in the bunkerTile array.
+     * @param name      The name of the tile image file.
+     * @param collision Indicates whether the tile has collision.
+     */
     public void loadBunkerTile(int index, String name, boolean collision)
     {
         try
@@ -138,7 +159,9 @@ public class Map extends bitmap
         }
     }
 
-
+    /**
+     * Updates the map, including tile animations.
+     */
     public void Update()
     {
         animationFrame++;
@@ -155,85 +178,60 @@ public class Map extends bitmap
         }
     }
 
-    public void Draw(Graphics2D g2)
-    {
+    /**
+     * Draws the current map on the screen.
+     *
+     * @param g2 The Graphics2D object used for drawing.
+     */
+    public void Draw(Graphics2D g2) {
         BufferedImage render_tile;
         int scale = gamePanel.tileSize;
 
-        if(!mapSwap)
-        {
-            for (int y = 0; y < islandHeight; y++)
-            {
-                for (int x = 0; x < islandWidth; x++)
-                {
+        if (!mapSwap) {
+            // Draw the island map
+            for (int y = 0; y < islandHeight; y++) {
+                for (int x = 0; x < islandWidth; x++) {
                     int map_index = island[y][x];
                     int centerX = x * gamePanel.tileSize - player.x + player.centerX;
                     int centerY = y * gamePanel.tileSize - player.y + player.centerY;
 
-                    if (map_index == 21)
-                    {
-                        try
-                        {
-                            if (island[y][x + chanceForWave] == 21)
-                            {
+                    // Animate water tiles
+                    if (map_index == 21) {
+                        try {
+                            if (island[y][x + chanceForWave] == 21) {
                                 island[y][x + chanceForWave] = 20;
                             }
+                        } catch (ArrayIndexOutOfBoundsException ignored) {
                         }
-                        catch (ArrayIndexOutOfBoundsException ignored)
-                        {}
 
-
-                        if (chanceForWave != 0)
-                        {
-                            if (swapWater == 1)
-                            {
-                                render_tile = islandTile[1].image;
+                        // Select the appropriate water tile image based on the animation frame
+                        if (chanceForWave != 0) {
+                            switch (swapWater) {
+                                case 1 -> render_tile = islandTile[1].image;
+                                case 2 -> render_tile = islandTile[2].image;
+                                case 3 -> render_tile = islandTile[3].image;
+                                case 4 -> render_tile = islandTile[4].image;
+                                case 5 -> render_tile = islandTile[5].image;
+                                case 6 -> render_tile = islandTile[6].image;
+                                default -> render_tile = islandTile[7].image;
                             }
-                            else if (swapWater == 2)
-                            {
-                                render_tile = islandTile[2].image;
-                            }
-                            else if (swapWater == 3)
-                            {
-                                render_tile = islandTile[3].image;
-                            }
-                            else if (swapWater == 4)
-                            {
-                                render_tile = islandTile[4].image;
-                            } else if (swapWater == 5)
-                            {
-                                render_tile = islandTile[5].image;
-                            }
-                            else if (swapWater == 6)
-                            {
-                                render_tile = islandTile[6].image;
-                            }
-                            else
-                            {
-                                render_tile = islandTile[7].image;
-                            }
-                        }
-                        else
-                        {
+                        } else {
                             render_tile = islandTile[7].image;
                         }
-
-                    }
-                    else if (map_index == 20)
-                    {
+                    } else if (map_index == 20) {
+                        // Handle wave animation
                         render_tile = islandTile[7].image;
                         waveTime++;
-                        if (waveTime > 160)
-                        {
+                        if (waveTime > 160) {
                             waveTime = 0;
                             island[y][x] = 21;
                         }
-                    }
-                    else
-                    {
+                    } else {
+                        // Draw other tiles
                         render_tile = islandTile[map_index].image;
                     }
 
+                    // Draw the tile if it's within the visible range of the player
                     if (((x * gamePanel.tileSize) < (player.x + player.centerX + gamePanel.tileSize)) &&
                             ((y * gamePanel.tileSize) < (player.y + player.centerY + gamePanel.tileSize)) &&
                             ((x * gamePanel.tileSize) > (player.x - player.centerX - gamePanel.tileSize)) &&
@@ -241,16 +239,12 @@ public class Map extends bitmap
                         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                         g2.drawImage(render_tile, centerX, centerY, scale, scale, null);
                     }
-
                 }
             }
-        }
-        else
-        {
-            for (int y = 0; y < bunkerHeight; y++)
-            {
-                for (int x = 0; x < bunkerWidth; x++)
-                {
+        } else {
+            // Draw the bunker map
+            for (int y = 0; y < bunkerHeight; y++) {
+                for (int x = 0; x < bunkerWidth; x++) {
                     int map_index = bunker[y][x];
                     int centerX = x * gamePanel.tileSize - player.x + player.centerX;
                     int centerY = y * gamePanel.tileSize - player.y + player.centerY;
